@@ -1,0 +1,296 @@
+openapi: 3.0.3
+info:
+  title: Car Rental API
+  description: REST-style API for user registration, listing cars, booking, and returning cars.
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+paths:
+  /users:
+    post:
+      tags:
+        - user
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserMutation"
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Invalid input
+    get:
+      tags:
+        - user
+      summary: Get all users
+      operationId: getUsers
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserList"
+
+    put:
+      tags:
+        - user
+      summary: Update user details
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserMutation"
+      responses:
+        '200':
+          description: User updated successfully
+    delete:
+      tags:
+        - user
+      summary: Delete a user
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User deleted successfully
+
+  /cars:
+    get:
+      tags:
+        - cars
+      summary: List available cars
+      operationId: listCars
+      responses:
+        '200':
+          description: List of available cars
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CarList"
+
+    post:
+      tags:
+        - cars
+      summary: Add a new car
+      operationId: addCar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Car"
+      responses:
+        '201':
+          description: Car added successfully
+    put:
+      tags:
+        - cars
+      summary: Update car details
+      operationId: updateCar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Car"
+      responses:
+        '200':
+          description: Car updated successfully
+    delete:
+      tags:
+        - cars
+      summary: Delete a car
+      operationId: deleteCar
+      parameters:
+        - name: VIN
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Car deleted successfully
+
+  /bookings:
+    post:
+      tags:
+        - booking
+      summary: Book a car
+      operationId: bookCar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                carId:
+                  type: string
+              required:
+                - userId
+                - carId
+      responses:
+        '201':
+          description: Car booked successfully
+        '400':
+          description: Invalid request
+    get:
+      tags:
+        - booking
+      summary: Get all bookings
+      operationId: getBookings
+      responses:
+        '200':
+          description: List all bookings of a user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BookingList"
+
+    put:
+      tags:
+        - booking
+      summary: Update a booking
+      operationId: updateBooking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bookingId:
+                  type: string
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Booking updated successfully
+    delete:
+      tags:
+        - booking
+      summary: Cancel a booking
+      operationId: deleteBooking
+      parameters:
+        - name: bookingId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Booking deleted successfully
+
+  /bookings/{bookingId}/return:
+    put:
+      tags:
+        - booking
+      summary: Return a booked car
+      operationId: returnCar
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Car returned successfully
+        '400':
+          description: Invalid booking ID
+  /bookings/{userId}/:
+    get:
+      tags:
+        - booking
+      summary: Get All Bookings by user
+      operationId: getAllBookingsByUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          #TODO list of booking
+          description: Car returned successfully
+        '400':
+          description: Invalid booking ID
+
+
+components:
+  schemas:
+    UserMutation:
+      description: The escape-room instance to join
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    UserList:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+    CarList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Car"
+    Car:
+      type: object
+      properties:
+        VIN:
+          type: string
+          #TODO look at this and determine if validation https://stackoverflow.com/questions/30314850/vin-validation-regex
+        model:
+          type: string
+        brand:
+          type: string
+        kilometers:
+          type: number
+        available:
+          type: boolean
+    BookingList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Booking"
+    Booking:
+      type: object
+      properties:
+        bookingId:
+          type: string
+        userId:
+          type: string
+        VIN:
+          type: string
+        status:
+          type: string
+
+
