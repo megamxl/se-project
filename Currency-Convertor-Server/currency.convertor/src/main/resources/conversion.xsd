@@ -68,7 +68,10 @@
             <xs:enumeration value="SGD"/>
             <xs:enumeration value="THB"/>
             <xs:enumeration value="ZAR"/>
+            <xs:enumeration value="EUR"/>
         </xs:restriction>
     </xs:simpleType>
+
+
 
 </xs:schema>
