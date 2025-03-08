@@ -70,7 +70,7 @@ public class Envelope {
         private Currency currency;
 
         @XmlAttribute(name = "rate")
-        private BigDecimal rate;
+        private Double rate;
 
     }
 }

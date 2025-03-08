@@ -30,7 +30,7 @@ public class CurrencyRatesRepository {
 
     private final Unmarshaller unmarshaller;
 
-    private Map<Currency, BigDecimal> rates;
+    private Map<Currency, Double> rates;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -42,7 +42,7 @@ public class CurrencyRatesRepository {
         this.rates = new HashMap<>();
     }
 
-    public Optional<BigDecimal> getRateByCurrency(Currency currency) {
+    public Optional<Double> getRateByCurrency(Currency currency) {
         updateRatesIfEmptyOrOlderAsToday();
 
         return Optional.of(rates.get(currency));
@@ -99,7 +99,7 @@ public class CurrencyRatesRepository {
         return Optional.empty();
     }
 
-    private static Unmarshaller  getUnmarshaller() throws JAXBException {
+    private static Unmarshaller getUnmarshaller() throws JAXBException {
         return JAXBContext.newInstance(Envelope.class).createUnmarshaller();
     }
 

@@ -20,45 +20,47 @@ public class ConversionService {
 
         //TODO assert payload fields
         if (payload.getGivenCurrency().equals(payload.getRequiredCurrency())) {
-            return createResponsePayload(payload, BigDecimal.valueOf(payload.getAmount()));
+            return createResponsePayload(payload,payload.getAmount());
         }
 
         // first of all check if is not EUR convert it to EUR
-        BigDecimal amountInEuro = convertToEuro(payload.getGivenCurrency(),  BigDecimal.valueOf(payload.getAmount()));
+        double amountInEuro = convertToEuro(payload.getGivenCurrency(),  payload.getAmount());
+
+        if ((payload.getRequiredCurrency().equals(Currency.EUR))) {
+            return createResponsePayload(payload,amountInEuro);
+        }
 
         // afterward convert from euro to what is needed
-        BigDecimal converted = convertFromEuroToTargetCurrency(payload.getRequiredCurrency(), amountInEuro);
+        double converted = convertFromEuroToTargetCurrency(payload.getRequiredCurrency(), amountInEuro);
 
         return createResponsePayload(payload, converted);
     }
 
-    private static ConversionResponsePayload createResponsePayload(ConversionRequestPayload payload, BigDecimal converted) {
+    private static ConversionResponsePayload createResponsePayload(ConversionRequestPayload payload, double converted) {
+        //TODO Apply rounding here
         ConversionResponsePayload conversionResponsePayload = new ConversionResponsePayload();
         conversionResponsePayload.setConvertedCurrency(payload.getRequiredCurrency());
-        conversionResponsePayload.setAmount(converted.doubleValue());
+        conversionResponsePayload.setAmount(converted);
         return conversionResponsePayload;
     }
 
-    private BigDecimal convertToEuro(Currency currency, BigDecimal amount) {
+    private double convertToEuro(Currency currency, double amount) {
 
         if (currency == Currency.EUR){
             return amount;
         }
 
-        BigDecimal exchangeValue = getRateForCurrency(currency);
-
-        return amount.divide(exchangeValue, RoundingMode.HALF_EVEN);
+        return amount /getRateForCurrency(currency);
     }
 
 
-    private BigDecimal convertFromEuroToTargetCurrency(Currency currency, BigDecimal amount) {
-        BigDecimal exchangeValue = getRateForCurrency(currency);
+    private double convertFromEuroToTargetCurrency(Currency currency, double amount) {
 
-        return amount.multiply(exchangeValue);
+        return amount * getRateForCurrency(currency);
     }
 
 
-    private BigDecimal getRateForCurrency(Currency currency) {
+    private double getRateForCurrency(Currency currency) {
         return currencyRatesRepository.getRateByCurrency(currency).orElseThrow(() -> new RuntimeException("Currency not found in the local repository"));
     }
 }
