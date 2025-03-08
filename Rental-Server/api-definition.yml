@@ -64,6 +64,49 @@ paths:
       responses:
         '204':
           description: User deleted successfully
+  /login:
+    post:
+      tags:
+        - user
+      summary: User login using email and password
+      description: Authenticate a user using their email and password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: The user's email address
+                  example: user@example.com
+                password:
+                  type: string
+                  description: The user's password
+                  example: password123
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: The authentication token
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjM0NTY3ODkwfQ"
+        '400':
+          description: Bad request (invalid email/password)
+        '401':
+          description: Unauthorized (invalid credentials)
+        '500':
+          description: Internal server error
 
   /cars:
     get:
@@ -71,6 +114,27 @@ paths:
         - cars
       summary: List available cars
       operationId: listCars
+      parameters:
+        - name: currency
+          in: query
+          description: The currency The user want to pay in
+          required: true
+          schema:
+            $ref: "#/components/schemas/Currency"
+        - name: startTime
+          in: query
+          description: Start time for filtering cars based on availability
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: endTime
+          in: query
+          description: End time for filtering cars based on availability
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: List of available cars
@@ -135,13 +199,16 @@ paths:
             schema:
               type: object
               properties:
-                userId:
+                VIN:
                   type: string
-                carId:
+                currency:
+                  $ref: "#/components/schemas/Currency"
+                startTime:
                   type: string
-              required:
-                - userId
-                - carId
+                  format: date-time
+                endTime:
+                  type: string
+                  format: date-time
       responses:
         '201':
           description: Car booked successfully
@@ -273,10 +340,12 @@ components:
           type: string
         brand:
           type: string
+        imageURL:
+           type: string
         kilometers:
           type: number
-        available:
-          type: boolean
+        pricePerDay:
+          type: number
     BookingList:
       type: array
       items:
@@ -292,5 +361,41 @@ components:
           type: string
         status:
           type: string
-
+    BookingStatus:
+      type: string
+      enum:
+        -
+    Currency:
+      type: string
+      enum:
+        - USD
+        - JPY
+        - BGN
+        - CZK
+        - DKK
+        - GBP
+        - HUF
+        - PLN
+        - RON
+        - SEK
+        - CHF
+        - ISK
+        - NOK
+        - TRY
+        - AUD
+        - BRL
+        - CAD
+        - CNY
+        - HKD
+        - IDR
+        - ILS
+        - INR
+        - KRW
+        - MXN
+        - MYR
+        - NZD
+        - PHP
+        - SGD
+        - THB
+        - ZAR
 
