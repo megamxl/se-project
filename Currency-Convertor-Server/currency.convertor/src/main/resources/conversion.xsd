@@ -1,0 +1,74 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://prestige-wheels.at/conversion/"
+           targetNamespace="http://prestige-wheels.at/conversion/" elementFormDefault="qualified">
+
+
+    <xs:element name="conversionRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="req" type="tns:conversionRequestPayload"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="conversionResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="response" type="tns:conversionResponsePayload"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:complexType name="conversionRequestPayload">
+        <xs:sequence>
+            <xs:element name="givenCurrency" type="tns:currency"/>
+            <xs:element name="amount" type="xs:double"/>
+            <xs:element name="requiredCurrency" type="tns:currency"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="conversionResponsePayload">
+        <xs:sequence>
+            <xs:element name="amount" type="xs:double"/>
+            <xs:element name="convertedCurrency" type="tns:currency"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:simpleType name="currency">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="USD"/>
+            <xs:enumeration value="JPY"/>
+            <xs:enumeration value="BGN"/>
+            <xs:enumeration value="CZK"/>
+            <xs:enumeration value="DKK"/>
+            <xs:enumeration value="GBP"/>
+            <xs:enumeration value="HUF"/>
+            <xs:enumeration value="PLN"/>
+            <xs:enumeration value="RON"/>
+            <xs:enumeration value="SEK"/>
+            <xs:enumeration value="CHF"/>
+            <xs:enumeration value="ISK"/>
+            <xs:enumeration value="NOK"/>
+            <xs:enumeration value="TRY"/>
+            <xs:enumeration value="AUD"/>
+            <xs:enumeration value="BRL"/>
+            <xs:enumeration value="CAD"/>
+            <xs:enumeration value="CNY"/>
+            <xs:enumeration value="HKD"/>
+            <xs:enumeration value="IDR"/>
+            <xs:enumeration value="ILS"/>
+            <xs:enumeration value="INR"/>
+            <xs:enumeration value="KRW"/>
+            <xs:enumeration value="MXN"/>
+            <xs:enumeration value="MYR"/>
+            <xs:enumeration value="NZD"/>
+            <xs:enumeration value="PHP"/>
+            <xs:enumeration value="SGD"/>
+            <xs:enumeration value="THB"/>
+            <xs:enumeration value="ZAR"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
