@@ -1,14 +1,18 @@
 package com.prestige.wheels.currency.convertor.repository.ecb.model;
 
 
+import com.prestige.wheels.currency.convertor.soap.model.Currency;
 import jakarta.xml.bind.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Setter
 @Getter
+@ToString
 @XmlRootElement(name = "Envelope", namespace = "http://www.gesmes.org/xml/2002-08-01")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Envelope {
@@ -24,6 +28,7 @@ public class Envelope {
 
     @Setter
     @Getter
+    @ToString
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Sender {
 
@@ -34,6 +39,7 @@ public class Envelope {
 
     @Setter
     @Getter
+    @ToString
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Cube {
 
@@ -44,6 +50,7 @@ public class Envelope {
 
     @Getter
     @Setter
+    @ToString
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class TimeCube{
         @XmlAttribute(name = "time")
@@ -55,14 +62,15 @@ public class Envelope {
 
     @Setter
     @Getter
+    @ToString
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class CurrencyRate {
 
         @XmlAttribute(name = "currency")
-        private String currency;
+        private Currency currency;
 
         @XmlAttribute(name = "rate")
-        private double rate;
+        private BigDecimal rate;
 
     }
 }
