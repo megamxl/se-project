@@ -65,7 +65,7 @@ public class CurrencyRatesRepository {
 
     }
 
-    private void getRatesFromExchangeAndUpdateRatesMap() throws IOException, JAXBException {
+    public void getRatesFromExchangeAndUpdateRatesMap() throws IOException, JAXBException {
         ByteArrayInputStream ratesXmlAsByteStream = getEuroFxRefBytes().orElseThrow(() -> new IllegalStateException("Euro Fx Ref bytes not retrievable. Contact the currency Converter support !"));
 
         Envelope envelope = (Envelope) unmarshaller.unmarshal(ratesXmlAsByteStream);

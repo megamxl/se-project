@@ -18,6 +18,10 @@ public class ConversionService {
 
     public ConversionResponsePayload convert (ConversionRequestPayload payload) {
 
+        assert payload != null;
+        assert payload.getGivenCurrency() != null;
+        assert payload.getRequiredCurrency() != null;
+
         //TODO assert payload fields
         if (payload.getGivenCurrency().equals(payload.getRequiredCurrency())) {
             return createResponsePayload(payload,payload.getAmount());
