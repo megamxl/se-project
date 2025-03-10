@@ -21,8 +21,6 @@ public class ConversionService {
         assert payload != null;
         assert payload.getGivenCurrency() != null;
         assert payload.getRequiredCurrency() != null;
-
-        //TODO assert payload fields
         if (payload.getGivenCurrency().equals(payload.getRequiredCurrency())) {
             return createResponsePayload(payload,payload.getAmount());
         }
