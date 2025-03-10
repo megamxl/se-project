@@ -212,6 +212,10 @@ paths:
       responses:
         '201':
           description: Car booked successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
         '400':
           description: Invalid request
     get:
@@ -245,6 +249,11 @@ paths:
                   type: string
                 status:
                   type: string
+                  enum:
+                    - BOOKED
+                    - ACTIVE
+                    - COMPLETED
+                    - CANCELLED
       responses:
         '200':
           description: Booking updated successfully
@@ -263,6 +272,7 @@ paths:
         '204':
           description: Booking deleted successfully
 
+// QUESTION: Ist das notwendig, oder kann das auch einfach mit einem update gemachet werden?
   /bookings/{bookingId}/return:
     put:
       tags:
@@ -294,11 +304,64 @@ paths:
             type: string
       responses:
         '200':
-          #TODO list of booking
-          description: Car returned successfully
+          description: List of user bookings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingList"
         '400':
           description: Invalid booking ID
-
+          
+  /booking-history:
+    get:
+      tags:
+        - booking-history
+      summary: Get booking history
+      operationId: getBookingHistory
+      parameters:
+        - name: userId
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: bookingId
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: VIN
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/BookingStatus"
+      responses:
+        '200':
+          description: Booking history retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BookingHistory"
+        '400':
+          description: Invalid request parameters
 
 components:
   schemas:
@@ -359,12 +422,64 @@ components:
           type: string
         VIN:
           type: string
-        status:
+        startTime:
           type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        totalCost:
+          type: number
+        currency:
+          $ref: "#/components/schemas/Currency"
+        status:
+          $ref: "#/components/schemas/BookingStatus"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     BookingStatus:
       type: string
       enum:
-        -
+        - BOOKED
+        - ACTIVE
+        - COMPLETED
+        - CANCELLED
+    BookingHistory:
+      type: object
+      properties:
+        historyId:
+          type: string
+        bookingId:
+          type: string
+        userId:
+          type: string
+        VIN:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        totalCost:
+          type: number
+        currency:
+          $ref: "#/components/schemas/Currency"
+        previousStatus:
+          $ref: "#/components/schemas/BookingStatus"
+        newStatus:
+          $ref: "#/components/schemas/BookingStatus"
+        changeReason:
+          type: string
+        changeTimestamp:
+          type: string
+          format: date-time
+        changedBy:
+          type: string
+          description: User ID of who made the change (can be system or admin)
     Currency:
       type: string
       enum:
@@ -399,4 +514,3 @@ components:
         - THB
         - ZAR
         - EUR
-
