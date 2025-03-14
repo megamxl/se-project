@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ConversionService {
 
+    public static final int roundingMultiplier = 100;
     private final CurrencyRatesRepository currencyRatesRepository;
 
     public ConversionResponsePayload convert (ConversionRequestPayload payload) {
@@ -35,11 +36,14 @@ public class ConversionService {
         return createResponsePayload(payload, converted);
     }
 
+    private static double roundResult(double converted) {
+        return (Math.round(converted * roundingMultiplier)) / (double) roundingMultiplier;
+    }
+
     private static ConversionResponsePayload createResponsePayload(ConversionRequestPayload payload, double converted) {
-        //TODO Apply rounding here
         ConversionResponsePayload conversionResponsePayload = new ConversionResponsePayload();
         conversionResponsePayload.setConvertedCurrency(payload.getRequiredCurrency());
-        conversionResponsePayload.setAmount(converted);
+        conversionResponsePayload.setAmount(roundResult(converted));
         return conversionResponsePayload;
     }
 
