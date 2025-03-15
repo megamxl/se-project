@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+option java_package = "com.prestige.wheels.currency.converter.grpc";
+
+service Convertor {
+  rpc convert(conversionRequest) returns (conversionResponse) {}
+  rpc getAvailableCurrency(empty) returns (currencyList) {}
+}
+
+message empty {
+
+}
+
+message currencyList {
+  repeated currency currencies = 1;
+}
+
+message conversionRequest {
+   currency given =1;
+   double amount = 2;
+   currency target = 3;
+}
+
+
+message conversionResponse {
+  currency converted = 1;
+  double amount =2;
+}
+
+
+enum currency {
+  USD = 0;
+  JPY = 1;
+  BGN = 2;
+  CZK = 3;
+  DKK = 4;
+  GBP = 5;
+  HUF = 6;
+  PLN = 7;
+  RON = 8;
+  SEK = 9;
+  CHF = 10;
+  ISK = 11;
+  NOK = 12;
+  TRY = 13;
+  AUD = 14;
+  BRL = 15;
+  CAD = 16;
+  CNY = 17;
+  HKD = 18;
+  IDR = 19;
+  ILS = 20;
+  INR = 21;
+  KRW = 22;
+  MXN = 23;
+  MYR = 24;
+  NZD = 25;
+  PHP = 26;
+  SGD = 27;
+  THB = 28;
+  ZAR = 29;
+  EUR = 30;
+}
