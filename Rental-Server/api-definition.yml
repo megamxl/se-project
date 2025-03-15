@@ -40,7 +40,7 @@ paths:
       tags:
         - admin
       summary: Get all users
-      operationId: getUsers
+      operationId: getAllUsers
       responses:
         '200':
           description: List of users
@@ -82,6 +82,7 @@ paths:
       tags:
         - user
       summary: User login using email and password
+      operationId: login
       description: Authenticate a user using their email and password.
       requestBody:
         required: true
@@ -108,12 +109,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    description: The authentication token
-                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjM0NTY3ODkwfQ"
+                $ref: "#/components/schemas/TokenResponse"
         '400':
           description: Bad request (invalid email/password)
         '401':
@@ -279,6 +275,12 @@ paths:
         - booking
       summary: Get a specific booking
       operationId: getBookingById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: List all bookings of a user
@@ -362,10 +364,20 @@ components:
           type: string
         status:
           type: string
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: The authentication token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjM0NTY3ODkwfQ"
     BookingStatus:
       type: string
       enum:
-        -
+        - pending
+        - confirmed
+        - completed
+        - canceled
     Currency:
       type: string
       enum:
