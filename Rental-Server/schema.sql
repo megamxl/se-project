@@ -13,7 +13,6 @@ CREATE TABLE car (
                      model VARCHAR(100) NOT NULL,
                      brand VARCHAR(100) NOT NULL,
                      image_url TEXT,
-                     kilometers INT DEFAULT 0 CHECK (kilometers >= 0),
                      price_per_day DECIMAL(10,2) NOT NULL CHECK (price_per_day >= 0),
                      created_at TIMESTAMP DEFAULT NOW()
                      ---year INT CHECK (year >= 1900 AND year <= EXTRACT(YEAR FROM NOW()))

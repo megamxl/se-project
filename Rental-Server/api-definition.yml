@@ -26,6 +26,19 @@ paths:
     get:
       tags:
         - user
+      summary: Get user info
+      operationId: getUsers
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /users/all:
+    get:
+      tags:
+        - admin
       summary: Get all users
       operationId: getUsers
       responses:
@@ -186,7 +199,7 @@ paths:
         '204':
           description: Car deleted successfully
 
-  /bookings:
+  /booking:
     post:
       tags:
         - booking
@@ -217,7 +230,7 @@ paths:
     get:
       tags:
         - booking
-      summary: Get all bookings
+      summary: Get all bookings by a user
       operationId: getBookings
       responses:
         '200':
@@ -225,9 +238,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/BookingList"
+                $ref: "#/components/schemas/BookingList"
 
     put:
       tags:
@@ -262,40 +273,32 @@ paths:
       responses:
         '204':
           description: Booking deleted successfully
-
-  /bookings/{bookingId}/return:
-    put:
-      tags:
-        - booking
-      summary: Return a booked car
-      operationId: returnCar
-      parameters:
-        - name: bookingId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Car returned successfully
-        '400':
-          description: Invalid booking ID
-  /bookings/{userId}/:
+  /booking/{id}:
     get:
       tags:
         - booking
-      summary: Get All Bookings by user
-      operationId: getAllBookingsByUser
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
+      summary: Get a specific booking
+      operationId: getBookingById
       responses:
         '200':
-          #TODO list of booking
-          description: Car returned successfully
+          description: List all bookings of a user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingList"
+  /bookings/all/:
+    get:
+      tags:
+        - admin
+      summary: Get All Bookings
+      operationId: getAllBookingsByUser
+      responses:
+        '200':
+          description: List all bookings of a user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingList"
         '400':
           description: Invalid booking ID
 
@@ -342,8 +345,6 @@ components:
           type: string
         imageURL:
            type: string
-        kilometers:
-          type: number
         pricePerDay:
           type: number
     BookingList:
