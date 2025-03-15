@@ -1,15 +1,18 @@
 package main
 
 import (
+	"fmt"
 	"github.com/megamxl/se-project/Rental-Server/api"
 	"log"
+	"log/slog"
 	"net/http"
+	"os"
 )
 
 func LoggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		log.Printf("Received request: %s %s", r.Method, r.URL.Path)
+		slog.Debug(fmt.Sprintf("Received request: %s %s from %s ", r.Method, r.URL.Path, r.RemoteAddr))
 
 		// Iterate over headers and log them
 		for name, values := range r.Header {
@@ -23,6 +26,9 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 }
 
 func main() {
+
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{AddSource: true, Level: slog.LevelDebug}))
+	slog.SetDefault(logger)
 
 	server := api.NewServer()
 
