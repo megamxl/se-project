@@ -89,7 +89,7 @@ public class ConversionServiceUnitTests {
         ConversionResponsePayload responsePayload = conversionService.convert(payload);
 
         assertThat(responsePayload.getConvertedCurrency()).isEqualTo(Currency.EUR);
-        assertThat(responsePayload.getAmount()).isEqualTo(41.66666666666667); // 50 / 1.2
+        assertThat(responsePayload.getAmount()).isEqualTo(41.67); // 50 / 1.2
     }
 
 
