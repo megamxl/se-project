@@ -44,6 +44,11 @@ func main() {
 		Addr:    "0.0.0.0:8080",
 	}
 
+	slog.Info("Server started on " + s.Addr)
+
 	// And we serve HTTP until the world ends.
-	log.Fatal(s.ListenAndServe())
+	err := s.ListenAndServe()
+	if err != nil {
+		log.Fatal("ListenAndServe failed : ", err)
+	}
 }
