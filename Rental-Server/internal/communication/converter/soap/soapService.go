@@ -1,7 +1,6 @@
 package soap
 
 import (
-	"errors"
 	"github.com/hooklift/gowsdl/soap"
 	int "github.com/megamxl/se-project/Rental-Server/internal/communication/converter"
 	soapGen "github.com/megamxl/se-project/Rental-Server/internal/communication/converter/soap/myservice"
@@ -25,13 +24,25 @@ var _ int.Converter = (*Service)(nil)
 
 func (s Service) GetAvailableCurrency() ([]string, error) {
 	//TODO implement me
-	/*	_ :=
-		&soapGen.GetAvailableCurrencyRequest{
-			SenselessRequestPayload: &soapGen.SenselessRequestPayload{
-				DontFill: "",
-			},
-		}*/
-	return nil, errors.New("Not implemented")
+	req := &soapGen.GetAvailableCurrencyRequest{
+		SenselessRequestPayload: &soapGen.SenselessRequestPayload{
+			DontFill: "",
+		},
+	}
+
+	resp, err := s.client.GetAvailableCurrency(req)
+	if err != nil {
+		slog.Error("Error calling SOAP service Conversion: ", err)
+		return nil, err
+	}
+
+	currList := []string{}
+
+	for _, currency := range resp.Currencies {
+		currList = append(currList, string(*currency)) // Append directly to currList
+	}
+
+	return currList, nil
 
 }
 

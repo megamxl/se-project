@@ -36,6 +36,11 @@ func main() {
 
 	resp, _ := convService.Convert(req.Request{Amount: 12.0, GivenCurrency: "USD", TargetCurrency: "JPY"})
 
+	currency, _ := convService.GetAvailableCurrency()
+	for _, s := range currency {
+		fmt.Println(s)
+	}
+
 	fmt.Println(resp)
 
 	server := api.NewServer()
