@@ -5,7 +5,7 @@
     <xs:element name="conversionRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="req" type="tns:conversionRequestPayload"/>
+                <xs:element name="conversionRequestPayload" type="tns:conversionRequestPayload"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -13,7 +13,15 @@
     <xs:element name="conversionResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="response" type="tns:conversionResponsePayload"/>
+                <xs:element name="conversionResponsePayload" type="tns:conversionResponsePayload"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getAvailableCurrencyRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="senselessRequestPayload" type="tns:senselessRequestPayload"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -35,7 +43,11 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:element name="getAvailableCurrencyRequest" type="xs:anyType"/>
+    <xs:complexType name="senselessRequestPayload">
+        <xs:sequence>
+            <xs:element name="dontFill" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
 
     <!-- Response Wrapper -->
     <xs:element name="getAvailableCurrencyResponse">

@@ -2,7 +2,10 @@ module github.com/megamxl/se-project/Rental-Server
 
 go 1.24.1
 
-tool github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen
+tool (
+	github.com/hooklift/gowsdl/cmd/gowsdl
+	github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen
+)
 
 require github.com/oapi-codegen/runtime v1.1.1
 
@@ -13,6 +16,7 @@ require (
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/google/uuid v1.5.0 // indirect
+	github.com/hooklift/gowsdl v0.5.0 // indirect
 	github.com/invopop/yaml v0.3.1 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect

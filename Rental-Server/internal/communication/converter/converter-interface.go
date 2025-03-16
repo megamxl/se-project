@@ -1,16 +1,17 @@
 package converter
 
 type Request struct {
-	givenCurrency  string
-	amount         float64
-	targetCurrency string
+	GivenCurrency  string
+	Amount         float64
+	TargetCurrency string
 }
 
 type Response struct {
-	currency string
-	amount   float64
+	Currency string
+	Amount   float64
 }
 
 type Converter interface {
-	convert(request Request) Response
+	Convert(request Request) (Response, error)
+	GetAvailableCurrency() ([]string, error)
 }
