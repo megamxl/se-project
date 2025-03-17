@@ -1,9 +1,9 @@
 version: '3.9'
-name: escapedoom-ms
+name: rental-dev-compose
 services:
   postgres:
     image: postgres:17.2-bookworm
-    container_name: postgres
+    container_name: postgres-car-rental
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
@@ -11,4 +11,6 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - rental_postgres_data:/var/lib/postgresql/data
+volumes:
+  rental_postgres_data:

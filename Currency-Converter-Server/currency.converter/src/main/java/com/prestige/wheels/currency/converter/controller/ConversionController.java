@@ -32,16 +32,16 @@ public class ConversionController {
         ConversionResponse conversionResponse = new ConversionResponse();
 
 
-        ConversionResponsePayload responsePayload = conversionService.convert(request.getReq());
+        ConversionResponsePayload responsePayload = conversionService.convert(request.getConversionRequestPayload());
 
-        conversionResponse.setResponse(responsePayload);
+        conversionResponse.setConversionResponsePayload(responsePayload);
 
         return conversionResponse;
     }
 
     @PayloadRoot(localPart = "getAvailableCurrencyRequest", namespace = NAMESPACE_URI)
     @ResponsePayload
-    GetAvailableCurrencyResponse getAvailableCurrency() {
+    GetAvailableCurrencyResponse getAvailableCurrency(@RequestPayload SenselessRequestPayload request) {
         return resp ;
     }
 
