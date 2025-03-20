@@ -5,6 +5,7 @@ import (
 	"github.com/megamxl/se-project/Rental-Server/api"
 	req "github.com/megamxl/se-project/Rental-Server/internal/communication/converter"
 	int "github.com/megamxl/se-project/Rental-Server/internal/communication/converter/soap"
+	d "github.com/megamxl/se-project/Rental-Server/internal/data/sql"
 	"log"
 	"log/slog"
 	"net/http"
@@ -28,6 +29,8 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 }
 
 func main() {
+
+	d.Db()
 
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{AddSource: true, Level: slog.LevelDebug}))
 	slog.SetDefault(logger)
@@ -60,8 +63,8 @@ func main() {
 	slog.Info("Server started on " + s.Addr)
 
 	// And we serve HTTP until the world ends.
-	err := s.ListenAndServe()
-	if err != nil {
-		log.Fatal("ListenAndServe failed : ", err)
+	err1 := s.ListenAndServe()
+	if err1 != nil {
+		log.Fatal("ListenAndServe failed : ", err1)
 	}
 }
