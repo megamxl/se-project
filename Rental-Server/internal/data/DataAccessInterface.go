@@ -6,28 +6,28 @@ import (
 )
 
 type RentalUser struct {
-	id       uuid.UUID
-	name     string
-	email    string
-	password string
+	Id       uuid.UUID
+	Name     string
+	Email    string
+	Password string
 }
 
 type Car struct {
-	vin         string
-	model       string
-	brand       string
-	imageUrl    string
-	pricePerDay string
+	Vin         string
+	Model       string
+	Brand       string
+	ImageUrl    string
+	PricePerDay string
 }
 
 type Booking struct {
-	id        uuid.UUID
-	carVin    string
-	userId    uuid.UUID
-	startTime time.Time
-	endTime   time.Time
+	Id        uuid.UUID
+	CarVin    string
+	UserId    uuid.UUID
+	StartTime time.Time
+	EndTime   time.Time
 	//look into enums
-	status string
+	Status string
 }
 
 type UserRepository interface {
