@@ -6,18 +6,18 @@ import (
 )
 
 type RentalUser struct {
-	id       uuid.UUID
-	name     string
-	email    string
-	password string
+	Id       uuid.UUID
+	Name     string
+	Email    string
+	Password string
 }
 
 type Car struct {
-	vin         string
-	model       string
-	brand       string
-	imageUrl    string
-	pricePerDay string
+	Vin         string
+	Model       string
+	Brand       string
+	ImageUrl    string
+	PricePerDay string
 }
 
 type Booking struct {
