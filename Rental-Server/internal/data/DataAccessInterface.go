@@ -21,13 +21,13 @@ type Car struct {
 }
 
 type Booking struct {
-	id        uuid.UUID
-	carVin    string
-	userId    uuid.UUID
-	startTime time.Time
-	endTime   time.Time
+	Id        uuid.UUID
+	CarVin    string
+	UserId    uuid.UUID
+	StartTime time.Time
+	EndTime   time.Time
 	//look into enums
-	status string
+	Status string
 }
 
 type UserRepository interface {
@@ -49,9 +49,9 @@ type CarRepository interface {
 }
 
 type BookingRepository interface {
-	GetBookingByVin(vin string) (Booking, error)
+	GetBookingsByVin(vin string) (Booking, error)
 	GetBookingById(id uuid.UUID) (Booking, error)
 	SaveBooking(booking Booking) (Booking, error)
-	DeleteBookingByVin(vin string) error
+	DeleteBookingsByVin(vin string) error
 	DeleteBookingById(id uuid.UUID) error
 }

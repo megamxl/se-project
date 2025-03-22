@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/megamxl/se-project/Rental-Server/api"
-	req "github.com/megamxl/se-project/Rental-Server/internal/communication/converter"
-	int "github.com/megamxl/se-project/Rental-Server/internal/communication/converter/soap"
 	d "github.com/megamxl/se-project/Rental-Server/internal/data/sql"
 	"log"
 	"log/slog"
@@ -35,16 +33,16 @@ func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{AddSource: true, Level: slog.LevelDebug}))
 	slog.SetDefault(logger)
 
-	convService := int.NewSoapService("http://localhost:8080/ws")
+	//convService := int.NewSoapService("http://localhost:8080/ws")
+	//
+	//resp, _ := convService.Convert(req.Request{Amount: 12.0, GivenCurrency: "USD", TargetCurrency: "JPY"})
+	//
+	//currency, _ := convService.GetAvailableCurrency()
+	//for _, s := range currency {
+	//	fmt.Println(s)
+	//}
 
-	resp, _ := convService.Convert(req.Request{Amount: 12.0, GivenCurrency: "USD", TargetCurrency: "JPY"})
-
-	currency, _ := convService.GetAvailableCurrency()
-	for _, s := range currency {
-		fmt.Println(s)
-	}
-
-	fmt.Println(resp)
+	//fmt.Println(resp)
 
 	server := api.NewServer()
 

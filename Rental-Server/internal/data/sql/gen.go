@@ -1,10 +1,16 @@
 package sql
 
 import (
-	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/model"
+	"context"
+	"github.com/google/uuid"
+	dataInt "github.com/megamxl/se-project/Rental-Server/internal/data"
+	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/query"
+	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/repos"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
+	"log/slog"
+	"time"
 )
 
 //go:generate  gentool -c "./gen.tool"
@@ -18,10 +24,33 @@ func Db() {
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
-	var user model.RentalUser
 
-	db.First(&user)
+	use := query.Use(db)
+	repo := repos.RentalRepo{
+		Q:   use,
+		Ctx: context.Background(),
+	}
 
-	log.Printf("User ID: %d, Name: %s, Email: %s\n", user.ID, user.Name, user.Email)
+	id, err := repo.GetBookingById(uuid.MustParse("49b68d7f-069b-44b3-8863-00e69d3be9f7"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	booking := dataInt.Booking{
+		CarVin:    "1HGBH41JXMN109186",
+		UserId:    uuid.MustParse("b9d76281-8850-46dd-b6ce-bc59259a52ab"),
+		StartTime: time.Date(2025, 5, 24, 0, 0, 0, 0, time.UTC),
+		EndTime:   time.Date(2025, 5, 27, 0, 0, 0, 0, time.UTC),
+		Status:    "confirmed",
+	}
+
+	saveBooking, err := repo.SaveBooking(booking)
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
+	slog.Info(saveBooking.Id.String())
+
+	slog.Info(id.UserId.String())
 
 }
