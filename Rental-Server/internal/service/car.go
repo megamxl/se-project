@@ -22,12 +22,6 @@ type carService struct {
 	repo data.CarRepository
 }
 
-func NewCarService(repo data.CarRepository) CarService {
-	return &carService{
-		repo: repo,
-	}
-}
-
 func (s *carService) GetCarByVin(ctx context.Context, vin string) (DTO.Car, error) {
 	if vin == "" {
 		return DTO.Car{}, errors.New("ERROR: Car vin is empty")
@@ -103,6 +97,12 @@ func (s *carService) GetCarsAvailableInTimeRange(ctx context.Context, startTime,
 	}
 
 	return dtoCars, nil
+}
+
+func NewCarService(repo data.CarRepository) CarService {
+	return &carService{
+		repo: repo,
+	}
 }
 
 func MapDataCarToDTOCar(dataCar data.Car) DTO.Car {
