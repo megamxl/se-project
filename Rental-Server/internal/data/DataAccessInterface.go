@@ -33,6 +33,7 @@ type Booking struct {
 type UserRepository interface {
 	GetUserByEmail(email string) (RentalUser, error)
 	GetUserById(id uuid.UUID) (RentalUser, error)
+	GetAllUsers() ([]RentalUser, error)
 	UpdateUserById(id uuid.UUID, update RentalUser) (RentalUser, error)
 	UpdateUserByEmail(email string, update RentalUser) (RentalUser, error)
 	DeleteUserById(id uuid.UUID) error
