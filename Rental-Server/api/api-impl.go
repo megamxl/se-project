@@ -13,7 +13,8 @@ import (
 var _ ServerInterface = (*Server)(nil)
 
 type Server struct {
-	carService service.CarService
+	carService  service.CarService
+	userService service.UserService
 }
 
 func (s Server) Login(w http.ResponseWriter, r *http.Request) {
@@ -133,28 +134,97 @@ func (s Server) UpdateCar(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s Server) GetUsers(w http.ResponseWriter, r *http.Request) {
-	//TODO implement me
-	panic("implement me")
+	// Implementation in future PR
 }
 
 func (s Server) RegisterUser(w http.ResponseWriter, r *http.Request) {
-	//TODO implement me
-	panic("implement me")
+	var body UserMutation
+	if err := Util.DecodeJSON(r, &body); err != nil {
+		http.Error(w, "Invalid input", http.StatusBadRequest)
+		return
+	}
+
+	if body.Username == nil || *body.Username == "" ||
+		body.Email == nil || *body.Email == "" ||
+		body.Password == nil || *body.Password == "" {
+		http.Error(w, "Invalid input: missing fields", http.StatusBadRequest)
+		return
+	}
+
+	_, err := s.userService.RegisterUser(
+		r.Context(),
+		DTO.RentalUser{
+			Name:  *body.Username,
+			Email: string(*body.Email),
+		},
+		*body.Password,
+	)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 }
 
 func (s Server) DeleteUser(w http.ResponseWriter, r *http.Request, params DeleteUserParams) {
-	//TODO implement me
-	panic("implement me")
+	if params.Id == "" {
+		http.Error(w, "Missing 'id' query parameter", http.StatusBadRequest)
+		return
+	}
+
+	err := s.userService.DeleteUser(r.Context(), params.Id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (s Server) GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	//TODO implement me
-	panic("implement me")
+	users, err := s.userService.GetAllUsers(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := Util.WriteJSON(w, http.StatusOK, users); err != nil {
+		http.Error(w, "Failed to write JSON response", http.StatusInternalServerError)
+	}
 }
 
 func (s Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	//TODO implement me
-	panic("implement me")
+	var body UserMutation
+	if err := Util.DecodeJSON(r, &body); err != nil {
+		http.Error(w, "Invalid input", http.StatusBadRequest)
+		return
+	}
+
+	if body.Username == nil || *body.Username == "" ||
+		body.Email == nil || *body.Email == "" {
+		http.Error(w, "Invalid input: missing fields", http.StatusBadRequest)
+		return
+	}
+
+	userToUpdate, err := s.userService.GetUserByEmail(r.Context(), string(*body.Email))
+	if err != nil {
+		http.Error(w, "User not found", http.StatusBadRequest)
+		return
+	}
+
+	userToUpdate.Name = *body.Username
+	if body.Password != nil && *body.Password != "" {
+		userToUpdate.Password = *body.Password
+	}
+
+	_, err = s.userService.UpdateUser(r.Context(), userToUpdate)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func NewServer() Server {
