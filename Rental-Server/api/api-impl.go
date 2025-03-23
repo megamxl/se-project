@@ -13,8 +13,9 @@ import (
 var _ ServerInterface = (*Server)(nil)
 
 type Server struct {
-	carService  service.CarService
-	userService service.UserService
+	carService     service.CarService
+	userService    service.UserService
+	bookingService service.BookingService
 }
 
 func (s Server) Login(w http.ResponseWriter, r *http.Request) {
@@ -25,33 +26,103 @@ func (s Server) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s Server) DeleteBooking(w http.ResponseWriter, r *http.Request, params DeleteBookingParams) {
-	//TODO implement me
-	panic("implement me")
+	if params.BookingId == "" {
+		http.Error(w, "missing 'bookingId' query parameter", http.StatusBadRequest)
+		return
+	}
+
+	if err := s.bookingService.DeleteBooking(r.Context(), params.BookingId); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (s Server) GetBookings(w http.ResponseWriter, r *http.Request) {
-	//TODO implement me
-	panic("implement me")
+	userId := r.URL.Query().Get("userId")
+	if userId == "" {
+		http.Error(w, "missing userId query parameter", http.StatusBadRequest)
+		return
+	}
+
+	bookings, err := s.bookingService.GetAllBookingsByUser(r.Context(), userId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := Util.WriteJSON(w, http.StatusOK, bookings); err != nil {
+		http.Error(w, "failed to write JSON response", http.StatusInternalServerError)
+		return
+	}
 }
 
 func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
-	//TODO implement me
-	panic("implement me")
+	var req DTO.Booking
+	if err := Util.DecodeJSON(r, &req); err != nil {
+		http.Error(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	_, err := s.bookingService.BookCar(r.Context(), req)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 }
 
 func (s Server) UpdateBooking(w http.ResponseWriter, r *http.Request) {
-	//TODO implement me
-	panic("implement me")
+	var req struct {
+		BookingId string `json:"bookingId"`
+		Status    string `json:"status"`
+	}
+	if err := Util.DecodeJSON(r, &req); err != nil {
+		http.Error(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+	if req.BookingId == "" || req.Status == "" {
+		http.Error(w, "missing bookingId or status", http.StatusBadRequest)
+		return
+	}
+
+	_, err := s.bookingService.UpdateBooking(r.Context(), req.BookingId, req.Status)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func (s Server) GetBookingById(w http.ResponseWriter, r *http.Request, id string) {
-	//TODO implement me
-	panic("implement me")
+	if id == "" {
+		http.Error(w, "missing id in path", http.StatusBadRequest)
+		return
+	}
+
+	booking, err := s.bookingService.GetBookingById(r.Context(), id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := Util.WriteJSON(w, http.StatusOK, booking); err != nil {
+		http.Error(w, "failed to write JSON response", http.StatusInternalServerError)
+		return
+	}
 }
 
 func (s Server) GetAllBookingsByUser(w http.ResponseWriter, r *http.Request) {
-	//TODO implement me
-	panic("implement me")
+	bookings, err := s.bookingService.GetAllBookings(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	if err := Util.WriteJSON(w, http.StatusOK, bookings); err != nil {
+		http.Error(w, "failed to write JSON response", http.StatusBadRequest)
+		return
+	}
 }
 
 func (s Server) DeleteCar(w http.ResponseWriter, r *http.Request, params DeleteCarParams) {
@@ -134,7 +205,8 @@ func (s Server) UpdateCar(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s Server) GetUsers(w http.ResponseWriter, r *http.Request) {
-	// Implementation in future PR
+	//TODO Implementation in future PR
+	panic("implement me")
 }
 
 func (s Server) RegisterUser(w http.ResponseWriter, r *http.Request) {

@@ -55,4 +55,6 @@ type BookingRepository interface {
 	SaveBooking(booking Booking) (Booking, error)
 	DeleteBookingsByVin(vin string) error
 	DeleteBookingById(id uuid.UUID) error
+	GetAllBookingsByUser(userId uuid.UUID) ([]Booking, error)
+	GetAllBookings() ([]Booking, error)
 }
