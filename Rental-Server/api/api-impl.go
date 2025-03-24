@@ -2,8 +2,8 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/megamxl/se-project/Rental-Server/api/DTO"
 	"github.com/megamxl/se-project/Rental-Server/api/Util"
+	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/service"
 	"net/http"
 	"time"
@@ -58,7 +58,7 @@ func (s Server) GetBookings(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
-	var req DTO.Booking
+	var req data.Booking
 	if err := Util.DecodeJSON(r, &req); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
@@ -174,7 +174,7 @@ func (s Server) ListCars(w http.ResponseWriter, r *http.Request, params ListCars
 }
 
 func (s Server) AddCar(w http.ResponseWriter, r *http.Request) {
-	var car DTO.Car
+	var car data.Car
 	if err := Util.DecodeJSON(r, &car); err != nil {
 		http.Error(w, "ERROR: invalid request body", http.StatusBadRequest)
 		return
@@ -189,7 +189,7 @@ func (s Server) AddCar(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s Server) UpdateCar(w http.ResponseWriter, r *http.Request) {
-	var car DTO.Car
+	var car data.Car
 	if err := Util.DecodeJSON(r, &car); err != nil {
 		http.Error(w, "ERROR: invalid request body", http.StatusBadRequest)
 		return
@@ -225,7 +225,7 @@ func (s Server) RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	_, err := s.userService.RegisterUser(
 		r.Context(),
-		DTO.RentalUser{
+		data.RentalUser{
 			Name:  *body.Username,
 			Email: string(*body.Email),
 		},

@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/google/uuid"
-	"github.com/megamxl/se-project/Rental-Server/api/DTO"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/service"
 	"github.com/stretchr/testify/assert"
@@ -76,14 +75,14 @@ func (m *mockUserRepository) GetAllUsers() ([]data.RentalUser, error) {
 func TestRegisterUser(t *testing.T) {
 	tests := []struct {
 		name          string
-		inputUser     DTO.RentalUser
+		inputUser     data.RentalUser
 		password      string
 		mockFunc      func(user data.RentalUser) (data.RentalUser, error)
 		expectedError string
 	}{
 		{
 			name: "missing fields",
-			inputUser: DTO.RentalUser{
+			inputUser: data.RentalUser{
 				Email: "",
 				Name:  "Alice",
 			},
@@ -92,7 +91,7 @@ func TestRegisterUser(t *testing.T) {
 		},
 		{
 			name: "repository error",
-			inputUser: DTO.RentalUser{
+			inputUser: data.RentalUser{
 				Email: "alice@example.com",
 				Name:  "Alice",
 			},
@@ -104,7 +103,7 @@ func TestRegisterUser(t *testing.T) {
 		},
 		{
 			name: "success",
-			inputUser: DTO.RentalUser{
+			inputUser: data.RentalUser{
 				Email: "alice@example.com",
 				Name:  "Alice",
 			},
@@ -147,7 +146,7 @@ func TestGetUserById(t *testing.T) {
 		inputID       string
 		mockFunc      func(id uuid.UUID) (data.RentalUser, error)
 		expectedError string
-		expectedUser  DTO.RentalUser
+		expectedUser  data.RentalUser
 	}{
 		{
 			name:          "invalid id format",
@@ -174,7 +173,7 @@ func TestGetUserById(t *testing.T) {
 				}, nil
 			},
 			expectedError: "",
-			expectedUser: DTO.RentalUser{
+			expectedUser: data.RentalUser{
 				Id:    validID,
 				Email: "bob@example.com",
 				Name:  "Bob",
@@ -211,7 +210,7 @@ func TestGetUserByEmail(t *testing.T) {
 		inputEmail    string
 		mockFunc      func(email string) (data.RentalUser, error)
 		expectedError string
-		expectedUser  DTO.RentalUser
+		expectedUser  data.RentalUser
 	}{
 		{
 			name:          "empty email",
@@ -238,7 +237,7 @@ func TestGetUserByEmail(t *testing.T) {
 				}, nil
 			},
 			expectedError: "",
-			expectedUser: DTO.RentalUser{
+			expectedUser: data.RentalUser{
 				Email: "charlie@example.com",
 				Name:  "Charlie",
 			},
@@ -271,13 +270,13 @@ func TestUpdateUser(t *testing.T) {
 	validID := uuid.New()
 	tests := []struct {
 		name          string
-		inputUser     DTO.RentalUser
+		inputUser     data.RentalUser
 		mockFunc      func(id uuid.UUID, update data.RentalUser) (data.RentalUser, error)
 		expectedError string
 	}{
 		{
 			name: "empty user id",
-			inputUser: DTO.RentalUser{
+			inputUser: data.RentalUser{
 				Id:       uuid.Nil,
 				Email:    "dave@example.com",
 				Name:     "Dave",
@@ -287,7 +286,7 @@ func TestUpdateUser(t *testing.T) {
 		},
 		{
 			name: "repository error",
-			inputUser: DTO.RentalUser{
+			inputUser: data.RentalUser{
 				Id:       validID,
 				Email:    "dave@example.com",
 				Name:     "Dave",
@@ -300,7 +299,7 @@ func TestUpdateUser(t *testing.T) {
 		},
 		{
 			name: "success",
-			inputUser: DTO.RentalUser{
+			inputUser: data.RentalUser{
 				Id:       validID,
 				Email:    "dave@example.com",
 				Name:     "Dave",

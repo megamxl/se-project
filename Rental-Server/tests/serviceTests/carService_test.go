@@ -3,7 +3,6 @@ package serviceTests
 import (
 	"context"
 	"errors"
-	"github.com/megamxl/se-project/Rental-Server/api/DTO"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/service"
 	"github.com/stretchr/testify/assert"
@@ -60,13 +59,13 @@ func (m *mockCarRepository) GetCarsAvailableInTimeRange(startTime, endTime time.
 func TestCreateCar(t *testing.T) {
 	tests := []struct {
 		name          string
-		inputCar      DTO.Car
+		inputCar      data.Car
 		mockRepoFunc  func(car data.Car) (data.Car, error)
 		expectedError string
 	}{
 		{
 			name: "empty VIN",
-			inputCar: DTO.Car{
+			inputCar: data.Car{
 				Vin:   "",
 				Model: "Golf",
 				Brand: "VW",
@@ -75,7 +74,7 @@ func TestCreateCar(t *testing.T) {
 		},
 		{
 			name: "missing brand",
-			inputCar: DTO.Car{
+			inputCar: data.Car{
 				Vin:   "1234ABC",
 				Model: "Golf",
 				Brand: "",
@@ -84,7 +83,7 @@ func TestCreateCar(t *testing.T) {
 		},
 		{
 			name: "repository error on save",
-			inputCar: DTO.Car{
+			inputCar: data.Car{
 				Vin:   "1234ABC",
 				Model: "Golf",
 				Brand: "VW",
@@ -96,7 +95,7 @@ func TestCreateCar(t *testing.T) {
 		},
 		{
 			name: "success",
-			inputCar: DTO.Car{
+			inputCar: data.Car{
 				Vin:         "1234ABC",
 				Model:       "Golf",
 				Brand:       "VW",
@@ -142,7 +141,7 @@ func TestGetCarByVin(t *testing.T) {
 		vin           string
 		mockRepoFunc  func(vin string) (data.Car, error)
 		expectedError string
-		expectedCar   DTO.Car
+		expectedCar   data.Car
 	}{
 		{
 			name:          "empty VIN",
@@ -170,7 +169,7 @@ func TestGetCarByVin(t *testing.T) {
 				}, nil
 			},
 			expectedError: "",
-			expectedCar: DTO.Car{
+			expectedCar: data.Car{
 				Vin:         "1234ABC",
 				Model:       "Golf",
 				Brand:       "VW",
@@ -206,13 +205,13 @@ func TestGetCarByVin(t *testing.T) {
 func TestUpdateCar(t *testing.T) {
 	tests := []struct {
 		name          string
-		inputCar      DTO.Car
+		inputCar      data.Car
 		mockRepoFunc  func(car data.Car) (data.Car, error)
 		expectedError string
 	}{
 		{
 			name: "empty VIN",
-			inputCar: DTO.Car{
+			inputCar: data.Car{
 				Vin:   "",
 				Model: "Golf",
 				Brand: "VW",
@@ -221,7 +220,7 @@ func TestUpdateCar(t *testing.T) {
 		},
 		{
 			name: "repository error on update",
-			inputCar: DTO.Car{
+			inputCar: data.Car{
 				Vin:   "1234ABC",
 				Model: "Golf",
 				Brand: "VW",
@@ -233,7 +232,7 @@ func TestUpdateCar(t *testing.T) {
 		},
 		{
 			name: "success",
-			inputCar: DTO.Car{
+			inputCar: data.Car{
 				Vin:         "1234ABC",
 				Model:       "Golf",
 				Brand:       "VW",
