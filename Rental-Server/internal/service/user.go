@@ -9,7 +9,7 @@ import (
 )
 
 type UserService interface {
-	RegisterUser(ctx context.Context, user data.RentalUser, password string) (data.RentalUser, error)
+	RegisterUser(ctx context.Context, user data.RentalUser) (data.RentalUser, error)
 	GetUserById(ctx context.Context, id string) (data.RentalUser, error)
 	GetUserByEmail(ctx context.Context, email string) (data.RentalUser, error)
 	UpdateUser(ctx context.Context, user data.RentalUser) (data.RentalUser, error)
@@ -21,8 +21,8 @@ type userService struct {
 	repo data.UserRepository
 }
 
-func (s userService) RegisterUser(ctx context.Context, user data.RentalUser, password string) (data.RentalUser, error) {
-	if user.Email == "" || user.Name == "" || password == "" {
+func (s userService) RegisterUser(ctx context.Context, user data.RentalUser) (data.RentalUser, error) {
+	if user.Email == "" || user.Name == "" || user.Password == "" {
 		return data.RentalUser{}, errors.New("ERROR: missing required user fields")
 	}
 

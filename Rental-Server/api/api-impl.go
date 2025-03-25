@@ -257,10 +257,10 @@ func (s Server) RegisterUser(w http.ResponseWriter, r *http.Request) {
 	_, err := s.userService.RegisterUser(
 		r.Context(),
 		data.RentalUser{
-			Name:  *body.Username,
-			Email: string(*body.Email),
+			Name:     *body.Username,
+			Email:    string(*body.Email),
+			Password: *body.Password,
 		},
-		*body.Password,
 	)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
