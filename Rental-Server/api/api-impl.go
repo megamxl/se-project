@@ -374,18 +374,25 @@ func MapDataCarToCar(dataCar data.Car) Car {
 }
 
 func MapDataUserToUser(user data.RentalUser) User {
+
+	idString := user.Id.String()
+
 	return User{
 		Email:    &user.Email,
-		Id:       &user.Id,
+		Id:       &idString,
 		Username: &user.Name,
 	}
 }
 
 func MapDataBookingToBooking(booking data.Booking) Booking {
+
+	bookingId := booking.Id.String()
+	userId := booking.UserId.String()
+
 	return Booking{
 		VIN:       &booking.CarVin,
-		BookingId: &booking.Id,
+		BookingId: &bookingId,
 		Status:    &booking.Status,
-		UserId:    &booking.UserId,
+		UserId:    &userId,
 	}
 }
