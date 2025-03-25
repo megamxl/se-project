@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"github.com/google/uuid"
 	"github.com/megamxl/se-project/Rental-Server/api/Util"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/query"
@@ -69,13 +70,20 @@ func (s Server) GetBookings(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
-	var req data.Booking
+	var req BookCarJSONBody
 	if err := Util.DecodeJSON(r, &req); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	_, err := s.bookingService.BookCar(r.Context(), req)
+	//TODO Fetch from Context
+	_, err := s.bookingService.BookCar(r.Context(), data.Booking{
+		CarVin:    *req.VIN,
+		UserId:    uuid.MustParse("e392e650-03f6-48a8-adee-d9f8857c48ef"),
+		StartTime: *req.StartTime,
+		EndTime:   *req.EndTime,
+	})
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -364,12 +372,14 @@ func ptr(s string) *string {
 }
 
 func MapDataCarToCar(dataCar data.Car) Car {
+	price := float32(dataCar.PricePerDay)
+
 	return Car{
 		VIN:         &dataCar.Vin,
 		Brand:       &dataCar.Brand,
 		ImageURL:    &dataCar.ImageUrl,
 		Model:       &dataCar.Model,
-		PricePerDay: &dataCar.PricePerDay,
+		PricePerDay: &price,
 	}
 }
 
