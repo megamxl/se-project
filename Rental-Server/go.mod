@@ -14,6 +14,7 @@ require (
 	gorm.io/driver/postgres v1.5.0
 	gorm.io/gen v0.3.26
 	gorm.io/gorm v1.25.12
+	gorm.io/plugin/dbresolver v1.5.3
 )
 
 require (
@@ -48,5 +49,4 @@ require (
 	gorm.io/datatypes v1.2.5 // indirect
 	gorm.io/driver/mysql v1.5.7 // indirect
 	gorm.io/hints v1.1.2 // indirect
-	gorm.io/plugin/dbresolver v1.5.3 // indirect
 )

@@ -2,10 +2,12 @@ package repos
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	dataInt "github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/model"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/query"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -14,6 +16,7 @@ var _ dataInt.CarRepository = (*CarRepo)(nil)
 type CarRepo struct {
 	Q   *query.Query
 	Ctx context.Context
+	Db  *gorm.DB
 }
 
 func (c CarRepo) GetCarByVin(vin string) (dataInt.Car, error) {
@@ -59,7 +62,16 @@ func (c CarRepo) DeleteCarByVin(vin string) error {
 func (c CarRepo) GetCarsAvailableInTimeRange(startTime time.Time, endTime time.Time) ([]dataInt.Car, error) {
 	//TODO implement me
 	// I need the superiors (Maxls) help to autogenerate the relation
-	panic("implement me")
+	layout := "2006-01-02 15:04:05"
+	var cars []dataInt.Car
+
+	tx := c.Db.WithContext(c.Ctx).Raw("SELECT c.* FROM car c WHERE NOT EXISTS ( SELECT 1 FROM booking b WHERE b.car_vin = c.vin AND tsrange(b.start_time, b.end_time) && tsrange(@start, @end))", sql.Named("start", startTime.Format(layout)), sql.Named("end", endTime.Format(layout))).Find(&cars)
+
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	return cars, nil
 }
 
 func intToModelCar(car dataInt.Car) *model.Car {
