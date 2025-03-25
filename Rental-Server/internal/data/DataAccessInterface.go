@@ -18,6 +18,11 @@ type Car struct {
 	Brand       string
 	ImageUrl    string
 	PricePerDay float64
+	Vin         string
+	Model       string
+	Brand       string
+	ImageUrl    string
+	PricePerDay string
 }
 
 type Booking struct {
@@ -33,6 +38,7 @@ type Booking struct {
 type UserRepository interface {
 	GetUserByEmail(email string) (RentalUser, error)
 	GetUserById(id uuid.UUID) (RentalUser, error)
+	GetAllUsers() ([]RentalUser, error)
 	UpdateUserById(id uuid.UUID, update RentalUser) (RentalUser, error)
 	UpdateUserByEmail(email string, update RentalUser) (RentalUser, error)
 	DeleteUserById(id uuid.UUID) error
@@ -54,4 +60,6 @@ type BookingRepository interface {
 	SaveBooking(booking Booking) (Booking, error)
 	DeleteBookingsByVin(vin string) error
 	DeleteBookingById(id uuid.UUID) error
+	GetAllBookingsByUser(userId uuid.UUID) ([]Booking, error)
+	GetAllBookings() ([]Booking, error)
 }
