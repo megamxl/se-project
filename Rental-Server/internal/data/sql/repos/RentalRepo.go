@@ -14,6 +14,16 @@ type RentalRepo struct {
 	Ctx context.Context
 }
 
+func (r RentalRepo) GetAllBookingsByUser(userId uuid.UUID) ([]dataInt.Booking, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (r RentalRepo) GetAllBookings() ([]dataInt.Booking, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (r RentalRepo) GetBookingsByVin(vin string) (dataInt.Booking, error) {
 
 	//TODO implement me
@@ -21,7 +31,6 @@ func (r RentalRepo) GetBookingsByVin(vin string) (dataInt.Booking, error) {
 }
 
 func (r RentalRepo) GetBookingById(id uuid.UUID) (dataInt.Booking, error) {
-	//TODO implement me
 
 	find, err := r.Q.WithContext(r.Ctx).Booking.Where(r.Q.Booking.ID.Eq(id.String())).Find()
 	if err != nil {

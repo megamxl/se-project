@@ -1,10 +1,16 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/megamxl/se-project/Rental-Server/api/Util"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
+	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/query"
+	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/repos"
 	"github.com/megamxl/se-project/Rental-Server/internal/service"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"log"
 	"net/http"
 	"time"
 )
@@ -299,8 +305,36 @@ func (s Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func NewServer() Server {
-	return Server{}
+func NewServer(dsn string) Server {
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
+
+	use := query.Use(db)
+
+	carRepo := repos.CarRepo{
+		Db:  db,
+		Ctx: context.Background(),
+		Q:   use,
+	}
+
+	repo := repos.RentalRepo{
+		Q:   use,
+		Ctx: context.Background(),
+	}
+
+	userRepo := repos.UserRepo{
+		Q:   use,
+		Ctx: context.Background(),
+	}
+
+	return Server{
+		carService:     service.NewCarService(carRepo),
+		userService:    service.NewUserService(&userRepo),
+		bookingService: service.NewBookingService(repo),
+	}
 }
 
 func ptr(s string) *string {

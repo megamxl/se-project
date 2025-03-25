@@ -4,7 +4,7 @@ info:
   description: REST-style API for user registration, listing cars, booking, and returning cars.
   version: 1.0.0
 servers:
-  - url: https://api.example.com/v1
+  - url: http://localhost:8098
 paths:
   /users:
     post:

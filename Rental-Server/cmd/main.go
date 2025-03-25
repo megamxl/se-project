@@ -44,7 +44,9 @@ func main() {
 
 	//fmt.Println(resp)
 
-	server := api.NewServer()
+	dsn := "host=localhost user=admin password=admin dbname=main port=5432 sslmode=disable"
+
+	server := api.NewServer(dsn)
 
 	r := http.NewServeMux()
 
