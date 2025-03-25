@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/google/uuid"
-	"github.com/megamxl/se-project/Rental-Server/api/DTO"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/service"
 	"github.com/stretchr/testify/assert"
@@ -76,13 +75,13 @@ func (m *mockBookingRepository) GetAllBookings() ([]data.Booking, error) {
 func TestBookCar(t *testing.T) {
 	tests := []struct {
 		name          string
-		inputBooking  DTO.Booking
+		inputBooking  data.Booking
 		mockSaveFunc  func(booking data.Booking) (data.Booking, error)
 		expectedError string
 	}{
 		{
 			name: "empty VIN",
-			inputBooking: DTO.Booking{
+			inputBooking: data.Booking{
 				CarVin: "",
 				Status: "",
 			},
@@ -90,7 +89,7 @@ func TestBookCar(t *testing.T) {
 		},
 		{
 			name: "repository error on save",
-			inputBooking: DTO.Booking{
+			inputBooking: data.Booking{
 				CarVin: "ABC123",
 				Status: "",
 			},
@@ -101,7 +100,7 @@ func TestBookCar(t *testing.T) {
 		},
 		{
 			name: "success",
-			inputBooking: DTO.Booking{
+			inputBooking: data.Booking{
 				CarVin: "ABC123",
 				Status: "",
 			},
@@ -142,7 +141,7 @@ func TestGetBookingById(t *testing.T) {
 		inputID         string
 		mockGetFunc     func(id uuid.UUID) (data.Booking, error)
 		expectedError   string
-		expectedBooking DTO.Booking
+		expectedBooking data.Booking
 	}{
 		{
 			name:          "invalid id format",
@@ -168,7 +167,7 @@ func TestGetBookingById(t *testing.T) {
 				}, nil
 			},
 			expectedError: "",
-			expectedBooking: DTO.Booking{
+			expectedBooking: data.Booking{
 				Id:     uuid.MustParse(validID),
 				CarVin: "ABC123",
 				Status: "pending",
