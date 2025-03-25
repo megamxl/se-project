@@ -51,10 +51,15 @@ func (s Server) GetBookings(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bookings, err := s.bookingService.GetAllBookingsByUser(r.Context(), userId)
+	dataBookings, err := s.bookingService.GetAllBookingsByUser(r.Context(), userId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	bookings := make([]Booking, len(dataBookings))
+	for index, db := range dataBookings {
+		bookings[index] = MapDataBookingToBooking(db)
 	}
 
 	if err := Util.WriteJSON(w, http.StatusOK, bookings); err != nil {
@@ -113,18 +118,25 @@ func (s Server) GetBookingById(w http.ResponseWriter, r *http.Request, id string
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := Util.WriteJSON(w, http.StatusOK, booking); err != nil {
+
+	if err := Util.WriteJSON(w, http.StatusOK, MapDataBookingToBooking(booking)); err != nil {
 		http.Error(w, "failed to write JSON response", http.StatusInternalServerError)
 		return
 	}
 }
 
 func (s Server) GetAllBookingsByUser(w http.ResponseWriter, r *http.Request) {
-	bookings, err := s.bookingService.GetAllBookings(r.Context())
+	dataBookings, err := s.bookingService.GetAllBookings(r.Context())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	bookings := make([]Booking, len(dataBookings))
+	for index, db := range dataBookings {
+		bookings[index] = MapDataBookingToBooking(db)
+	}
+
 	if err := Util.WriteJSON(w, http.StatusOK, bookings); err != nil {
 		http.Error(w, "failed to write JSON response", http.StatusBadRequest)
 		return
@@ -167,10 +179,15 @@ func (s Server) ListCars(w http.ResponseWriter, r *http.Request, params ListCars
 		return
 	}
 
-	cars, err := s.carService.GetCarsAvailableInTimeRange(r.Context(), startTimeVal, endTimeVal)
+	dataCars, err := s.carService.GetCarsAvailableInTimeRange(r.Context(), startTimeVal, endTimeVal)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	cars := make([]Car, len(dataCars))
+	for index, db := range dataCars {
+		cars[index] = MapDataCarToCar(db)
 	}
 
 	if err := Util.WriteJSON(w, http.StatusOK, cars); err != nil {
@@ -261,10 +278,15 @@ func (s Server) DeleteUser(w http.ResponseWriter, r *http.Request, params Delete
 }
 
 func (s Server) GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	users, err := s.userService.GetAllUsers(r.Context())
+	dataUsers, err := s.userService.GetAllUsers(r.Context())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	users := make([]User, len(dataUsers))
+	for index, db := range dataUsers {
+		users[index] = MapDataUserToUser(db)
 	}
 
 	if err := Util.WriteJSON(w, http.StatusOK, users); err != nil {
@@ -339,4 +361,31 @@ func NewServer(dsn string) Server {
 
 func ptr(s string) *string {
 	return &s
+}
+
+func MapDataCarToCar(dataCar data.Car) Car {
+	return Car{
+		VIN:         &dataCar.Vin,
+		Brand:       &dataCar.Brand,
+		ImageURL:    &dataCar.ImageUrl,
+		Model:       &dataCar.Model,
+		PricePerDay: &dataCar.PricePerDay,
+	}
+}
+
+func MapDataUserToUser(user data.RentalUser) User {
+	return User{
+		Email:    &user.Email,
+		Id:       &user.Id,
+		Username: &user.Name,
+	}
+}
+
+func MapDataBookingToBooking(booking data.Booking) Booking {
+	return Booking{
+		VIN:       &booking.CarVin,
+		BookingId: &booking.Id,
+		Status:    &booking.Status,
+		UserId:    &booking.UserId,
+	}
 }

@@ -17,7 +17,7 @@ type Car struct {
 	Model       string
 	Brand       string
 	ImageUrl    string
-	PricePerDay float64
+	PricePerDay float32
 }
 
 type Booking struct {
