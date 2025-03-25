@@ -15,19 +15,35 @@ type RentalRepo struct {
 }
 
 func (r RentalRepo) GetAllBookingsByUser(userId uuid.UUID) ([]dataInt.Booking, error) {
-	//TODO implement me
-	panic("implement me")
+
+	find, err := r.Q.WithContext(r.Ctx).Booking.Where(r.Q.Booking.CustomerID.Eq(userId.String())).Find()
+	if err != nil {
+		return nil, err
+	}
+
+	return MapBookingsToDTOs(find), nil
+
 }
 
 func (r RentalRepo) GetAllBookings() ([]dataInt.Booking, error) {
-	//TODO implement me
-	panic("implement me")
+
+	find, err := r.Q.WithContext(r.Ctx).Booking.Find()
+	if err != nil {
+		return nil, err
+	}
+
+	return MapBookingsToDTOs(find), nil
 }
 
-func (r RentalRepo) GetBookingsByVin(vin string) (dataInt.Booking, error) {
+func (r RentalRepo) GetBookingsByVin(vin string) ([]dataInt.Booking, error) {
 
-	//TODO implement me
-	panic("implement me")
+	find, err := r.Q.WithContext(r.Ctx).Booking.Where(r.Q.Booking.CarVin.Eq(vin)).Find()
+	if err != nil {
+		return nil, err
+	}
+
+	return MapBookingsToDTOs(find), nil
+
 }
 
 func (r RentalRepo) GetBookingById(id uuid.UUID) (dataInt.Booking, error) {
@@ -61,8 +77,13 @@ func (r RentalRepo) SaveBooking(booking dataInt.Booking) (dataInt.Booking, error
 }
 
 func (r RentalRepo) DeleteBookingsByVin(vin string) error {
-	//TODO implement me
-	panic("implement me")
+
+	_, err := r.Q.WithContext(r.Ctx).Booking.Where(r.Q.Booking.CarVin.Eq(vin)).Delete()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r RentalRepo) DeleteBookingById(id uuid.UUID) error {
@@ -96,4 +117,12 @@ func modelToInt(newBooking *model.Booking) dataInt.Booking {
 		Status:    newBooking.Status,
 	}
 	return savedBooking
+}
+
+func MapBookingsToDTOs(bookings []*model.Booking) []dataInt.Booking {
+	dtos := make([]dataInt.Booking, len(bookings))
+	for i, booking := range bookings {
+		dtos[i] = modelToInt(booking)
+	}
+	return dtos
 }

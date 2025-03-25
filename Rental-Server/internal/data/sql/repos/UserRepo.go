@@ -17,8 +17,12 @@ type UserRepo struct {
 }
 
 func (u *UserRepo) GetAllUsers() ([]dataInt.RentalUser, error) {
-	//TODO implement me
-	panic("implement me")
+	find, err := u.Q.WithContext(u.Ctx).RentalUser.Find()
+	if err != nil {
+		return nil, err
+	}
+
+	return MapUserToDTOs(find), nil
 }
 
 func (u *UserRepo) GetUserByEmail(email string) (dataInt.RentalUser, error) {
@@ -101,4 +105,12 @@ func modelToIntRentalUser(newRentalUser *model.RentalUser) dataInt.RentalUser {
 		Password: newRentalUser.Password,
 	}
 	return savedRentalUser
+}
+
+func MapUserToDTOs(bookings []*model.RentalUser) []dataInt.RentalUser {
+	dtos := make([]dataInt.RentalUser, len(bookings))
+	for i, booking := range bookings {
+		dtos[i] = modelToIntRentalUser(booking)
+	}
+	return dtos
 }

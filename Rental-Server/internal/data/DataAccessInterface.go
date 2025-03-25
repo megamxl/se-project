@@ -50,7 +50,7 @@ type CarRepository interface {
 }
 
 type BookingRepository interface {
-	GetBookingsByVin(vin string) (Booking, error)
+	GetBookingsByVin(vin string) ([]Booking, error)
 	GetBookingById(id uuid.UUID) (Booking, error)
 	SaveBooking(booking Booking) (Booking, error)
 	DeleteBookingsByVin(vin string) error

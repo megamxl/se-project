@@ -60,7 +60,6 @@ func (c CarRepo) DeleteCarByVin(vin string) error {
 }
 
 func (c CarRepo) GetCarsAvailableInTimeRange(startTime time.Time, endTime time.Time) ([]dataInt.Car, error) {
-	//TODO implement me
 	// I need the superiors (Maxls) help to autogenerate the relation
 	layout := "2006-01-02 15:04:05"
 	var cars []dataInt.Car
