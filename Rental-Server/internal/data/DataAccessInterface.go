@@ -57,4 +57,5 @@ type BookingRepository interface {
 	DeleteBookingById(id uuid.UUID) error
 	GetAllBookingsByUser(userId uuid.UUID) ([]Booking, error)
 	GetAllBookings() ([]Booking, error)
+	UpdateBookingStateById(id uuid.UUID, update string) (Booking, error)
 }

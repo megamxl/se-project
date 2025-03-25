@@ -14,6 +14,25 @@ type RentalRepo struct {
 	Ctx context.Context
 }
 
+func (r RentalRepo) UpdateBookingStateById(id uuid.UUID, state string) (dataInt.Booking, error) {
+
+	_, err := r.Q.WithContext(r.Ctx).Booking.Where(r.Q.Booking.ID.Eq(id.String())).Update(
+		r.Q.Booking.Status, state)
+	if err != nil {
+		return dataInt.Booking{}, err
+	}
+
+	first, err := r.Q.WithContext(r.Ctx).Booking.
+		Where(r.Q.Booking.ID.Eq(id.String())).
+		First()
+	if err != nil {
+		return dataInt.Booking{}, err
+	}
+
+	return modelToInt(first), nil
+
+}
+
 func (r RentalRepo) GetAllBookingsByUser(userId uuid.UUID) ([]dataInt.Booking, error) {
 
 	find, err := r.Q.WithContext(r.Ctx).Booking.Where(r.Q.Booking.CustomerID.Eq(userId.String())).Find()
