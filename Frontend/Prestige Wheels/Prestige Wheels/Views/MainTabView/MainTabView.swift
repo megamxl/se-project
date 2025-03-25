@@ -8,21 +8,30 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @EnvironmentObject var loginViewModel: LoginViewModel
+    
     var body: some View {
         TabView {
             Tab("Find a Car", systemImage: "car.fill") {
                 FindCarView()
             }
             Tab("Bookings", systemImage: "book.pages.fill") {
-                EmptyView()
+                MyBookingsView()
             }
             Tab("Profile", systemImage: "person.crop.circle.fill") {
-                EmptyView()
+                ProfileView()
             }
         }
+//        .fullScreenCover(isPresented: Binding(
+//            get: { !loginViewModel.isLoggedIn },
+//            set: { loginViewModel.isLoggedIn = !$0 }
+//        )) {
+//            LoginView()
+//        }
     }
 }
 
 #Preview {
     MainTabView()
+        .environmentObject(LoginViewModel())
 }
