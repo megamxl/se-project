@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"github.com/megamxl/se-project/Rental-Server/api"
 	d "github.com/megamxl/se-project/Rental-Server/internal/data/sql"
+	"github.com/megamxl/se-project/Rental-Server/internal/middleware"
 	"log"
 	"log/slog"
 	"net/http"
@@ -13,14 +14,45 @@ import (
 func LoggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		slog.Debug(fmt.Sprintf("Received request: %s %s from %s ", r.Method, r.URL.Path, r.RemoteAddr))
+		var err error
 
-		// Iterate over headers and log them
-		for name, values := range r.Header {
-			for _, value := range values {
-				log.Printf("Header: %s = %s", name, value)
-			}
+		if r.URL.Path == "/login" && r.Method == "POST" {
+			next.ServeHTTP(w, r)
 		}
+
+		if r.URL.Path == "/users" && r.Method == "POST" {
+			next.ServeHTTP(w, r)
+		}
+
+		token, err := middleware.ExtractBearerToken(r)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+
+		claims, err := middleware.ValidateAndReturnClaimsFromJWT(token)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+
+		userID, ok := claims["sub"].(string)
+		if !ok {
+			http.Error(w, "Unauthorized: missing subject", http.StatusUnauthorized)
+			return
+		}
+
+		roles, ok := claims["roles"].(string)
+		if !ok {
+			http.Error(w, "Unauthorized: missing subject", http.StatusUnauthorized)
+			return
+		}
+
+		ctx := context.WithValue(r.Context(), middleware.ContextKeyUserID, userID)
+		ctx = context.WithValue(ctx, middleware.ContextKeyRoles, roles)
+
+		// Update the request context with the new context
+		r = r.WithContext(ctx)
 
 		next.ServeHTTP(w, r)
 	})

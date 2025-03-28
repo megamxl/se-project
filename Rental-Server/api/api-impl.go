@@ -2,12 +2,13 @@ package api
 
 import (
 	"context"
-	"encoding/json"
+	"errors"
 	"github.com/google/uuid"
 	"github.com/megamxl/se-project/Rental-Server/api/Util"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/query"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/repos"
+	"github.com/megamxl/se-project/Rental-Server/internal/middleware"
 	"github.com/megamxl/se-project/Rental-Server/internal/service"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -26,10 +27,36 @@ type Server struct {
 }
 
 func (s Server) Login(w http.ResponseWriter, r *http.Request) {
-	resp := TokenResponse{Token: ptr("eyMyToken")}
-	w.Header().Set("Content-Type", "application/json") // Set header first
+	var body LoginJSONRequestBody
+
+	if err := Util.DecodeJSON(r, &body); err != nil {
+		http.Error(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	errMsg := "Password or Email incorrect"
+
+	user, err := s.userService.GetUserByEmail(r.Context(), string(body.Email))
+	if err != nil {
+		http.Error(w, errMsg, http.StatusUnauthorized)
+	}
+
+	if user.Password != body.Password {
+		http.Error(w, errMsg, http.StatusUnauthorized)
+	}
+
+	jwtForUser, err := middleware.CreateJWForUser(user)
+	if err != nil {
+		http.Error(w, "can't create Token check wit the support", http.StatusInternalServerError)
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "jwt",
+		Value:   jwtForUser,
+		Expires: time.Now().Add(24 * time.Hour),
+	})
+
 	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(resp)
 }
 
 func (s Server) DeleteBooking(w http.ResponseWriter, r *http.Request, params DeleteBookingParams) {
@@ -46,13 +73,13 @@ func (s Server) DeleteBooking(w http.ResponseWriter, r *http.Request, params Del
 }
 
 func (s Server) GetBookings(w http.ResponseWriter, r *http.Request) {
-	userId := r.URL.Query().Get("userId")
-	if userId == "" {
-		http.Error(w, "missing userId query parameter", http.StatusBadRequest)
-		return
+
+	userIdFromRequest, err := getUserIdFromRequest(r)
+	if err != nil {
+		http.Error(w, "User not found contact support", http.StatusBadRequest)
 	}
 
-	dataBookings, err := s.bookingService.GetAllBookingsByUser(r.Context(), userId)
+	dataBookings, err := s.bookingService.GetAllBookingsByUser(r.Context(), userIdFromRequest.String())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -72,14 +99,18 @@ func (s Server) GetBookings(w http.ResponseWriter, r *http.Request) {
 func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
 	var req BookCarJSONBody
 	if err := Util.DecodeJSON(r, &req); err != nil {
-		http.Error(w, "invalid request body", http.StatusBadRequest)
+		http.Error(w, "invalid userIdFromRequest body", http.StatusBadRequest)
 		return
 	}
 
-	//TODO Fetch from Context
-	_, err := s.bookingService.BookCar(r.Context(), data.Booking{
+	userIdFromRequest, err := getUserIdFromRequest(r)
+	if err != nil {
+		http.Error(w, "User not found contact support", http.StatusBadRequest)
+	}
+
+	_, err = s.bookingService.BookCar(r.Context(), data.Booking{
 		CarVin:    *req.VIN,
-		UserId:    uuid.MustParse("e392e650-03f6-48a8-adee-d9f8857c48ef"),
+		UserId:    userIdFromRequest,
 		StartTime: *req.StartTime,
 		EndTime:   *req.EndTime,
 	})
@@ -236,8 +267,18 @@ func (s Server) UpdateCar(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s Server) GetUsers(w http.ResponseWriter, r *http.Request) {
-	//TODO Implementation in future PR
-	panic("implement me")
+
+	userIdFromRequest, err := getUserIdFromRequest(r)
+	if err != nil {
+		http.Error(w, "User not found contact support", http.StatusBadRequest)
+	}
+
+	user, err := s.userService.GetUserById(r.Context(), userIdFromRequest.String())
+
+	if err := Util.WriteJSON(w, http.StatusOK, MapDataUserToUser(user)); err != nil {
+		http.Error(w, "failed to write JSON response", http.StatusInternalServerError)
+	}
+
 }
 
 func (s Server) RegisterUser(w http.ResponseWriter, r *http.Request) {
@@ -405,4 +446,15 @@ func MapDataBookingToBooking(booking data.Booking) Booking {
 		Status:    &booking.Status,
 		UserId:    &userId,
 	}
+}
+
+func getUserIdFromRequest(r *http.Request) (uuid.UUID, error) {
+
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		return uuid.Max, errors.New("UserId not found in request context")
+	}
+
+	return uuid.Parse(userID)
+
 }
