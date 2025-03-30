@@ -381,6 +381,10 @@ components:
           type: string
         status:
           type: string
+        paidAmount:
+          type: number
+        currency:
+          $ref: "#/components/schemas/Currency"
     TokenResponse:
       type: object
       properties:

@@ -51,10 +51,12 @@ const (
 
 // Booking defines model for Booking.
 type Booking struct {
-	VIN       *string `json:"VIN,omitempty"`
-	BookingId *string `json:"bookingId,omitempty"`
-	Status    *string `json:"status,omitempty"`
-	UserId    *string `json:"userId,omitempty"`
+	VIN        *string   `json:"VIN,omitempty"`
+	BookingId  *string   `json:"bookingId,omitempty"`
+	Currency   *Currency `json:"currency,omitempty"`
+	PaidAmount *float32  `json:"paidAmount,omitempty"`
+	Status     *string   `json:"status,omitempty"`
+	UserId     *string   `json:"userId,omitempty"`
 }
 
 // BookingList defines model for BookingList.

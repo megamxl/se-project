@@ -450,11 +450,16 @@ func MapDataBookingToBooking(booking data.Booking) Booking {
 	bookingId := booking.Id.String()
 	userId := booking.UserId.String()
 
+	f := float32(booking.AmountPaid)
+
+	currency := Currency(booking.Currency)
 	return Booking{
-		VIN:       &booking.CarVin,
-		BookingId: &bookingId,
-		Status:    &booking.Status,
-		UserId:    &userId,
+		VIN:        &booking.CarVin,
+		BookingId:  &bookingId,
+		Status:     &booking.Status,
+		UserId:     &userId,
+		PaidAmount: &f,
+		Currency:   &currency,
 	}
 }
 
