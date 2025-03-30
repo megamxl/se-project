@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/google/uuid"
 	"github.com/megamxl/se-project/Rental-Server/api/Util"
+	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter/soap"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/query"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/repos"
@@ -99,7 +100,7 @@ func (s Server) GetBookings(w http.ResponseWriter, r *http.Request) {
 func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
 	var req BookCarJSONBody
 	if err := Util.DecodeJSON(r, &req); err != nil {
-		http.Error(w, "invalid userIdFromRequest body", http.StatusBadRequest)
+		http.Error(w, "invalid Request body", http.StatusBadRequest)
 		return
 	}
 
@@ -218,16 +219,15 @@ func (s Server) ListCars(w http.ResponseWriter, r *http.Request, params ListCars
 		return
 	}
 
-	dataCars, err := s.carService.GetCarsAvailableInTimeRange(r.Context(), startTimeVal, endTimeVal)
+	dataCars, err := s.carService.GetCarsAvailableInTimeRange(r.Context(), startTimeVal, endTimeVal, string(params.Currency))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	cars := make([]Car, len(dataCars))
-	for index, db := range dataCars {
-		cars[index] = MapDataCarToCar(db)
-	}
+	duration := endTimeVal.Sub(startTimeVal).Hours() / 24
+
+	cars := CarIntToListResponse(dataCars, int(duration), params.Currency)
 
 	if err := Util.WriteJSON(w, http.StatusOK, cars); err != nil {
 		http.Error(w, "ERROR: failed to write JSON response", http.StatusInternalServerError)
@@ -401,8 +401,10 @@ func NewServer(dsn string) Server {
 		Ctx: context.Background(),
 	}
 
+	convService := soap.NewSoapService("http://localhost:8080/ws")
+
 	return Server{
-		carService:     service.NewCarService(carRepo),
+		carService:     service.NewCarService(carRepo, convService),
 		userService:    service.NewUserService(&userRepo),
 		bookingService: service.NewBookingService(repo),
 	}
@@ -457,4 +459,34 @@ func getUserIdFromRequest(r *http.Request) (uuid.UUID, error) {
 
 	return uuid.Parse(userID)
 
+}
+
+func CarIntToListResponse(cars []data.Car, duration int, curr Currency) CarList {
+
+	var carListResponse CarList
+
+	for _, car := range cars {
+		pricePerDay := float32(car.PricePerDay)
+		priceOverAll := float32(car.PricePerDay * float64(duration))
+
+		carListResponse = append(carListResponse, struct {
+			VIN          *string   `json:"VIN,omitempty"`
+			Brand        *string   `json:"brand,omitempty"`
+			Currency     *Currency `json:"currency,omitempty"`
+			ImageURL     *string   `json:"imageURL,omitempty"`
+			Model        *string   `json:"model,omitempty"`
+			PriceOverAll *float32  `json:"priceOverAll,omitempty"`
+			PricePerDay  *float32  `json:"pricePerDay,omitempty"`
+		}{
+			VIN:          &car.Vin,
+			Brand:        &car.Brand,
+			Currency:     &curr,
+			ImageURL:     &car.ImageUrl,
+			Model:        &car.Model,
+			PriceOverAll: &priceOverAll,
+			PricePerDay:  &pricePerDay,
+		})
+	}
+
+	return carListResponse
 }

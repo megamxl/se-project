@@ -70,7 +70,15 @@ type Car struct {
 }
 
 // CarList defines model for CarList.
-type CarList = []Car
+type CarList = []struct {
+	VIN          *string   `json:"VIN,omitempty"`
+	Brand        *string   `json:"brand,omitempty"`
+	Currency     *Currency `json:"currency,omitempty"`
+	ImageURL     *string   `json:"imageURL,omitempty"`
+	Model        *string   `json:"model,omitempty"`
+	PriceOverAll *float32  `json:"priceOverAll,omitempty"`
+	PricePerDay  *float32  `json:"pricePerDay,omitempty"`
+}
 
 // Currency defines model for Currency.
 type Currency string

@@ -334,7 +334,24 @@ components:
     CarList:
       type: array
       items:
-        $ref: "#/components/schemas/Car"
+        type: object
+        properties:
+          VIN:
+            type: string
+            #TODO look at this and determine if validation https://stackoverflow.com/questions/30314850/vin-validation-regex
+          model:
+            type: string
+          brand:
+            type: string
+          imageURL:
+            type: string
+          priceOverAll:
+            type: number
+          pricePerDay:
+            type: number
+          currency:
+            $ref: "#/components/schemas/Currency"
+
     Car:
       type: object
       properties:

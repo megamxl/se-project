@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter"
+	"log/slog"
 	"time"
 
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
@@ -14,11 +16,12 @@ type CarService interface {
 	CreateCar(ctx context.Context, car data.Car) (data.Car, error)
 	UpdateCar(ctx context.Context, car data.Car) (data.Car, error)
 	DeleteCarByVin(ctx context.Context, vin string) error
-	GetCarsAvailableInTimeRange(ctx context.Context, startTime, endTime time.Time) ([]data.Car, error)
+	GetCarsAvailableInTimeRange(ctx context.Context, startTime, endTime time.Time, currency string) ([]data.Car, error)
 }
 
 type carService struct {
 	repo data.CarRepository
+	conv converter.Converter
 }
 
 func (s *carService) GetCarByVin(ctx context.Context, vin string) (data.Car, error) {
@@ -76,12 +79,27 @@ func (s *carService) DeleteCarByVin(ctx context.Context, vin string) error {
 	return nil
 }
 
-func (s *carService) GetCarsAvailableInTimeRange(ctx context.Context, startTime, endTime time.Time) ([]data.Car, error) {
+func (s *carService) GetCarsAvailableInTimeRange(ctx context.Context, startTime, endTime time.Time, currency string) ([]data.Car, error) {
 	if endTime.Before(startTime) {
 		return nil, errors.New("EndTime is earlier than StartTime")
 	}
 
 	dataCars, err := s.repo.GetCarsAvailableInTimeRange(startTime, endTime)
+
+	for i, dataCar := range dataCars {
+		convert, err := s.conv.Convert(converter.Request{
+			GivenCurrency:  "USD",
+			Amount:         dataCar.PricePerDay,
+			TargetCurrency: currency,
+		})
+		if err != nil {
+			slog.Error("Conversion Error:", err)
+			continue
+		}
+
+		dataCars[i].PricePerDay = convert.Amount
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("GetCarsAvailableInTimeRange: %w", err)
 	}
@@ -89,8 +107,9 @@ func (s *carService) GetCarsAvailableInTimeRange(ctx context.Context, startTime,
 	return dataCars, nil
 }
 
-func NewCarService(repo data.CarRepository) CarService {
+func NewCarService(repo data.CarRepository, conv converter.Converter) CarService {
 	return &carService{
 		repo: repo,
+		conv: conv,
 	}
 }
