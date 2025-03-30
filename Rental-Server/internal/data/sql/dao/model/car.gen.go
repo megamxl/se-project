@@ -16,6 +16,7 @@ type Car struct {
 	Model       string    `gorm:"column:model;not null" json:"model"`
 	Brand       string    `gorm:"column:brand;not null" json:"brand"`
 	ImageURL    string    `gorm:"column:image_url" json:"image_url"`
+	Kilometers  int32     `gorm:"column:kilometers" json:"kilometers"`
 	PricePerDay float64   `gorm:"column:price_per_day;not null" json:"price_per_day"`
 	CreatedAt   time.Time `gorm:"column:created_at;default:now()" json:"created_at"`
 }

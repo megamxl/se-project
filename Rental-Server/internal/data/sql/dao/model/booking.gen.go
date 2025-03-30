@@ -12,16 +12,15 @@ const TableNameBooking = "booking"
 
 // Booking mapped from table <booking>
 type Booking struct {
-	ID string `gor
-
-
-m:"column:id;primaryKey;default:gen_random_uuid()" json:"id"`
+	ID         string    `gorm:"column:id;primaryKey;default:gen_random_uuid()" json:"id"`
 	CarVin     string    `gorm:"column:car_vin;not null" json:"car_vin"`
 	CustomerID string    `gorm:"column:customer_id;not null" json:"customer_id"`
 	StartTime  time.Time `gorm:"column:start_time;not null" json:"start_time"`
 	EndTime    time.Time `gorm:"column:end_time;not null" json:"end_time"`
 	Status     string    `gorm:"column:status;default:pending" json:"status"`
 	CreatedAt  time.Time `gorm:"column:created_at;default:now()" json:"created_at"`
+	Paidamount float64   `gorm:"column:paidamount" json:"paidamount"`
+	Currency   string    `gorm:"column:currency" json:"currency"`
 }
 
 // TableName Booking's table name

@@ -27,7 +27,9 @@ type Booking struct {
 	StartTime time.Time
 	EndTime   time.Time
 	//look into enums
-	Status string
+	Status     string
+	AmountPaid float64
+	Currency   string
 }
 
 type UserRepository interface {

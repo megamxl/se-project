@@ -109,12 +109,20 @@ func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "User not found contact support", http.StatusBadRequest)
 	}
 
+	vin, err := s.carService.GetCarByVin(r.Context(), *req.VIN)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
 	_, err = s.bookingService.BookCar(r.Context(), data.Booking{
 		CarVin:    *req.VIN,
 		UserId:    userIdFromRequest,
 		StartTime: *req.StartTime,
 		EndTime:   *req.EndTime,
-	})
+	},
+		string(*req.Currency),
+		vin.PricePerDay,
+	)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -406,7 +414,7 @@ func NewServer(dsn string) Server {
 	return Server{
 		carService:     service.NewCarService(carRepo, convService),
 		userService:    service.NewUserService(&userRepo),
-		bookingService: service.NewBookingService(repo),
+		bookingService: service.NewBookingService(repo, convService),
 	}
 }
 
