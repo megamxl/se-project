@@ -6,33 +6,34 @@ import (
 )
 
 type RentalUser struct {
-	id       uuid.UUID
-	name     string
-	email    string
-	password string
+	Id       uuid.UUID
+	Name     string
+	Email    string
+	Password string
 }
 
 type Car struct {
-	vin         string
-	model       string
-	brand       string
-	imageUrl    string
-	pricePerDay string
+	Vin         string
+	Model       string
+	Brand       string
+	ImageUrl    string
+	PricePerDay float64
 }
 
 type Booking struct {
-	id        uuid.UUID
-	carVin    string
-	userId    uuid.UUID
-	startTime time.Time
-	endTime   time.Time
+	Id        uuid.UUID
+	CarVin    string
+	UserId    uuid.UUID
+	StartTime time.Time
+	EndTime   time.Time
 	//look into enums
-	status string
+	Status string
 }
 
 type UserRepository interface {
 	GetUserByEmail(email string) (RentalUser, error)
 	GetUserById(id uuid.UUID) (RentalUser, error)
+	GetAllUsers() ([]RentalUser, error)
 	UpdateUserById(id uuid.UUID, update RentalUser) (RentalUser, error)
 	UpdateUserByEmail(email string, update RentalUser) (RentalUser, error)
 	DeleteUserById(id uuid.UUID) error
@@ -49,9 +50,12 @@ type CarRepository interface {
 }
 
 type BookingRepository interface {
-	GetBookingByVin(vin string) (Booking, error)
+	GetBookingsByVin(vin string) ([]Booking, error)
 	GetBookingById(id uuid.UUID) (Booking, error)
 	SaveBooking(booking Booking) (Booking, error)
-	DeleteBookingByVin(vin string) error
+	DeleteBookingsByVin(vin string) error
 	DeleteBookingById(id uuid.UUID) error
+	GetAllBookingsByUser(userId uuid.UUID) ([]Booking, error)
+	GetAllBookings() ([]Booking, error)
+	UpdateBookingStateById(id uuid.UUID, update string) (Booking, error)
 }

@@ -31,7 +31,7 @@ CREATE TABLE booking (
                          CONSTRAINT fk_booking_car FOREIGN KEY (car_vin) REFERENCES car(vin) ON DELETE CASCADE,
                          CONSTRAINT fk_booking_customer FOREIGN KEY (customer_id) REFERENCES rental_user(id) ON DELETE CASCADE,
 
-                         CONSTRAINT chk_start_time_before_end_time CHECK (start_time < end_time),
+                         CONSTRAINT chk_start_time_before_end_time CHECK (start_time <= end_time),
 
                         -- Prevent overlapping bookings for the same car (PostgreSQL)
                         -- Instead of '[]' (inclusive range), we could use '[)' (start-inclusive, end-exclusive) to allow back-to-back bookings without gaps.

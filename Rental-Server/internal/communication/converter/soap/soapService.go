@@ -23,7 +23,6 @@ func NewSoapService(url string) *Service {
 var _ int.Converter = (*Service)(nil)
 
 func (s Service) GetAvailableCurrency() ([]string, error) {
-	//TODO implement me
 	req := &soapGen.GetAvailableCurrencyRequest{
 		SenselessRequestPayload: &soapGen.SenselessRequestPayload{
 			DontFill: "",
