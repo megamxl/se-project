@@ -136,14 +136,14 @@ paths:
           required: false
           schema:
             type: string
-            format: date-time
+            format: date
         - name: endTime
           in: query
           description: End time for filtering cars based on availability
           required: false
           schema:
             type: string
-            format: date-time
+            format: date
       responses:
         '200':
           description: List of available cars
@@ -214,10 +214,10 @@ paths:
                   $ref: "#/components/schemas/Currency"
                 startTime:
                   type: string
-                  format: date-time
+                  format: date
                 endTime:
                   type: string
-                  format: date-time
+                  format: date
       responses:
         '201':
           description: Car booked successfully

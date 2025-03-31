@@ -9,12 +9,15 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"strings"
 )
 
-func LoggingMiddleware(next http.Handler) http.Handler {
+func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		var err error
+
+		r.URL.Path = strings.TrimRight(r.URL.Path, "/")
 
 		if r.URL.Path == "/login" && r.Method == "POST" {
 			next.ServeHTTP(w, r)
@@ -72,7 +75,7 @@ func main() {
 	// get an `http.Handler` that we can use
 	h := api.HandlerFromMux(server, r)
 
-	hWithMiddleware := LoggingMiddleware(h)
+	hWithMiddleware := Middleware(h)
 
 	s := &http.Server{
 		Handler: hWithMiddleware,

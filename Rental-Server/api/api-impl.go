@@ -118,8 +118,8 @@ func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
 	booking, err := s.bookingService.BookCar(r.Context(), data.Booking{
 		CarVin:    *req.VIN,
 		UserId:    userIdFromRequest,
-		StartTime: *req.StartTime,
-		EndTime:   *req.EndTime,
+		StartTime: req.StartTime.Time,
+		EndTime:   req.EndTime.Time,
 	},
 		string(*req.Currency),
 		vin.PricePerDay,
@@ -221,11 +221,11 @@ func (s Server) ListCars(w http.ResponseWriter, r *http.Request, params ListCars
 	var endTimeVal time.Time
 
 	if params.StartTime != nil {
-		startTimeVal = *params.StartTime
+		startTimeVal = params.StartTime.Time
 	}
 
 	if params.EndTime != nil {
-		endTimeVal = *params.EndTime
+		endTimeVal = params.EndTime.Time
 	}
 
 	if !startTimeVal.IsZero() && !endTimeVal.IsZero() && endTimeVal.Before(startTimeVal) {
