@@ -29,7 +29,7 @@ func Middleware(next http.Handler) http.Handler {
 			return
 		}
 
-		token, err := middleware.ExtractBearerToken(r)
+		token, err := middleware.ExtractToken(r)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
 			return
