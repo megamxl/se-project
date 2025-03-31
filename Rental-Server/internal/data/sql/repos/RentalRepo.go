@@ -122,18 +122,22 @@ func intToModel(booking dataInt.Booking) *model.Booking {
 		StartTime:  booking.StartTime,
 		EndTime:    booking.EndTime,
 		Status:     booking.Status,
+		Paidamount: booking.AmountPaid,
+		Currency:   booking.Currency,
 	}
 	return newBooking
 }
 
 func modelToInt(newBooking *model.Booking) dataInt.Booking {
 	savedBooking := dataInt.Booking{
-		Id:        uuid.MustParse(newBooking.ID),
-		CarVin:    newBooking.CarVin,
-		UserId:    uuid.MustParse(newBooking.CustomerID),
-		StartTime: newBooking.StartTime,
-		EndTime:   newBooking.EndTime,
-		Status:    newBooking.Status,
+		Id:         uuid.MustParse(newBooking.ID),
+		CarVin:     newBooking.CarVin,
+		UserId:     uuid.MustParse(newBooking.CustomerID),
+		StartTime:  newBooking.StartTime,
+		EndTime:    newBooking.EndTime,
+		Status:     newBooking.Status,
+		AmountPaid: newBooking.Paidamount,
+		Currency:   newBooking.Currency,
 	}
 	return savedBooking
 }

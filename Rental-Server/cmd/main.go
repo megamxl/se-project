@@ -2,29 +2,34 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/megamxl/se-project/Rental-Server/api"
-	d "github.com/megamxl/se-project/Rental-Server/internal/data/sql"
 	"github.com/megamxl/se-project/Rental-Server/internal/middleware"
 	"log"
 	"log/slog"
 	"net/http"
 	"os"
+	"strings"
 )
 
-func LoggingMiddleware(next http.Handler) http.Handler {
+func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		var err error
 
+		r.URL.Path = strings.TrimRight(r.URL.Path, "/")
+
 		if r.URL.Path == "/login" && r.Method == "POST" {
 			next.ServeHTTP(w, r)
+			return
 		}
 
 		if r.URL.Path == "/users" && r.Method == "POST" {
 			next.ServeHTTP(w, r)
+			return
 		}
 
-		token, err := middleware.ExtractBearerToken(r)
+		token, err := middleware.ExtractToken(r)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
 			return
@@ -60,36 +65,21 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 
 func main() {
 
-	d.Db()
-
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{AddSource: true, Level: slog.LevelDebug}))
 	slog.SetDefault(logger)
 
-	//convService := int.NewSoapService("http://localhost:8080/ws")
-	//
-	//resp, _ := convService.Convert(req.Request{Amount: 12.0, GivenCurrency: "USD", TargetCurrency: "JPY"})
-	//
-	//currency, _ := convService.GetAvailableCurrency()
-	//for _, s := range currency {
-	//	fmt.Println(s)
-	//}
-
-	//fmt.Println(resp)
-
-	dsn := "host=localhost user=admin password=admin dbname=main port=5432 sslmode=disable"
-
-	server := api.NewServer(dsn)
+	server := api.NewServer(generateDSNStringFromEnvVariables())
 
 	r := http.NewServeMux()
 
 	// get an `http.Handler` that we can use
 	h := api.HandlerFromMux(server, r)
 
-	hWithMiddleware := LoggingMiddleware(h)
+	hWithMiddleware := Middleware(h)
 
 	s := &http.Server{
 		Handler: hWithMiddleware,
-		Addr:    "0.0.0.0:8098",
+		Addr:    os.Getenv("WEB_HOST") + ":" + os.Getenv("WEB_PORT"),
 	}
 
 	slog.Info("Server started on " + s.Addr)
@@ -99,4 +89,16 @@ func main() {
 	if err1 != nil {
 		log.Fatal("ListenAndServe failed : ", err1)
 	}
+}
+
+func generateDSNStringFromEnvVariables() string {
+
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+	dbUsername := os.Getenv("DB_USERNAME")
+	dbPW := os.Getenv("DB_PASSWORD")
+	dbSSL := os.Getenv("DB_SSL-MODE")
+
+	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s", dbHost, dbUsername, dbPW, dbName, dbPort, dbSSL)
 }

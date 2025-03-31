@@ -34,6 +34,8 @@ func newBooking(db *gorm.DB, opts ...gen.DOOption) booking {
 	_booking.EndTime = field.NewTime(tableName, "end_time")
 	_booking.Status = field.NewString(tableName, "status")
 	_booking.CreatedAt = field.NewTime(tableName, "created_at")
+	_booking.Paidamount = field.NewFloat64(tableName, "paidamount")
+	_booking.Currency = field.NewString(tableName, "currency")
 
 	_booking.fillFieldMap()
 
@@ -51,6 +53,8 @@ type booking struct {
 	EndTime    field.Time
 	Status     field.String
 	CreatedAt  field.Time
+	Paidamount field.Float64
+	Currency   field.String
 
 	fieldMap map[string]field.Expr
 }
@@ -74,6 +78,8 @@ func (b *booking) updateTableName(table string) *booking {
 	b.EndTime = field.NewTime(table, "end_time")
 	b.Status = field.NewString(table, "status")
 	b.CreatedAt = field.NewTime(table, "created_at")
+	b.Paidamount = field.NewFloat64(table, "paidamount")
+	b.Currency = field.NewString(table, "currency")
 
 	b.fillFieldMap()
 
@@ -98,7 +104,7 @@ func (b *booking) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (b *booking) fillFieldMap() {
-	b.fieldMap = make(map[string]field.Expr, 7)
+	b.fieldMap = make(map[string]field.Expr, 9)
 	b.fieldMap["id"] = b.ID
 	b.fieldMap["car_vin"] = b.CarVin
 	b.fieldMap["customer_id"] = b.CustomerID
@@ -106,6 +112,8 @@ func (b *booking) fillFieldMap() {
 	b.fieldMap["end_time"] = b.EndTime
 	b.fieldMap["status"] = b.Status
 	b.fieldMap["created_at"] = b.CreatedAt
+	b.fieldMap["paidamount"] = b.Paidamount
+	b.fieldMap["currency"] = b.Currency
 }
 
 func (b booking) clone(db *gorm.DB) booking {

@@ -5,11 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
+	"log/slog"
 )
 
 type BookingService interface {
-	BookCar(ctx context.Context, req data.Booking) (data.Booking, error)
+	BookCar(ctx context.Context, req data.Booking, currency string, pricePerDayInUSD float64) (data.Booking, error)
 	GetBookingById(ctx context.Context, id string) (data.Booking, error)
 	UpdateBooking(ctx context.Context, bookingId string, status string) (data.Booking, error)
 	DeleteBooking(ctx context.Context, bookingId string) error
@@ -19,15 +21,33 @@ type BookingService interface {
 
 type bookingService struct {
 	repo data.BookingRepository
+	conv converter.Converter
 }
 
-func (s bookingService) BookCar(ctx context.Context, req data.Booking) (data.Booking, error) {
+func (s bookingService) BookCar(ctx context.Context, req data.Booking, currency string, pricePerDayInUSD float64) (data.Booking, error) {
 	if req.CarVin == "" {
 		return data.Booking{}, errors.New("BookCar: VIN is empty")
 	}
 
 	if req.Status == "" {
 		req.Status = "pending"
+	}
+
+	between := GetDurationBetween(req.StartTime, req.EndTime).Hours() / 24
+
+	convert, err := s.conv.Convert(converter.Request{
+		GivenCurrency:  "USD",
+		Amount:         pricePerDayInUSD,
+		TargetCurrency: currency,
+	})
+
+	req.Currency = currency
+	req.AmountPaid = convert.Amount * between
+
+	if err != nil {
+		slog.Error(" conversion error creating Booking in USD", err)
+		req.Currency = "USD"
+		req.AmountPaid = pricePerDayInUSD * between
 	}
 
 	saved, err := s.repo.SaveBooking(req)
@@ -102,8 +122,9 @@ func (s bookingService) GetAllBookings(ctx context.Context) ([]data.Booking, err
 	return bookings, nil
 }
 
-func NewBookingService(repo data.BookingRepository) BookingService {
+func NewBookingService(repo data.BookingRepository, conv converter.Converter) BookingService {
 	return &bookingService{
 		repo: repo,
+		conv: conv,
 	}
 }

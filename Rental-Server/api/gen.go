@@ -8,7 +8,6 @@ package api
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/oapi-codegen/runtime"
 	openapi_types "github.com/oapi-codegen/runtime/types"
@@ -51,10 +50,12 @@ const (
 
 // Booking defines model for Booking.
 type Booking struct {
-	VIN       *string `json:"VIN,omitempty"`
-	BookingId *string `json:"bookingId,omitempty"`
-	Status    *string `json:"status,omitempty"`
-	UserId    *string `json:"userId,omitempty"`
+	VIN        *string   `json:"VIN,omitempty"`
+	BookingId  *string   `json:"bookingId,omitempty"`
+	Currency   *Currency `json:"currency,omitempty"`
+	PaidAmount *float32  `json:"paidAmount,omitempty"`
+	Status     *string   `json:"status,omitempty"`
+	UserId     *string   `json:"userId,omitempty"`
 }
 
 // BookingList defines model for BookingList.
@@ -113,10 +114,10 @@ type DeleteBookingParams struct {
 
 // BookCarJSONBody defines parameters for BookCar.
 type BookCarJSONBody struct {
-	VIN       *string    `json:"VIN,omitempty"`
-	Currency  *Currency  `json:"currency,omitempty"`
-	EndTime   *time.Time `json:"endTime,omitempty"`
-	StartTime *time.Time `json:"startTime,omitempty"`
+	VIN       *string             `json:"VIN,omitempty"`
+	Currency  *Currency           `json:"currency,omitempty"`
+	EndTime   *openapi_types.Date `json:"endTime,omitempty"`
+	StartTime *openapi_types.Date `json:"startTime,omitempty"`
 }
 
 // UpdateBookingJSONBody defines parameters for UpdateBooking.
@@ -136,10 +137,10 @@ type ListCarsParams struct {
 	Currency Currency `form:"currency" json:"currency"`
 
 	// StartTime Start time for filtering cars based on availability
-	StartTime *time.Time `form:"startTime,omitempty" json:"startTime,omitempty"`
+	StartTime *openapi_types.Date `form:"startTime,omitempty" json:"startTime,omitempty"`
 
 	// EndTime End time for filtering cars based on availability
-	EndTime *time.Time `form:"endTime,omitempty" json:"endTime,omitempty"`
+	EndTime *openapi_types.Date `form:"endTime,omitempty" json:"endTime,omitempty"`
 }
 
 // LoginJSONBody defines parameters for Login.

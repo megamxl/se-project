@@ -41,3 +41,6 @@ CREATE TABLE booking (
                              DATERANGE(start_time, end_time, '[]') WITH &&
                         )
 );
+
+ALTER TABLE booking ADD paidAmount DECIMAL (10,2);
+ALTER TABLE booking ADD currency Varchar (3);

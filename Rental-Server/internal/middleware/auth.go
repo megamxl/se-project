@@ -55,10 +55,16 @@ func ValidateAndReturnClaimsFromJWT(tokenString string) (jwt.MapClaims, error) {
 var ErrMissingAuthHeader = errors.New("missing Authorization header")
 var ErrInvalidAuthHeader = errors.New("invalid Authorization header format")
 
-func ExtractBearerToken(r *http.Request) (string, error) {
+func ExtractToken(r *http.Request) (string, error) {
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
-		return "", ErrMissingAuthHeader
+
+		cookie, err := r.Cookie("jwt")
+		if err != nil {
+			return "", ErrMissingAuthHeader
+		}
+
+		return cookie.Value, nil
 	}
 
 	parts := strings.SplitN(authHeader, " ", 2)

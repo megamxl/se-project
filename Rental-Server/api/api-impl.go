@@ -15,6 +15,7 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -109,15 +110,28 @@ func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "User not found contact support", http.StatusBadRequest)
 	}
 
-	_, err = s.bookingService.BookCar(r.Context(), data.Booking{
+	vin, err := s.carService.GetCarByVin(r.Context(), *req.VIN)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	booking, err := s.bookingService.BookCar(r.Context(), data.Booking{
 		CarVin:    *req.VIN,
 		UserId:    userIdFromRequest,
-		StartTime: *req.StartTime,
-		EndTime:   *req.EndTime,
-	})
+		StartTime: req.StartTime.Time,
+		EndTime:   req.EndTime.Time,
+	},
+		string(*req.Currency),
+		vin.PricePerDay,
+	)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := Util.WriteJSON(w, http.StatusOK, MapDataBookingToBooking(booking)); err != nil {
+		http.Error(w, "failed to write JSON response", http.StatusInternalServerError)
 		return
 	}
 
@@ -207,11 +221,11 @@ func (s Server) ListCars(w http.ResponseWriter, r *http.Request, params ListCars
 	var endTimeVal time.Time
 
 	if params.StartTime != nil {
-		startTimeVal = *params.StartTime
+		startTimeVal = params.StartTime.Time
 	}
 
 	if params.EndTime != nil {
-		endTimeVal = *params.EndTime
+		endTimeVal = params.EndTime.Time
 	}
 
 	if !startTimeVal.IsZero() && !endTimeVal.IsZero() && endTimeVal.Before(startTimeVal) {
@@ -401,12 +415,12 @@ func NewServer(dsn string) Server {
 		Ctx: context.Background(),
 	}
 
-	convService := soap.NewSoapService("http://localhost:8080/ws")
+	convService := soap.NewSoapService(os.Getenv("CONVERTOR_SOAP_URL"))
 
 	return Server{
 		carService:     service.NewCarService(carRepo, convService),
 		userService:    service.NewUserService(&userRepo),
-		bookingService: service.NewBookingService(repo),
+		bookingService: service.NewBookingService(repo, convService),
 	}
 }
 
@@ -442,11 +456,16 @@ func MapDataBookingToBooking(booking data.Booking) Booking {
 	bookingId := booking.Id.String()
 	userId := booking.UserId.String()
 
+	f := float32(booking.AmountPaid)
+
+	currency := Currency(booking.Currency)
 	return Booking{
-		VIN:       &booking.CarVin,
-		BookingId: &bookingId,
-		Status:    &booking.Status,
-		UserId:    &userId,
+		VIN:        &booking.CarVin,
+		BookingId:  &bookingId,
+		Status:     &booking.Status,
+		UserId:     &userId,
+		PaidAmount: &f,
+		Currency:   &currency,
 	}
 }
 
