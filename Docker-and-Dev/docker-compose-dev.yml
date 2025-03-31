@@ -13,7 +13,7 @@ services:
     volumes:
       - rental_postgres_data:/var/lib/postgresql/data
 
-  conveter:
+  converter:
     image: ghcr.io/megamxl/se-project/java-currency-converter:latest
     ports:
      - "8081:8080"
@@ -36,6 +36,6 @@ services:
       - CONVERTOR_SOAP_URL=http://host.docker.internal:8081/ws
     depends_on:
       - postgres
-      - conveter
+      - converter
 volumes:
   rental_postgres_data:
