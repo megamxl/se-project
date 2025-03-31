@@ -33,7 +33,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build rentalService
         working-directory: ./Rental-Server
-        run: docker build -t ghcr.io/megamxl/se-project/rental:latest
+        run: docker build -t ghcr.io/megamxl/se-project/rental:latest .
       - name: Push rentalService
         working-directory: ./Rental-Server
         run: docker push ghcr.io/megamxl/se-project/rental:latest
