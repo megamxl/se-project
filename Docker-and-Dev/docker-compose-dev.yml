@@ -12,5 +12,30 @@ services:
       - "5432:5432"
     volumes:
       - rental_postgres_data:/var/lib/postgresql/data
+
+  conveter:
+    image: ghcr.io/megamxl/se-project/java-currency-converter:latest
+    ports:
+     - "8081:8080"
+
+  rentalServer:
+    image: dev-rental
+    container_name: rentalServer
+    build: ../Rental-Server
+    ports:
+      - "8098:8080"
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=5432
+      - DB_NAME=main
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin
+      - DB_SSL-MODE=disable
+      - WEB_HOST=0.0.0.0
+      - WEB_PORT=8080
+      - CONVERTOR_SOAP_URL=http://host.docker.internal:8081/ws
+    depends_on:
+      - postgres
+      - conveter
 volumes:
   rental_postgres_data:
