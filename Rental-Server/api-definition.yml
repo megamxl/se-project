@@ -221,6 +221,10 @@ paths:
       responses:
         '201':
           description: Car booked successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
         '400':
           description: Invalid request
     get:

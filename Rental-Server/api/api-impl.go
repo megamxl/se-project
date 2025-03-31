@@ -15,6 +15,7 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -114,7 +115,7 @@ func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	_, err = s.bookingService.BookCar(r.Context(), data.Booking{
+	booking, err := s.bookingService.BookCar(r.Context(), data.Booking{
 		CarVin:    *req.VIN,
 		UserId:    userIdFromRequest,
 		StartTime: *req.StartTime,
@@ -126,6 +127,11 @@ func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := Util.WriteJSON(w, http.StatusOK, MapDataBookingToBooking(booking)); err != nil {
+		http.Error(w, "failed to write JSON response", http.StatusInternalServerError)
 		return
 	}
 
@@ -409,7 +415,7 @@ func NewServer(dsn string) Server {
 		Ctx: context.Background(),
 	}
 
-	convService := soap.NewSoapService("http://localhost:8080/ws")
+	convService := soap.NewSoapService(os.Getenv("CONVERTOR_SOAP_URL"))
 
 	return Server{
 		carService:     service.NewCarService(carRepo, convService),
