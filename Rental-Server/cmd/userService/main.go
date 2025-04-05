@@ -9,7 +9,9 @@ import (
 func main() {
 
 	h := config.BasicServerSetup()
-	hWithMiddleware := middleware.MonoMiddleware(h)
+
+	hWithMiddleware := middleware.UserServiceMiddleware(h)
 
 	config.ListenAndServeServer(hWithMiddleware, os.Getenv("WEB_HOST")+":"+os.Getenv("WEB_PORT"))
+
 }

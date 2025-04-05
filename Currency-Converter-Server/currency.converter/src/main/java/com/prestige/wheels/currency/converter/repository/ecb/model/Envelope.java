@@ -26,6 +26,7 @@ public class Envelope {
     private Cube cube;
 
     @Setter
+
     @Getter
     @ToString
     @XmlAccessorType(XmlAccessType.FIELD)
