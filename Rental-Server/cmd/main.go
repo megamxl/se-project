@@ -13,23 +13,29 @@ import (
 
 func LoggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		var err error
-
 		if r.URL.Path == "/login" && r.Method == "POST" {
 			next.ServeHTTP(w, r)
+			return
 		}
 
 		if r.URL.Path == "/users" && r.Method == "POST" {
 			next.ServeHTTP(w, r)
-		}
-
-		token, err := middleware.ExtractBearerToken(r)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusUnauthorized)
 			return
 		}
 
+		// Try to extract JWT from Authorization header
+		token, err := middleware.ExtractBearerToken(r)
+		if err != nil || token == "" {
+			// If missing, try getting it from the cookie
+			cookie, cookieErr := r.Cookie("jwt")
+			if cookieErr != nil {
+				http.Error(w, "Missing Authorization header or jwt cookie", http.StatusUnauthorized)
+				return
+			}
+			token = cookie.Value
+		}
+
+		// Validate the token and extract claims
 		claims, err := middleware.ValidateAndReturnClaimsFromJWT(token)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -44,7 +50,7 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 
 		roles, ok := claims["roles"].(string)
 		if !ok {
-			http.Error(w, "Unauthorized: missing subject", http.StatusUnauthorized)
+			http.Error(w, "Unauthorized: missing roles", http.StatusUnauthorized)
 			return
 		}
 
