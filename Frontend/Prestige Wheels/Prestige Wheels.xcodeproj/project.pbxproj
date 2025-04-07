@@ -10,6 +10,10 @@
 		5A2EC1752D921C0E0010EEEF /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5A2EC1742D921C0E0010EEEF /* OpenAPIClient */; };
 		5A2EC1952D92207C0010EEEF /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5A2EC1942D92207C0010EEEF /* OpenAPIClient */; };
 		5A5FDB862D92199300D8B762 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5A5FDB852D92199300D8B762 /* OpenAPIClient */; };
+		5AD8B2772DA2C1E9001CDCE8 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AD8B2762DA2C1E9001CDCE8 /* OpenAPIClient */; };
+		5AD8B2832DA2C705001CDCE8 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AD8B2822DA2C705001CDCE8 /* OpenAPIClient */; };
+		5AD8B2E62DA2D3CC001CDCE8 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AD8B2E52DA2D3CC001CDCE8 /* OpenAPIClient */; };
+		5AD8B3162DA2D887001CDCE8 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AD8B3152DA2D887001CDCE8 /* OpenAPIClient */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,7 +33,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AD8B2E62DA2D3CC001CDCE8 /* OpenAPIClient in Frameworks */,
+				5AD8B2772DA2C1E9001CDCE8 /* OpenAPIClient in Frameworks */,
+				5AD8B3162DA2D887001CDCE8 /* OpenAPIClient in Frameworks */,
 				5A2EC1952D92207C0010EEEF /* OpenAPIClient in Frameworks */,
+				5AD8B2832DA2C705001CDCE8 /* OpenAPIClient in Frameworks */,
 				5A2EC1752D921C0E0010EEEF /* OpenAPIClient in Frameworks */,
 				5A5FDB862D92199300D8B762 /* OpenAPIClient in Frameworks */,
 			);
@@ -77,6 +85,10 @@
 				5A5FDB852D92199300D8B762 /* OpenAPIClient */,
 				5A2EC1742D921C0E0010EEEF /* OpenAPIClient */,
 				5A2EC1942D92207C0010EEEF /* OpenAPIClient */,
+				5AD8B2762DA2C1E9001CDCE8 /* OpenAPIClient */,
+				5AD8B2822DA2C705001CDCE8 /* OpenAPIClient */,
+				5AD8B2E52DA2D3CC001CDCE8 /* OpenAPIClient */,
+				5AD8B3152DA2D887001CDCE8 /* OpenAPIClient */,
 			);
 			productName = "Prestige Wheels";
 			productReference = 5A5FFC6E2D91E6D60027FF67 /* Prestige Wheels.app */;
@@ -107,7 +119,7 @@
 			mainGroup = 5A5FFC652D91E6D60027FF67;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				5A2EC1932D92207C0010EEEF /* XCLocalSwiftPackageReference "../../../../../Downloads/moya-openapi/GeneratedMoyaClient" */,
+				5AD8B3142DA2D887001CDCE8 /* XCLocalSwiftPackageReference "../GeneratedMoyaClient" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5A5FFC6F2D91E6D60027FF67 /* Products */;
@@ -341,9 +353,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		5A2EC1932D92207C0010EEEF /* XCLocalSwiftPackageReference "../../../../../Downloads/moya-openapi/GeneratedMoyaClient" */ = {
+		5AD8B3142DA2D887001CDCE8 /* XCLocalSwiftPackageReference "../GeneratedMoyaClient" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = "../../../../../Downloads/moya-openapi/GeneratedMoyaClient";
+			relativePath = ../GeneratedMoyaClient;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -357,6 +369,22 @@
 			productName = OpenAPIClient;
 		};
 		5A5FDB852D92199300D8B762 /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5AD8B2762DA2C1E9001CDCE8 /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5AD8B2822DA2C705001CDCE8 /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5AD8B2E52DA2D3CC001CDCE8 /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5AD8B3152DA2D887001CDCE8 /* OpenAPIClient */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAPIClient;
 		};

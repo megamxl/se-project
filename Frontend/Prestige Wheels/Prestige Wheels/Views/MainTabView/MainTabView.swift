@@ -22,12 +22,12 @@ struct MainTabView: View {
                 ProfileView()
             }
         }
-//        .fullScreenCover(isPresented: Binding(
-//            get: { !loginViewModel.isLoggedIn },
-//            set: { loginViewModel.isLoggedIn = !$0 }
-//        )) {
-//            LoginView()
-//        }
+        .fullScreenCover(isPresented: Binding(
+            get: { !loginViewModel.isLoggedIn },
+            set: { loginViewModel.isLoggedIn = !$0 }
+        )) {
+            LoginView()
+        }
     }
 }
 

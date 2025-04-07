@@ -58,7 +58,17 @@ struct FindCarView: View {
             }
             .navigationTitle("Prestige Wheels")
             .onAppear {
-                viewModel.loadCars()
+                if LoginViewModel.shared.isLoggedIn {
+                    viewModel.loadCars()
+                }
+            }
+            .refreshable {
+                if LoginViewModel.shared.isLoggedIn {
+                    print("loading cars")
+                    viewModel.loadCars()
+                } else {
+                    print("not logged in")
+                }
             }
         }
     }

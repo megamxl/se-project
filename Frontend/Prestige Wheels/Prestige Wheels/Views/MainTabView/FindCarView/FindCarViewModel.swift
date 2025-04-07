@@ -9,7 +9,7 @@ import Foundation
 import OpenAPIClient
 
 class FindCarViewModel: ObservableObject {
-    @Published var cars: [OpenAPIClientAPI.Car] = []
+    @Published var cars: [OpenAPIClientAPI.CarListInner] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     

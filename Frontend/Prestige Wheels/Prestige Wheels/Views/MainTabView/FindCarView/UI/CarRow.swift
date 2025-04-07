@@ -9,7 +9,7 @@ import SwiftUI
 import OpenAPIClient
 
 struct CarRow: View {
-    let car: OpenAPIClientAPI.Car
+    let car: OpenAPIClientAPI.CarListInner
     let currency: OpenAPIClientAPI.Currency
     
     var body: some View {
@@ -53,13 +53,13 @@ struct CarRow: View {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-    CarRow(car: OpenAPIClientAPI.Car(VIN: "WVWDA7AJ3AW410109", model: "Golf", brand: "Volkswagen", imageURL: "https://groupcms-services-api.porsche-holding.com/dam/images/8576a348442ddf167ea302fac1d6d27ee9fcd4c3/702d47bb1c21f79f7d02f8356bdd9d5e/50a4f40a-012e-426e-9f6b-933d4325702e/crop:SMART/resize:3840:1920/702d47bb1c21f79f7d02f8356bdd9d5e", pricePerDay: 33.00), currency: .eur)
+    CarRow(car: OpenAPIClientAPI.CarListInner(VIN: "WVWDA7AJ3AW410109", model: "Golf", brand: "Volkswagen", imageURL: "https://groupcms-services-api.porsche-holding.com/dam/images/8576a348442ddf167ea302fac1d6d27ee9fcd4c3/702d47bb1c21f79f7d02f8356bdd9d5e/50a4f40a-012e-426e-9f6b-933d4325702e/crop:SMART/resize:3840:1920/702d47bb1c21f79f7d02f8356bdd9d5e", pricePerDay: 33.00), currency: .eur)
 }
 
 #Preview() {
     NavigationStack {
         List(1..<10) { _ in
-            CarRow(car: OpenAPIClientAPI.Car(VIN: "WVWDA7AJ3AW410109", model: "Golf", brand: "Volkswagen", imageURL: "https://groupcms-services-api.porsche-holding.com/dam/images/8576a348442ddf167ea302fac1d6d27ee9fcd4c3/702d47bb1c21f79f7d02f8356bdd9d5e/50a4f40a-012e-426e-9f6b-933d4325702e/crop:SMART/resize:3840:1920/702d47bb1c21f79f7d02f8356bdd9d5e", pricePerDay: 33.00), currency: .eur)
+            CarRow(car: OpenAPIClientAPI.CarListInner(VIN: "WVWDA7AJ3AW410109", model: "Golf", brand: "Volkswagen", imageURL: "https://groupcms-services-api.porsche-holding.com/dam/images/8576a348442ddf167ea302fac1d6d27ee9fcd4c3/702d47bb1c21f79f7d02f8356bdd9d5e/50a4f40a-012e-426e-9f6b-933d4325702e/crop:SMART/resize:3840:1920/702d47bb1c21f79f7d02f8356bdd9d5e", pricePerDay: 33.00), currency: .eur)
                 .listRowSeparator(.hidden)
                 .listRowInsets(.init())
                 .padding(.vertical, .spacingXS)

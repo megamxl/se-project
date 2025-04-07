@@ -8,11 +8,11 @@ brew install openapi-generator
 
 3. Generate the swift-package.
 ```bash
-openapi-generator generate \                       
+openapi-generator generate \
   -i api-definition.yml \
   -g swift5 \
   -o GeneratedMoyaClient \
-  --additional-properties=useMoya=true,swiftUseApiNamespace=true
+  --additional-properties=swiftUseApiNamespace=true
 ```
 
 4. Add the Swift-Package to the project.

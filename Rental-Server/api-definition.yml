@@ -106,10 +106,6 @@ paths:
       responses:
         '200':
           description: Successful login
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TokenResponse"
         '400':
           description: Bad request (invalid email/password)
         '401':
