@@ -5,7 +5,7 @@
 //  Created by Michael Luegmayer on 10.02.2025.
 //
 
-import Foundation
+import SwiftUI
 
 extension Bundle {
     /// A computed property that returns the release version number of the bundle.
@@ -37,5 +37,15 @@ extension Bundle {
     /// ```
     var buildVersionNumber: String? {
         return infoDictionary?["CFBundleVersion"] as? String
+    }
+    
+    public var icon: UIImage? {
+        if let icons = infoDictionary?["CFBundleIcons"] as? [String: Any],
+            let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
+            let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+            let lastIcon = iconFiles.last {
+            return UIImage(named: lastIcon)
+        }
+        return nil
     }
 }

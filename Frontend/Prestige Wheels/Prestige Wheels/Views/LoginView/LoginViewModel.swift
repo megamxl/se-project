@@ -12,8 +12,6 @@ import OpenAPIClient
 
 @MainActor
 class LoginViewModel: ObservableObject {
-    static let shared = LoginViewModel()
-
     // MARK: - Input Fields
 
     @Published var username: String = "john.doe@example.com"

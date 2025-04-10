@@ -37,9 +37,19 @@ struct CarRow: View {
                     .font(.subheadline)
             }
             Spacer()
-            if let pricePerDay = car.pricePerDay {
-                Text("\(pricePerDay.formatted(.currency(code: currency.rawValue)))")
-                    .foregroundStyle(.gray)
+            VStack(alignment: .trailing, spacing: 4){
+                if let priceOverAll = car.priceOverAll {
+                    Text("\(priceOverAll.formatted(.currency(code: currency.rawValue)))")
+                        .foregroundStyle(.primary)
+                        .font(.callout)
+                        .fontDesign(.rounded)
+                }
+                if let pricePerDay = car.pricePerDay {
+                    Text("\(pricePerDay.formatted(.currency(code: currency.rawValue))) /day")
+                        .foregroundStyle(.gray)
+                        .font(.caption2)
+                        .fontDesign(.rounded)
+                }
             }
         }
         .hAlign(.leading)

@@ -18,14 +18,15 @@ struct LoginView: View {
 
     var body: some View {
         Form {
-            Section {
-                Text("Prestige Wheels")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .hAlign(.center)
-            }
-            .listRowBackground(Color.clear)
-
+            Image(uiImage: Bundle.main.icon ?? UIImage())
+                .resizable()
+                .scaledToFill()
+                .clipped()
+                .clipShape(RoundedRectangle(cornerRadius: 22))
+                .frame(width: 100, height: 100, alignment: .center)
+                .listRowBackground(Color.clear)
+                .hAlign(.center)
+            
             Section {
                 TextField("Username", text: $loginViewModel.username)
                     .disableAutocorrection(true)
@@ -43,6 +44,12 @@ struct LoginView: View {
                         }
                     }
                     .submitLabel(.go)
+            } header: {
+                Text("Welcome, please login...")
+                    .font(.headline)
+                    .listRowInsets(.init())
+                    .textCase(nil)
+                    .padding(.bottom, .spacingS)
             }
 
             Section {
@@ -55,10 +62,12 @@ struct LoginView: View {
                 }
                 .disabled(loginViewModel.username.isEmpty || loginViewModel.password.isEmpty)
             } footer: {
-                Button {} label: {
-                    Text("Problems with the registration?")
-                        .font(.caption)
-                        .foregroundStyle(.gray)
+                Button {
+                    
+                } label: {
+                    Text("or register now")
+                        .font(.callout)
+                        .fontWeight(.medium)
                 }
                 .hAlign(.center)
                 .padding(.top, .spacingS)

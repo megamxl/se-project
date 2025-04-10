@@ -7,9 +7,11 @@
 
 import SwiftUI
 import OpenAPIClient
+import OSLog
 
 struct FindCarView: View {
-    @StateObject private var viewModel = FindCarViewModel()
+    @StateObject private var viewModel = CarViewModel()
+    @EnvironmentObject var loginViewModel: LoginViewModel
     
     var body: some View {
         NavigationStack {
@@ -20,6 +22,7 @@ struct FindCarView: View {
                     DatePicker("To:", selection: $viewModel.toDate, displayedComponents: .date)
                 }
                 .padding()
+                .background(Color.secondary.opacity(0.25))
                 
                 // MARK: Content
                 if viewModel.isLoading {
@@ -36,6 +39,7 @@ struct FindCarView: View {
                             .padding(.horizontal)
                     }
                     .listStyle(.plain)
+                    .contentMargins(.top, 0, for: .scrollContent)
                 }
             }
             .toolbar {
@@ -58,16 +62,20 @@ struct FindCarView: View {
             }
             .navigationTitle("Prestige Wheels")
             .onAppear {
-                if LoginViewModel.shared.isLoggedIn {
-                    viewModel.loadCars()
+                if loginViewModel.isLoggedIn {
+                    viewModel.listCars()
                 }
             }
+            .onChange(of: loginViewModel.isLoggedIn) {
+                Logger.backgroundProcessing.log("🔄 refresh after login")
+                viewModel.listCars()
+            }
             .refreshable {
-                if LoginViewModel.shared.isLoggedIn {
-                    print("loading cars")
-                    viewModel.loadCars()
+                if loginViewModel.isLoggedIn {
+                    Logger.backgroundProcessing.log("🔄 loading cars")
+                    viewModel.listCars()
                 } else {
-                    print("not logged in")
+                    Logger.backgroundProcessing.warning("⚠️ not logged in")
                 }
             }
         }
@@ -83,4 +91,5 @@ struct FindCarView: View {
 
 #Preview {
     FindCarView()
+        .environmentObject(LoginViewModel())
 }
