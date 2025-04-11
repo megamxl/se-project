@@ -93,6 +93,7 @@ func intToModelRentalUser(rentalUser dataInt.RentalUser) *model.RentalUser {
 		Name:     rentalUser.Name,
 		Email:    rentalUser.Email,
 		Password: rentalUser.Password,
+		Admin:    rentalUser.Admin,
 	}
 	return newRentalUser
 }
@@ -103,6 +104,7 @@ func modelToIntRentalUser(newRentalUser *model.RentalUser) dataInt.RentalUser {
 		Name:     newRentalUser.Name,
 		Email:    newRentalUser.Email,
 		Password: newRentalUser.Password,
+		Admin:    newRentalUser.Admin,
 	}
 	return savedRentalUser
 }

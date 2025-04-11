@@ -99,6 +99,7 @@ func pathBlocker(next http.Handler, paths []string) http.Handler {
 			}
 		}
 
-		MonoMiddleware(next)
+		next.ServeHTTP(w, r)
+
 	})
 }

@@ -11,6 +11,7 @@ func main() {
 	h := config.BasicServerSetup()
 
 	hWithMiddleware := middleware.BookingsServiceMiddleware(h)
+	serviceMiddleware := middleware.BookingsServiceMiddleware(hWithMiddleware)
 
-	config.ListenAndServeServer(hWithMiddleware, os.Getenv("WEB_HOST")+":"+os.Getenv("WEB_PORT"))
+	config.ListenAndServeServer(serviceMiddleware, os.Getenv("WEB_HOST")+":"+os.Getenv("WEB_PORT"))
 }

@@ -11,7 +11,8 @@ func main() {
 	h := config.BasicServerSetup()
 
 	hWithMiddleware := middleware.UserServiceMiddleware(h)
+	monoMiddleware := middleware.MonoMiddleware(hWithMiddleware)
 
-	config.ListenAndServeServer(hWithMiddleware, os.Getenv("WEB_HOST")+":"+os.Getenv("WEB_PORT"))
+	config.ListenAndServeServer(monoMiddleware, os.Getenv("WEB_HOST")+":"+os.Getenv("WEB_PORT"))
 
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/megamxl/se-project/Rental-Server/api/Util"
 	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter/soap"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
+	"github.com/megamxl/se-project/Rental-Server/internal/data/sql"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/query"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/repos"
 	"github.com/megamxl/se-project/Rental-Server/internal/middleware"
@@ -14,8 +15,10 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -397,6 +400,10 @@ func NewServer(dsn string) Server {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
+	seeder := sql.NewSqlSeeder(db)
+
+	basedOnEnvVaribels(err, seeder)
+
 	use := query.Use(db)
 
 	carRepo := repos.CarRepo{
@@ -424,8 +431,49 @@ func NewServer(dsn string) Server {
 	}
 }
 
-func ptr(s string) *string {
-	return &s
+func basedOnEnvVaribels(err error, seeder sql.Seeder) {
+	monoSeeder, err := strconv.ParseBool(os.Getenv("SEED_MOMOLITH"))
+	if err != nil {
+		slog.Info("Not seeding database for Monolith since Argument can't be parsed as boolean")
+	}
+
+	if monoSeeder {
+		seeder.SeedUser()
+		seeder.SeedCars()
+		seeder.SeedBooking()
+		seeder.SeedBookingMonolithConstraints()
+		return
+	}
+
+	userSql, err := strconv.ParseBool(os.Getenv("SEED_USER_SQL"))
+	if err != nil {
+		slog.Info("Not seeding database for SEED_USER_SQL since Argument can't be parsed as boolean")
+	}
+
+	if userSql {
+		seeder.SeedUser()
+		return
+	}
+
+	carSQL, err := strconv.ParseBool(os.Getenv("SEED_CAR_SQL"))
+	if err != nil {
+		slog.Info("Not seeding database for SEED_CAR_SQL since Argument can't be parsed as boolean")
+	}
+
+	if carSQL {
+		seeder.SeedCars()
+	}
+
+	bookSQL, err := strconv.ParseBool(os.Getenv("SEED_BOOKING_SQL"))
+	if err != nil {
+		slog.Info("Not seeding database for SEED_BOOKING_SQL since Argument can't be parsed as boolean")
+	}
+
+	if bookSQL {
+		seeder.SeedBooking()
+		seeder.SeedBookingConstraints()
+	}
+
 }
 
 func MapDataCarToCar(dataCar data.Car) Car {

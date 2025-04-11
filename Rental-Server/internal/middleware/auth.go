@@ -13,10 +13,16 @@ import (
 
 func CreateJWForUser(user data.RentalUser) (string, error) {
 
+	roles := "customer"
+
+	if user.Admin {
+		roles = "admin"
+	}
+
 	claims := jwt.MapClaims{
 		"sub":   user.Id, // subject (e.g., user ID)
 		"name":  user.Name,
-		"roles": "customer",
+		"roles": roles,
 		"exp":   time.Now().Add(time.Hour * 1).Unix(), // Expires in 1 hour
 	}
 

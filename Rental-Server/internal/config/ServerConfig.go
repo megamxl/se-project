@@ -45,6 +45,7 @@ func GenerateDSNStringFromEnvVariables() string {
 	dbUsername := os.Getenv("DB_USERNAME")
 	dbPW := os.Getenv("DB_PASSWORD")
 	dbSSL := os.Getenv("DB_SSL-MODE")
+	schema := os.Getenv("SQL_SCHEMA")
 
-	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s", dbHost, dbUsername, dbPW, dbName, dbPort, dbSSL)
+	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s search_path=%s", dbHost, dbUsername, dbPW, dbName, dbPort, dbSSL, schema)
 }

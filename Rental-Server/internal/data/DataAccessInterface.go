@@ -10,6 +10,7 @@ type RentalUser struct {
 	Name     string
 	Email    string
 	Password string
+	Admin    bool
 }
 
 type Car struct {
