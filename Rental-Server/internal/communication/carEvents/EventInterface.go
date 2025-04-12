@@ -7,3 +7,8 @@ type CarEvent interface {
 	RemoveCar(car dataInt.Car)
 	UpdateCar(car dataInt.Car)
 }
+
+type CarEventStruct struct {
+	Car       dataInt.Car
+	Operation string
+}

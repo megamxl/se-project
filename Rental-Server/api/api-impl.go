@@ -3,8 +3,10 @@ package api
 import (
 	"context"
 	"errors"
+	"github.com/apache/pulsar-client-go/pulsar"
 	"github.com/google/uuid"
 	"github.com/megamxl/se-project/Rental-Server/api/Util"
+	"github.com/megamxl/se-project/Rental-Server/internal/communication/carEvents"
 	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter/soap"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql"
@@ -423,6 +425,29 @@ func NewServer(dsn string) Server {
 	}
 
 	convService := soap.NewSoapService(os.Getenv("CONVERTOR_SOAP_URL"))
+
+	if os.Getenv("PULSAR_LISTENER") == "true" {
+
+		client, err := pulsar.NewClient(pulsar.ClientOptions{
+			URL:               os.Getenv("PULSAR_URL"),
+			OperationTimeout:  30 * time.Second,
+			ConnectionTimeout: 30 * time.Second,
+		})
+		if err != nil {
+			slog.Error("Could not instantiate Pulsar client: %v", err)
+		}
+
+		reader, err := client.CreateReader(pulsar.ReaderOptions{
+			Topic:          "car-events",
+			StartMessageID: pulsar.EarliestMessageID(),
+		})
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		carEvents.NewPulsarConsumer(reader, carRepo)
+	}
 
 	return Server{
 		carService:     service.NewCarService(carRepo, convService),

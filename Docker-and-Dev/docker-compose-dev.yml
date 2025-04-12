@@ -37,5 +37,21 @@ services:
     depends_on:
       - postgres
       - converter
+    
+  pulsar:
+    image: apachepulsar/pulsar:4.0.4
+    command: bin/pulsar standalone
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+    volumes:
+      - pulsardata:/pulsar/data
+      - pulsarconf:/pulsar/conf
+    tty: true
+    stdin_open: true
+
+  
 volumes:
   rental_postgres_data:
+  pulsardata:
+  pulsarconf:
