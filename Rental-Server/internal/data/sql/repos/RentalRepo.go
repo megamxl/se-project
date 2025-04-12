@@ -16,9 +16,12 @@ type RentalRepo struct {
 
 func (r RentalRepo) UpdateBookingStateById(id uuid.UUID, state string) (dataInt.Booking, error) {
 
-	_, err := r.Q.WithContext(r.Ctx).Booking.Where(r.Q.Booking.ID.Eq(id.String())).Update(
+	status, err := r.Q.WithContext(r.Ctx).Booking.Where(r.Q.Booking.ID.Eq(id.String())).Update(
 		r.Q.Booking.Status, state)
-	if err != nil {
+	if err != nil || status.RowsAffected == 0 {
+		if status.RowsAffected == 0 {
+			err = errors.New("booking not found")
+		}
 		return dataInt.Booking{}, err
 	}
 

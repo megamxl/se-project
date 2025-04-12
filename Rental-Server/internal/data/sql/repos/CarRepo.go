@@ -45,7 +45,7 @@ func (c CarRepo) UpdateCar(car dataInt.Car) (dataInt.Car, error) {
 	status, err := c.Q.WithContext(c.Ctx).Car.Where(c.Q.Car.Vin.Eq(car.Vin)).Updates(car)
 	if err != nil || status.RowsAffected == 0 {
 		if status.RowsAffected == 0 {
-			err = errors.New("UpdateCar: Car not found")
+			err = errors.New("car not found")
 		}
 		return dataInt.Car{}, err
 	}

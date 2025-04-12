@@ -52,8 +52,11 @@ func (u *UserRepo) GetUserById(id uuid.UUID) (dataInt.RentalUser, error) {
 }
 
 func (u *UserRepo) UpdateUserById(id uuid.UUID, update dataInt.RentalUser) (dataInt.RentalUser, error) {
-	_, err := u.Q.WithContext(u.Ctx).RentalUser.Where(u.Q.RentalUser.ID.Eq(id.String())).Updates(update)
-	if err != nil {
+	status, err := u.Q.WithContext(u.Ctx).RentalUser.Where(u.Q.RentalUser.ID.Eq(id.String())).Updates(update)
+	if err != nil || status.RowsAffected == 0 {
+		if status.RowsAffected == 0 {
+			err = errors.New("user not found")
+		}
 		return dataInt.RentalUser{}, err
 	}
 
