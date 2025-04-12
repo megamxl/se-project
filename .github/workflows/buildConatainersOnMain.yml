@@ -37,4 +37,22 @@ jobs:
       - name: Push rentalService
         working-directory: ./Rental-Server
         run: docker push ghcr.io/megamxl/se-project/rental:latest
-        
+      - name: Build userService
+        working-directory: ./Rental-Server
+        run: docker build --build-arg SERVICE_LOCATION=cmd/userService/main.go -t ghcr.io/megamxl/se-project/user-service:latest .
+      - name: Push userService
+        working-directory: ./Rental-Server
+        run: docker push ghcr.io/megamxl/se-project/user-service:latest
+      - name: Build carService
+        working-directory: ./Rental-Server
+        run: docker build --build-arg SERVICE_LOCATION=cmd/carsService/main.go -t ghcr.io/megamxl/se-project/car-service:latest .
+      - name: Push carService
+        working-directory: ./Rental-Server
+        run: docker push ghcr.io/megamxl/se-project/car-service:latest
+      - name: Build bookingService
+        working-directory: ./Rental-Server
+        run: docker build --build-arg SERVICE_LOCATION=cmd/carsService/main.go -t ghcr.io/megamxl/se-project/booking-service:latest .
+      - name: Push bookingService
+        working-directory: ./Rental-Server
+        run: docker push ghcr.io/megamxl/se-project/booking-service:latest
+
