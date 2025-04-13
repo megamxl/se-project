@@ -7,6 +7,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/megamxl/se-project/Rental-Server/api/Util"
 	"github.com/megamxl/se-project/Rental-Server/internal/communication/carEvents"
+	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter"
+	myGrpcImpl "github.com/megamxl/se-project/Rental-Server/internal/communication/converter/grpc"
+	myGrpcStub "github.com/megamxl/se-project/Rental-Server/internal/communication/converter/grpc/proto"
+	"google.golang.org/grpc/credentials/insecure"
+
 	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter/soap"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql"
@@ -14,6 +19,7 @@ import (
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/repos"
 	"github.com/megamxl/se-project/Rental-Server/internal/middleware"
 	"github.com/megamxl/se-project/Rental-Server/internal/service"
+	"google.golang.org/grpc"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -424,7 +430,30 @@ func NewServer(dsn string) Server {
 		Ctx: context.Background(),
 	}
 
-	convService := soap.NewSoapService(os.Getenv("CONVERTOR_SOAP_URL"))
+	var convService converter.Converter
+
+	if os.Getenv("CONVERTOR_SOAP_URL") != "" {
+		convService = soap.NewSoapService(os.Getenv("CONVERTOR_SOAP_URL"))
+
+		slog.Info("Connected to SOAP server and using it ")
+
+	} else if os.Getenv("CONVERTOR_GRPC_URL") != "" {
+
+		var opts []grpc.DialOption
+		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+		conn, err := grpc.NewClient(os.Getenv("CONVERTOR_GRPC_URL"), opts...)
+		if err != nil {
+			log.Fatal("Failed to connect to server:", err)
+		}
+
+		client := myGrpcStub.NewConvertorClient(conn)
+
+		convService = myGrpcImpl.NewConverter(client)
+		slog.Info("Connected to GRPC server and using it ")
+	} else {
+		log.Fatalf("Unsupported config no convertor set. Set CONVERTOR_SOAP_URL or CONVERTOR_GRPC_URL")
+	}
 
 	if os.Getenv("PULSAR_LISTENER") == "true" {
 

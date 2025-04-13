@@ -17,6 +17,7 @@ services:
     image: ghcr.io/megamxl/se-project/java-currency-converter:latest
     ports:
      - "8081:8080"
+     - "8082:8082"
 
   rentalServer:
     image: dev-rental
