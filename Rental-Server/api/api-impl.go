@@ -452,7 +452,7 @@ func NewServer(dsn string) Server {
 		convService = myGrpcImpl.NewConverter(client)
 		slog.Info("Connected to GRPC server and using it ")
 	} else {
-		log.Fatalf("Unsupported config no convertor set. Set CONVERTOR_SOAP_URL or CONVERTOR_GRPC_URL")
+		slog.Info("Unsupported config no convertor set. Set CONVERTOR_SOAP_URL or CONVERTOR_GRPC_URL if you want an convertor")
 	}
 
 	if os.Getenv("PULSAR_LISTENER") == "true" {

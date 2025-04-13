@@ -22,7 +22,9 @@ RUN go build -o rental-server $SERVICE_LOCATION
 FROM alpine
 RUN apk update --no-cache && apk add --no-cache ca-certificates
 
+
 WORKDIR /app
 COPY --from=builder /build/rental-server /app/rental-server
+COPY --from=builder /build/internal/data/sql /app/internal/data/sql/
 CMD ["/app/rental-server"]
 
