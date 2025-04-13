@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"github.com/golang-jwt/jwt/v5"
+	"log/slog"
 	"net/http"
 	"strings"
 )
@@ -30,6 +31,8 @@ func CheckIfTokenExistsAndIsValid(r *http.Request) (jwt.MapClaims, error) {
 		return nil, err
 
 	}
+
+	slog.Info(token)
 
 	claims, err := ValidateAndReturnClaimsFromJWT(token)
 	if err != nil {

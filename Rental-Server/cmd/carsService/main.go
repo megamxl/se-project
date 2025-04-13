@@ -11,7 +11,7 @@ func main() {
 	h := config.BasicServerSetup()
 
 	hWithMiddleware := middleware.CarsServiceMiddleware(h)
-	serviceMiddleware := middleware.CarsServiceMiddleware(hWithMiddleware)
+	serviceMiddleware := middleware.MonoMiddleware(hWithMiddleware)
 
 	config.ListenAndServeServer(serviceMiddleware, os.Getenv("WEB_HOST")+":"+os.Getenv("WEB_PORT"))
 
