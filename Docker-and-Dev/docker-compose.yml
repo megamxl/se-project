@@ -80,6 +80,7 @@ services:
       - SQL_SCHEMA=car_service
       - PULSAR_PRODUCER=true
       - PULSAR_URL=pulsar://pulsar-ms:6650
+      - BOOKING_SERVICE_URL=http://bookingService:8080
     depends_on:
       - postgres-ms
       - converter-ms

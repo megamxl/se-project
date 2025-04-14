@@ -55,6 +55,11 @@ func MonoMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
+		if r.Method == "GET" && strings.Contains(r.URL.Path, "/bookings/rpc/in_range") {
+			next.ServeHTTP(w, r)
+			return
+		}
+
 		claims, err := CheckIfTokenExistsAndIsValid(r)
 		if err != nil {
 			http.Error(w, "Token Invalid or Missing", http.StatusUnauthorized)

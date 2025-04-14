@@ -39,6 +39,24 @@ type Server struct {
 	bookingService service.BookingService
 }
 
+func (s Server) ListBookingsInRange(w http.ResponseWriter, r *http.Request, params ListBookingsInRangeParams) {
+	timeRange, err := s.bookingService.GetAllBookingsInTimeRange(params.StartTime.Time, params.EndTime.Time)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	bookings := make([]Booking, len(timeRange))
+	for index, db := range timeRange {
+		bookings[index] = MapDataBookingToBooking(db)
+	}
+
+	if err := Util.WriteJSON(w, http.StatusOK, bookings); err != nil {
+		http.Error(w, "failed to write JSON response", http.StatusBadRequest)
+		return
+	}
+}
+
 func (s Server) Login(w http.ResponseWriter, r *http.Request) {
 	var body LoginJSONRequestBody
 

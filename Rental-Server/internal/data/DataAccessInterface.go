@@ -50,6 +50,7 @@ type CarRepository interface {
 	DeleteCarByVin(vin string) error
 
 	GetCarsAvailableInTimeRange(startTime time.Time, endTime time.Time) ([]Car, error)
+	GetCarsNotInList(vins []string) ([]Car, error)
 }
 
 type BookingRepository interface {
@@ -61,4 +62,5 @@ type BookingRepository interface {
 	GetAllBookingsByUser(userId uuid.UUID) ([]Booking, error)
 	GetAllBookings() ([]Booking, error)
 	UpdateBookingStateById(id uuid.UUID, update string) (Booking, error)
+	GetBookingsInTimeRange(startTime time.Time, endTime time.Time) ([]Booking, error)
 }
