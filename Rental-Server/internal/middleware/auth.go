@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
-	"log/slog"
 	"net/http"
 	"os"
 	"strings"
@@ -76,7 +75,6 @@ func ExtractToken(r *http.Request) (string, error) {
 		if err != nil {
 			return "", ErrMissingAuthHeader
 		}
-		slog.Info(fmt.Sprintf("cookie %s", cookie.Value))
 
 		return cookie.Value, nil
 	}

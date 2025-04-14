@@ -7,7 +7,6 @@ import (
 	"github.com/apache/pulsar-client-go/pulsar"
 	"github.com/megamxl/se-project/Rental-Server/internal/communication/carEvents"
 	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter"
-	"log"
 	"log/slog"
 	"os"
 	"time"
@@ -146,7 +145,7 @@ func NewCarService(repo data.CarRepository, conv converter.Converter) CarService
 		})
 
 		if err != nil {
-			log.Fatalf("Could not instantiate Pulsar producer: %v", err)
+			slog.Error("Could not instantiate Pulsar producer: %v", err)
 		}
 
 		service.producer = carEvents.PulsarProducer{Producer: producer}
