@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 option java_package = "com.prestige.wheels.currency.converter.grpc";
+option go_package = "github.com/megamxl/se-project/Rental-Server/internal/communication/converter/grpc";
 
 service Convertor {
   rpc convert(conversionRequest) returns (conversionResponse) {}

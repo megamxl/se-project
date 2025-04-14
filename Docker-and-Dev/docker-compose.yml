@@ -1,0 +1,150 @@
+version: '3.9'
+name: rental-ms-compose
+services:
+  postgres-ms:
+    image: postgres:17.2-bookworm
+    container_name: postgres-ms-rental
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: main
+    ports:
+      - "5432:5432"
+    volumes:
+      - rental_ms_postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  converter-ms:
+    image: ghcr.io/megamxl/se-project/java-currency-converter:latest
+    ports:
+     - "8081:8080"
+     - "8082:8082"
+
+  userService:
+    image: dev-user-service
+    container_name: user-service
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.userService.rule=PathPrefix(`/users`)"
+      - "traefik.http.routers.userService-login.rule=PathPrefix(`/login`)"
+      - "traefik.http.routers.userService.entrypoints=web"
+      - "traefik.http.services.userService.loadbalancer.server.port=8080"
+    build:
+      context: ../Rental-Server
+      args:
+        SERVICE_LOCATION: cmd/userService/main.go
+    ports:
+      - "8091:8080"
+    environment:
+      - CONVERTOR_GRPC_URL=converter-ms:8082
+      - DB_HOST=postgres-ms
+      - DB_NAME=main
+      - DB_PASSWORD=admin
+      - DB_PORT=5432
+      - DB_SSL-MODE=disable
+      - DB_USERNAME=admin
+      - SEED_USER_SQL=true
+      - WEB_HOST=0.0.0.0
+      - WEB_PORT=8080
+      - SQL_SCHEMA=user_service
+    depends_on:
+      - postgres-ms
+      - converter-ms
+      - pulsar-ms
+
+  carService:
+    image: dev-car-service
+    container_name: car-service
+    build:
+      context: ../Rental-Server
+      args:
+        SERVICE_LOCATION: cmd/carsService/main.go
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.carService.rule=PathPrefix(`/cars`)"
+      - "traefik.http.routers.carService.entrypoints=web"
+      - "traefik.http.services.carService.loadbalancer.server.port=8080"
+    ports:
+      - "8092:8080"
+    environment:
+      - CONVERTOR_GRPC_URL=converter-ms:8082
+      - DB_HOST=postgres-ms
+      - DB_NAME=main
+      - DB_PASSWORD=admin
+      - DB_PORT=5432
+      - DB_SSL-MODE=disable
+      - DB_USERNAME=admin
+      - SEED_CAR_SQL=true
+      - WEB_HOST=0.0.0.0
+      - WEB_PORT=8080
+      - SQL_SCHEMA=car_service
+      - PULSAR_PRODUCER=true
+      - PULSAR_URL=pulsar://pulsar-ms:6650
+    depends_on:
+      - postgres-ms
+      - converter-ms
+      - pulsar-ms
+
+  bookingService:
+    image: dev-booking-service
+    container_name: booking-service
+    build:
+      context: ../Rental-Server
+      args:
+        SERVICE_LOCATION: cmd/bookingService/main.go
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bookingService.rule=PathPrefix(`/booking`)"
+      - "traefik.http.routers.bookingService.entrypoints=web"
+      - "traefik.http.services.bookingService.loadbalancer.server.port=8080"
+    ports:
+      - "8093:8080"
+    environment:
+      - CONVERTOR_GRPC_URL=converter-ms:8082
+      - DB_HOST=postgres-ms
+      - DB_PORT=5432
+      - DB_NAME=main
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin
+      - DB_SSL-MODE=disable
+      - WEB_HOST=0.0.0.0
+      - WEB_PORT=8080
+      - SQL_SCHEMA=booking_schema
+      - PULSAR_LISTENER=true
+      - PULSAR_URL=pulsar://pulsar-ms:6650
+      - SEED_BOOKING_SQL=true
+      - SEED_CAR_SQL=true
+    depends_on:
+      - postgres-ms
+      - converter-ms
+      - pulsar-ms
+    
+  pulsar-ms:
+    image: apachepulsar/pulsar:4.0.4
+    command: bin/pulsar standalone
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+    volumes:
+      - pulsardata_ms:/pulsar/data
+      - pulsarconf_ms:/pulsar/conf
+    tty: true
+    stdin_open: true
+
+  traefik:
+    image: traefik:v3.3.5
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "9081:8080" # Traefik dashboard
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  
+volumes:
+  rental_ms_postgres_data:
+  pulsardata_ms:
+  pulsarconf_ms:

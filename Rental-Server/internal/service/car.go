@@ -4,8 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/apache/pulsar-client-go/pulsar"
+	"github.com/megamxl/se-project/Rental-Server/internal/communication/carEvents"
 	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter"
 	"log/slog"
+	"os"
 	"time"
 
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
@@ -20,8 +23,9 @@ type CarService interface {
 }
 
 type carService struct {
-	repo data.CarRepository
-	conv converter.Converter
+	repo     data.CarRepository
+	conv     converter.Converter
+	producer carEvents.CarEvent
 }
 
 func (s *carService) GetCarByVin(ctx context.Context, vin string) (data.Car, error) {
@@ -50,6 +54,10 @@ func (s *carService) CreateCar(ctx context.Context, car data.Car) (data.Car, err
 		return data.Car{}, fmt.Errorf("CreateCar: %w", err)
 	}
 
+	if s.producer != nil {
+		s.producer.AddCar(createdCar)
+	}
+
 	return createdCar, nil
 }
 
@@ -63,6 +71,10 @@ func (s *carService) UpdateCar(ctx context.Context, car data.Car) (data.Car, err
 		return data.Car{}, fmt.Errorf("UpdateCar: %w", err)
 	}
 
+	if s.producer != nil {
+		s.producer.UpdateCar(updatedCar)
+	}
+
 	return updatedCar, nil
 }
 
@@ -74,6 +86,10 @@ func (s *carService) DeleteCarByVin(ctx context.Context, vin string) error {
 	err := s.repo.DeleteCarByVin(vin)
 	if err != nil {
 		return fmt.Errorf("DeleteCarByVin: %w", err)
+	}
+
+	if s.producer != nil {
+		s.producer.RemoveCar(data.Car{Vin: vin})
 	}
 
 	return nil
@@ -108,8 +124,32 @@ func (s *carService) GetCarsAvailableInTimeRange(ctx context.Context, startTime,
 }
 
 func NewCarService(repo data.CarRepository, conv converter.Converter) CarService {
-	return &carService{
+
+	service := carService{
 		repo: repo,
 		conv: conv,
 	}
+
+	if os.Getenv("PULSAR_PRODUCER") == "true" {
+		client, err := pulsar.NewClient(pulsar.ClientOptions{
+			URL:               os.Getenv("PULSAR_URL"),
+			OperationTimeout:  30 * time.Second,
+			ConnectionTimeout: 30 * time.Second,
+		})
+		if err != nil {
+			slog.Error("Could not instantiate Pulsar client: %v", err)
+		}
+
+		producer, err := client.CreateProducer(pulsar.ProducerOptions{
+			Topic: "car-events",
+		})
+
+		if err != nil {
+			slog.Error("Could not instantiate Pulsar producer: %v", err)
+		}
+
+		service.producer = carEvents.PulsarProducer{Producer: producer}
+	}
+
+	return &service
 }

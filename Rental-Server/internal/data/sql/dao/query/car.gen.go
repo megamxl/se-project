@@ -31,7 +31,6 @@ func newCar(db *gorm.DB, opts ...gen.DOOption) car {
 	_car.Model = field.NewString(tableName, "model")
 	_car.Brand = field.NewString(tableName, "brand")
 	_car.ImageURL = field.NewString(tableName, "image_url")
-	_car.Kilometers = field.NewInt32(tableName, "kilometers")
 	_car.PricePerDay = field.NewFloat64(tableName, "price_per_day")
 	_car.CreatedAt = field.NewTime(tableName, "created_at")
 
@@ -48,7 +47,6 @@ type car struct {
 	Model       field.String
 	Brand       field.String
 	ImageURL    field.String
-	Kilometers  field.Int32
 	PricePerDay field.Float64
 	CreatedAt   field.Time
 
@@ -71,7 +69,6 @@ func (c *car) updateTableName(table string) *car {
 	c.Model = field.NewString(table, "model")
 	c.Brand = field.NewString(table, "brand")
 	c.ImageURL = field.NewString(table, "image_url")
-	c.Kilometers = field.NewInt32(table, "kilometers")
 	c.PricePerDay = field.NewFloat64(table, "price_per_day")
 	c.CreatedAt = field.NewTime(table, "created_at")
 
@@ -98,12 +95,11 @@ func (c *car) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (c *car) fillFieldMap() {
-	c.fieldMap = make(map[string]field.Expr, 7)
+	c.fieldMap = make(map[string]field.Expr, 6)
 	c.fieldMap["vin"] = c.Vin
 	c.fieldMap["model"] = c.Model
 	c.fieldMap["brand"] = c.Brand
 	c.fieldMap["image_url"] = c.ImageURL
-	c.fieldMap["kilometers"] = c.Kilometers
 	c.fieldMap["price_per_day"] = c.PricePerDay
 	c.fieldMap["created_at"] = c.CreatedAt
 }

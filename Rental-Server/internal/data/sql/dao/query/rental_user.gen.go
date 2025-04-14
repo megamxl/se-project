@@ -31,6 +31,7 @@ func newRentalUser(db *gorm.DB, opts ...gen.DOOption) rentalUser {
 	_rentalUser.Name = field.NewString(tableName, "name")
 	_rentalUser.Email = field.NewString(tableName, "email")
 	_rentalUser.Password = field.NewString(tableName, "password")
+	_rentalUser.Admin = field.NewBool(tableName, "admin")
 	_rentalUser.CreatedAt = field.NewTime(tableName, "created_at")
 
 	_rentalUser.fillFieldMap()
@@ -46,6 +47,7 @@ type rentalUser struct {
 	Name      field.String
 	Email     field.String
 	Password  field.String
+	Admin     field.Bool
 	CreatedAt field.Time
 
 	fieldMap map[string]field.Expr
@@ -67,6 +69,7 @@ func (r *rentalUser) updateTableName(table string) *rentalUser {
 	r.Name = field.NewString(table, "name")
 	r.Email = field.NewString(table, "email")
 	r.Password = field.NewString(table, "password")
+	r.Admin = field.NewBool(table, "admin")
 	r.CreatedAt = field.NewTime(table, "created_at")
 
 	r.fillFieldMap()
@@ -94,11 +97,12 @@ func (r *rentalUser) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (r *rentalUser) fillFieldMap() {
-	r.fieldMap = make(map[string]field.Expr, 5)
+	r.fieldMap = make(map[string]field.Expr, 6)
 	r.fieldMap["id"] = r.ID
 	r.fieldMap["name"] = r.Name
 	r.fieldMap["email"] = r.Email
 	r.fieldMap["password"] = r.Password
+	r.fieldMap["admin"] = r.Admin
 	r.fieldMap["created_at"] = r.CreatedAt
 }
 

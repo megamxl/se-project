@@ -6,22 +6,29 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
 
 func CreateJWForUser(user data.RentalUser) (string, error) {
 
+	roles := "customer"
+
+	if user.Admin {
+		roles = "admin"
+	}
+
 	claims := jwt.MapClaims{
 		"sub":   user.Id, // subject (e.g., user ID)
 		"name":  user.Name,
-		"roles": "customer",
+		"roles": roles,
 		"exp":   time.Now().Add(time.Hour * 1).Unix(), // Expires in 1 hour
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	tokenString, err := token.SignedString([]byte("secret"))
+	tokenString, err := token.SignedString(getSecretFromEnv())
 	if err != nil {
 		return "", err
 	}
@@ -31,7 +38,7 @@ func CreateJWForUser(user data.RentalUser) (string, error) {
 
 func ValidateAndReturnClaimsFromJWT(tokenString string) (jwt.MapClaims, error) {
 
-	secretKey := []byte("secret")
+	secretKey := getSecretFromEnv()
 
 	parsedToken, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Ensure HS256
@@ -50,6 +57,11 @@ func ValidateAndReturnClaimsFromJWT(tokenString string) (jwt.MapClaims, error) {
 	} else {
 		return nil, fmt.Errorf("can't get roles claim")
 	}
+}
+
+func getSecretFromEnv() []byte {
+	secretKey := []byte(os.Getenv("jwtSecret"))
+	return secretKey
 }
 
 var ErrMissingAuthHeader = errors.New("missing Authorization header")

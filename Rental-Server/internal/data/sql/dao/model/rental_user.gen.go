@@ -16,6 +16,7 @@ type RentalUser struct {
 	Name      string    `gorm:"column:name;not null" json:"name"`
 	Email     string    `gorm:"column:email;not null" json:"email"`
 	Password  string    `gorm:"column:password;not null" json:"password"`
+	Admin     bool      `gorm:"column:admin" json:"admin"`
 	CreatedAt time.Time `gorm:"column:created_at;default:now()" json:"created_at"`
 }
 
