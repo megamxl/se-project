@@ -28,6 +28,9 @@ import (
 	"os"
 	"strconv"
 	"time"
+
+	nosqldb "github.com/megamxl/se-project/Rental-Server/internal/data/no-sql/db"
+	nosqlrepos "github.com/megamxl/se-project/Rental-Server/internal/data/no-sql/repos"
 )
 
 // ensure that we've conformed to the `ServerInterface` with a compile-time check
@@ -425,9 +428,16 @@ func NewServer(dsn string) Server {
 		Ctx: context.Background(),
 	}
 
-	userRepo := repos.UserRepo{
-		Q:   use,
-		Ctx: context.Background(),
+	var userRepo data.UserRepository
+
+	if os.Getenv("DB_BACKEND") == "nosql" {
+		nosqldb.InitMongo()
+		userRepo = nosqlrepos.NewUserRepo(context.Background(), nosqldb.MongoDatabase)
+	} else {
+		userRepo = &repos.UserRepo{
+			Q:   use,
+			Ctx: context.Background(),
+		}
 	}
 
 	var convService converter.Converter
@@ -480,7 +490,7 @@ func NewServer(dsn string) Server {
 
 	return Server{
 		carService:     service.NewCarService(carRepo, convService),
-		userService:    service.NewUserService(&userRepo),
+		userService:    service.NewUserService(userRepo),
 		bookingService: service.NewBookingService(repo, convService),
 	}
 }
