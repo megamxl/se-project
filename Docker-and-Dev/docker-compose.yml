@@ -56,9 +56,9 @@ services:
       - WEB_PORT=8080
       - SQL_SCHEMA=user_service
       # NoSQL
-      - DB_BACKEND=nosql ## Change this to either 'nosql' or 'sql' to specify which db to use
-      - MONGO_URI=mongodb://mongo-ms:27017
-      - MONGO_DB_NAME=user_service
+      - USER_DB_BACKEND=nosql ## Change this to either 'nosql' or 'sql' to specify which db to use
+      - USER_MONGO_URI=mongodb://mongo-ms:27017
+      - USER_MONGO_DB_NAME=user_service
     depends_on:
       - postgres-ms
       - converter-ms
@@ -93,9 +93,9 @@ services:
       - PULSAR_PRODUCER=true
       - PULSAR_URL=pulsar://pulsar-ms:6650
       # NoSQL
-      - DB_BACKEND=sql ## Change this to either 'nosql' or 'sql' to specify which db to use
-      - MONGO_URI=mongodb://mongo-ms:27017
-      - MONGO_DB_NAME=user_service
+      - CAR_DB_BACKEND=nosql ## Change this to either 'nosql' or 'sql' to specify which db to use
+      - CAR_MONGO_URI=mongodb://mongo-ms:27017
+      - CAR_MONGO_DB_NAME=car_service
     depends_on:
       - postgres-ms
       - converter-ms

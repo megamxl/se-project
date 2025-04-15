@@ -6,12 +6,11 @@ import (
 	"fmt"
 	"github.com/apache/pulsar-client-go/pulsar"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
-	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/repos"
 	"log/slog"
 )
 
 type pulsarConsumer struct {
-	repo     repos.CarRepo
+	repo     data.CarRepository
 	reader   pulsar.Reader
 	consumer pulsar.Consumer
 }
@@ -53,7 +52,7 @@ func (i pulsarConsumer) UpdateCar(car data.Car) {
 	slog.Info(fmt.Sprintf("Updated car in Pulsar listener %s", update.Vin))
 }
 
-func NewPulsarConsumer(reader pulsar.Reader, repo repos.CarRepo) CarEvent {
+func NewPulsarConsumer(reader pulsar.Reader, repo data.CarRepository) CarEvent {
 	consumer := &pulsarConsumer{
 		repo:   repo,
 		reader: reader,

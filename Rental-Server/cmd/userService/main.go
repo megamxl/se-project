@@ -14,5 +14,4 @@ func main() {
 	monoMiddleware := middleware.MonoMiddleware(hWithMiddleware)
 
 	config.ListenAndServeServer(monoMiddleware, os.Getenv("WEB_HOST")+":"+os.Getenv("WEB_PORT"))
-
 }

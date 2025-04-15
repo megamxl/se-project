@@ -8,6 +8,7 @@ import (
 	"github.com/megamxl/se-project/Rental-Server/internal/data/no-sql/dao/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 )
 
 var _ dataInt.UserRepository = (*UserRepo)(nil)
@@ -18,6 +19,7 @@ type UserRepo struct {
 }
 
 func (u *UserRepo) GetAllUsers() ([]dataInt.RentalUser, error) {
+	log.Println("👤 [Mongo] GetAllUsers")
 	cursor, err := u.Collection.Find(u.Ctx, bson.M{})
 	if err != nil {
 		return nil, err
@@ -41,6 +43,7 @@ func (u *UserRepo) GetAllUsers() ([]dataInt.RentalUser, error) {
 }
 
 func (u *UserRepo) GetUserByEmail(email string) (dataInt.RentalUser, error) {
+	log.Printf("👤 [Mongo] GetUserByEmail: %s", email)
 	var result model.RentalUser
 
 	err := u.Collection.FindOne(u.Ctx, bson.M{"email": email}).Decode(&result)
@@ -55,6 +58,7 @@ func (u *UserRepo) GetUserByEmail(email string) (dataInt.RentalUser, error) {
 }
 
 func (u *UserRepo) GetUserById(id uuid.UUID) (dataInt.RentalUser, error) {
+	log.Printf("👤 [Mongo] GetUserById: %s", id.String())
 	var result model.RentalUser
 
 	err := u.Collection.FindOne(u.Ctx, bson.M{"_id": id.String()}).Decode(&result)
@@ -69,6 +73,7 @@ func (u *UserRepo) GetUserById(id uuid.UUID) (dataInt.RentalUser, error) {
 }
 
 func (u *UserRepo) UpdateUserById(id uuid.UUID, update dataInt.RentalUser) (dataInt.RentalUser, error) {
+	log.Printf("👤 [Mongo] UpdateUserById: %s with %+v", id.String(), update)
 	filter := bson.M{"_id": id.String()}
 	updateDoc := bson.M{"$set": bson.M{
 		"name":     update.Name,
@@ -86,6 +91,7 @@ func (u *UserRepo) UpdateUserById(id uuid.UUID, update dataInt.RentalUser) (data
 }
 
 func (u *UserRepo) UpdateUserByEmail(email string, update dataInt.RentalUser) (dataInt.RentalUser, error) {
+	log.Printf("👤 [Mongo] UpdateUserByEmail: %s with %+v", email, update)
 	filter := bson.M{"email": email}
 	updateDoc := bson.M{"$set": bson.M{
 		"name":     update.Name,
@@ -103,12 +109,14 @@ func (u *UserRepo) UpdateUserByEmail(email string, update dataInt.RentalUser) (d
 }
 
 func (u *UserRepo) DeleteUserById(id uuid.UUID) error {
+	log.Printf("👤 [Mongo] DeleteUserById: %s", id.String())
 	filter := bson.M{"_id": id.String()}
 	_, err := u.Collection.DeleteOne(u.Ctx, filter)
 	return err
 }
 
 func (u *UserRepo) SaveUser(user dataInt.RentalUser) (dataInt.RentalUser, error) {
+	log.Printf("👤 [Mongo] SaveUser: %+v", user)
 	user.Id = uuid.New()
 
 	doc := model.RentalUser{
@@ -130,6 +138,7 @@ func (u *UserRepo) SaveUser(user dataInt.RentalUser) (dataInt.RentalUser, error)
 // Helper
 
 func NewUserRepo(ctx context.Context, db *mongo.Database) *UserRepo {
+	log.Println("📦 [Mongo] NewUserRepo")
 	return &UserRepo{
 		Collection: db.Collection("users"),
 		Ctx:        ctx,
