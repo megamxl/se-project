@@ -144,7 +144,6 @@ services:
       - "6650:6650"
       - "8080:8080"
     volumes:
-      - pulsardata_ms:/pulsar/data
       - pulsarconf_ms:/pulsar/conf
     tty: true
     stdin_open: true
