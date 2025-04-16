@@ -1,6 +1,14 @@
 version: '3.9'
 name: rental-ms-compose
 services:
+  mongo-ms:
+    image: mongo:7
+    container_name: mongo-ms-rental
+    ports:
+      - "27017:27017"
+    volumes:
+      - rental_ms_mongo_data:/data/db
+
   postgres-ms:
     image: postgres:17.2-bookworm
     container_name: postgres-ms-rental
@@ -47,6 +55,10 @@ services:
       - WEB_HOST=0.0.0.0
       - WEB_PORT=8080
       - SQL_SCHEMA=user_service
+      # NoSQL
+      - USER_DB_BACKEND=nosql ## Change this to either 'nosql' or 'sql' to specify which db to use
+      - USER_MONGO_URI=mongodb://mongo-ms:27017
+      - USER_MONGO_DB_NAME=user_service
     depends_on:
       - postgres-ms
       - converter-ms
@@ -81,6 +93,10 @@ services:
       - PULSAR_PRODUCER=true
       - PULSAR_URL=pulsar://pulsar-ms:6650
       - BOOKING_SERVICE_URL=http://bookingService:8080
+      # NoSQL
+      - CAR_DB_BACKEND=nosql ## Change this to either 'nosql' or 'sql' to specify which db to use
+      - CAR_MONGO_URI=mongodb://mongo-ms:27017
+      - CAR_MONGO_DB_NAME=car_service
     depends_on:
       - postgres-ms
       - converter-ms

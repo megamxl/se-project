@@ -28,6 +28,9 @@ import (
 	"os"
 	"strconv"
 	"time"
+
+	nosqldb "github.com/megamxl/se-project/Rental-Server/internal/data/no-sql/db"
+	nosqlrepos "github.com/megamxl/se-project/Rental-Server/internal/data/no-sql/repos"
 )
 
 // ensure that we've conformed to the `ServerInterface` with a compile-time check
@@ -432,10 +435,21 @@ func NewServer(dsn string) Server {
 
 	use := query.Use(db)
 
-	carRepo := repos.CarRepo{
-		Db:  db,
-		Ctx: context.Background(),
-		Q:   use,
+	var carRepo data.CarRepository
+
+	carDbBackend := os.Getenv("CAR_DB_BACKEND")
+	switch carDbBackend {
+	case "nosql":
+		nosqldb.InitMongoWith(os.Getenv("CAR_MONGO_URI"), os.Getenv("CAR_MONGO_DB_NAME"))
+		carRepo = nosqlrepos.NewCarRepo(context.Background(), nosqldb.MongoDatabase)
+	case "sql":
+		carRepo = &repos.CarRepo{
+			Db:  db,
+			Ctx: context.Background(),
+			Q:   use,
+		}
+	default:
+		log.Printf("❌ Invalid or missing CAR_DB_BACKEND env variable: got '%s'", carDbBackend)
 	}
 
 	repo := repos.RentalRepo{
@@ -443,9 +457,20 @@ func NewServer(dsn string) Server {
 		Ctx: context.Background(),
 	}
 
-	userRepo := repos.UserRepo{
-		Q:   use,
-		Ctx: context.Background(),
+	var userRepo data.UserRepository
+
+	userDbBackend := os.Getenv("USER_DB_BACKEND")
+	switch userDbBackend {
+	case "nosql":
+		nosqldb.InitMongoWith(os.Getenv("USER_MONGO_URI"), os.Getenv("USER_MONGO_DB_NAME"))
+		userRepo = nosqlrepos.NewUserRepo(context.Background(), nosqldb.MongoDatabase)
+	case "sql":
+		userRepo = &repos.UserRepo{
+			Q:   use,
+			Ctx: context.Background(),
+		}
+	default:
+		log.Printf("❌ Invalid or missing USER_DB_BACKEND env variable: got '%s'", userDbBackend)
 	}
 
 	var convService converter.Converter
@@ -498,7 +523,7 @@ func NewServer(dsn string) Server {
 
 	return Server{
 		carService:     service.NewCarService(carRepo, convService),
-		userService:    service.NewUserService(&userRepo),
+		userService:    service.NewUserService(userRepo),
 		bookingService: service.NewBookingService(repo, convService),
 	}
 }
