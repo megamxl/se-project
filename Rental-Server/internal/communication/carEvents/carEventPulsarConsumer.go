@@ -73,6 +73,8 @@ func NewPulsarConsumer(reader pulsar.Reader, repo data.CarRepository) CarEvent {
 				continue
 			}
 
+			fmt.Println(car)
+
 			switch car.Operation {
 			case "ADD":
 				consumer.AddCar(car.Car)

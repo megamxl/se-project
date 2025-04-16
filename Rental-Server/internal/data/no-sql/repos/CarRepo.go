@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	"os"
 	"time"
 
 	dataInt "github.com/megamxl/se-project/Rental-Server/internal/data"
@@ -17,6 +18,35 @@ var _ dataInt.CarRepository = (*CarRepo)(nil)
 type CarRepo struct {
 	Collection *mongo.Collection
 	Ctx        context.Context
+}
+
+func (c CarRepo) GetCarsNotInList(vins []string) ([]dataInt.Car, error) {
+
+	filter := bson.M{}
+
+	if len(vins) > 0 {
+		filter["_id"] = bson.M{
+			"$nin": vins,
+		}
+	}
+
+	cursor, err := c.Collection.Find(c.Ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(c.Ctx)
+
+	var cars []model.Car
+	if err := cursor.All(c.Ctx, &cars); err != nil {
+		return nil, err
+	}
+
+	result := make([]dataInt.Car, len(cars))
+	for _, car := range cars {
+		result = append(result, convertModelToDataCar(car))
+	}
+
+	return result, nil
 }
 
 func (c CarRepo) GetCarByVin(vin string) (dataInt.Car, error) {
@@ -83,23 +113,24 @@ func (c CarRepo) DeleteCarByVin(vin string) error {
 
 func (c CarRepo) GetCarsAvailableInTimeRange(startTime time.Time, endTime time.Time) ([]dataInt.Car, error) {
 	// This is a placeholder. Real availability logic involves checking bookings.
+	if os.Getenv("BOOKING_SERVICE_URL") == "" {
+		return nil, errors.New("BOOKING_SERVICE_URL not set cant get bookings")
+	}
+
 	log.Printf("🚗 [Mongo] GetCarsAvailableInTimeRange: from %s to %s", startTime.Format("2006-01-02"), endTime.Format("2006-01-02"))
-	filter := bson.M{}
-	cursor, err := c.Collection.Find(c.Ctx, filter)
+	booked, err := dataInt.GetVinsBooked(startTime, endTime)
+
 	if err != nil {
 		return nil, err
 	}
-	defer cursor.Close(c.Ctx)
 
-	var cars []dataInt.Car
-	for cursor.Next(c.Ctx) {
-		var m model.Car
-		if err := cursor.Decode(&m); err != nil {
-			return nil, err
-		}
-		cars = append(cars, convertModelToDataCar(m))
+	list, err := c.GetCarsNotInList(booked)
+
+	if err != nil {
+		return nil, err
 	}
-	return cars, nil
+
+	return list, nil
 }
 
 // Helper
