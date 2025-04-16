@@ -41,7 +41,7 @@ func (c CarRepo) GetCarsNotInList(vins []string) ([]dataInt.Car, error) {
 		return nil, err
 	}
 
-	result := make([]dataInt.Car, len(cars))
+	var result []dataInt.Car
 	for _, car := range cars {
 		result = append(result, convertModelToDataCar(car))
 	}
