@@ -45,32 +45,63 @@ struct LoginView: View {
                     }
                     .submitLabel(.go)
             } header: {
-                Text("Welcome, please login...")
-                    .font(.headline)
-                    .listRowInsets(.init())
-                    .textCase(nil)
-                    .padding(.bottom, .spacingS)
+                if loginViewModel.authenticationMethod == .login {
+                    Text("Welcome, please login...")
+                        .font(.headline)
+                        .listRowInsets(.init())
+                        .textCase(nil)
+                        .padding(.bottom, .spacingS)
+                } else {
+                    Text("Welcome, please register...")
+                        .font(.headline)
+                        .listRowInsets(.init())
+                        .textCase(nil)
+                        .padding(.bottom, .spacingS)
+                }
             }
 
-            Section {
-                Button {
-                    loginViewModel.login()
-                } label: {
-                    Text("Login")
-                        .font(.headline)
-                        .hAlign(.center)
+            if loginViewModel.authenticationMethod == .login {
+                Section {
+                    Button {
+                        loginViewModel.login()
+                    } label: {
+                        Text("Login")
+                            .font(.headline)
+                            .hAlign(.center)
+                    }
+                    .disabled(loginViewModel.username.isEmpty || loginViewModel.password.isEmpty)
+                } footer: {
+                    Button {
+                        loginViewModel.authenticationMethod = .register
+                    } label: {
+                        Text("or register now")
+                            .font(.callout)
+                            .fontWeight(.medium)
+                    }
+                    .hAlign(.center)
+                    .padding(.top, .spacingS)
                 }
-                .disabled(loginViewModel.username.isEmpty || loginViewModel.password.isEmpty)
-            } footer: {
-                Button {
-                    
-                } label: {
-                    Text("or register now")
-                        .font(.callout)
-                        .fontWeight(.medium)
+            } else {
+                Section {
+                    Button {
+                        loginViewModel.register()
+                    } label: {
+                        Text("Register")
+                            .font(.headline)
+                            .hAlign(.center)
+                    }
+                    .disabled(loginViewModel.username.isEmpty || loginViewModel.password.isEmpty)
+                } footer: {
+                    Button {
+                        loginViewModel.authenticationMethod = .login
+                    } label: {
+                        Text("or login now")
+                            .font(.callout)
+                            .fontWeight(.medium)
+                    }
+                    .hAlign(.center)
+                    .padding(.top, .spacingS)
                 }
-                .hAlign(.center)
-                .padding(.top, .spacingS)
             }
         }
         .onAppear {

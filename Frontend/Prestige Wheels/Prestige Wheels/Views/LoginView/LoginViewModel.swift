@@ -21,6 +21,15 @@ class LoginViewModel: ObservableObject {
 
     @Published var errorMessage: String?
     @Published var isLoggedIn: Bool = false
+    
+    // MARK: - Properties
+
+    @Published var authenticationMethod: AuthenticationMethod = .login
+    
+    enum AuthenticationMethod {
+        case login
+        case register
+    }
 
     // MARK: - Init
 
@@ -36,6 +45,26 @@ class LoginViewModel: ObservableObject {
         let login = OpenAPIClientAPI.LoginRequest(email: username, password: password)
 
         OpenAPIClientAPI.UserAPI.login(loginRequest: login) { _, error in
+            if let error = error {
+                Logger.authentication.info("❌ Login failed: \(error.localizedDescription)")
+                self.isLoggedIn = false
+                self.errorMessage = "Login fehlgeschlagen: \(error.localizedDescription)"
+            } else {
+                Logger.authentication.info("✅ Login success")
+                self.isLoggedIn = true
+                // Session-Cookie wird automatisch gespeichert
+            }
+        }
+    }
+    
+    // MARK: - Register Method
+    
+    func register() {
+        errorMessage = nil
+
+        let register = OpenAPIClientAPI.UserMutation(username: username, email: username, password: password)
+
+        OpenAPIClientAPI.UserAPI.registerUser(userMutation: register) { _, error in
             if let error = error {
                 Logger.authentication.info("❌ Login failed: \(error.localizedDescription)")
                 self.isLoggedIn = false
