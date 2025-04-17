@@ -1,3 +1,3 @@
 package api
 
-//go:generate oapi-codegen --config=cfg.yml ../api-definition.yml
+//go:generate go tool oapi-codegen --config=cfg.yml ../api-definition.yml

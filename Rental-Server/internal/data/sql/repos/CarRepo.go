@@ -8,6 +8,7 @@ import (
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/model"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/query"
 	"gorm.io/gorm"
+	"os"
 	"time"
 )
 
@@ -17,6 +18,22 @@ type CarRepo struct {
 	Q   *query.Query
 	Ctx context.Context
 	Db  *gorm.DB
+}
+
+func (c CarRepo) GetCarsNotInList(vins []string) ([]dataInt.Car, error) {
+
+	find, err := c.Q.WithContext(c.Ctx).Car.Where(c.Q.Car.Vin.NotIn(vins...)).Find()
+	if err != nil {
+		return nil, err
+	}
+
+	var cars []dataInt.Car
+
+	for _, v := range find {
+		cars = append(cars, modelToIntCar(v))
+	}
+
+	return cars, nil
 }
 
 func (c CarRepo) GetCarByVin(vin string) (dataInt.Car, error) {
@@ -67,10 +84,27 @@ func (c CarRepo) GetCarsAvailableInTimeRange(startTime time.Time, endTime time.T
 	layout := "2006-01-02 15:04:05"
 	var cars []dataInt.Car
 
-	tx := c.Db.WithContext(c.Ctx).Raw("SELECT c.* FROM car c WHERE NOT EXISTS ( SELECT 1 FROM booking b WHERE b.car_vin = c.vin AND tsrange(b.start_time, b.end_time) && tsrange(@start, @end))", sql.Named("start", startTime.Format(layout)), sql.Named("end", endTime.Format(layout))).Find(&cars)
+	if os.Getenv("BOOKING_SERVICE_URL") != "" {
+		booked, err := dataInt.GetVinsBooked(startTime, endTime)
 
-	if tx.Error != nil {
-		return nil, tx.Error
+		if err != nil {
+			return nil, err
+		}
+
+		list, err := c.GetCarsNotInList(booked)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return list, nil
+
+	} else {
+		tx := c.Db.WithContext(c.Ctx).Raw("SELECT c.* FROM car c WHERE NOT EXISTS ( SELECT 1 FROM booking b WHERE b.car_vin = c.vin AND tsrange(b.start_time, b.end_time) && tsrange(@start, @end))", sql.Named("start", startTime.Format(layout)), sql.Named("end", endTime.Format(layout))).Find(&cars)
+
+		if tx.Error != nil {
+			return nil, tx.Error
+		}
 	}
 
 	return cars, nil

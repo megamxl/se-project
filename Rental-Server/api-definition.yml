@@ -307,6 +307,34 @@ paths:
                 $ref: "#/components/schemas/BookingList"
         '400':
           description: Invalid booking ID
+  /bookings/rpc/in_range:
+    get:
+      tags:
+        - rpc
+      summary: List Bookings in time frame cars
+      operationId: listBookingsInRange
+      parameters:
+        - name: startTime
+          in: query
+          description: Start time for filtering
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: endTime
+          in: query
+          description: End time for filtering
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: List of available cars
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingList"
 
 
 components:

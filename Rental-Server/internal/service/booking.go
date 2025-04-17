@@ -8,6 +8,7 @@ import (
 	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"log/slog"
+	"time"
 )
 
 type BookingService interface {
@@ -17,11 +18,22 @@ type BookingService interface {
 	DeleteBooking(ctx context.Context, bookingId string) error
 	GetAllBookingsByUser(ctx context.Context, userId string) ([]data.Booking, error)
 	GetAllBookings(ctx context.Context) ([]data.Booking, error)
+	GetAllBookingsInTimeRange(from, to time.Time) ([]data.Booking, error)
 }
 
 type bookingService struct {
 	repo data.BookingRepository
 	conv converter.Converter
+}
+
+func (s bookingService) GetAllBookingsInTimeRange(from, to time.Time) ([]data.Booking, error) {
+
+	timeRange, err := s.repo.GetBookingsInTimeRange(from, to)
+	if err != nil {
+		return nil, err
+	}
+
+	return timeRange, nil
 }
 
 func (s bookingService) BookCar(ctx context.Context, req data.Booking, currency string, pricePerDayInUSD float64) (data.Booking, error) {

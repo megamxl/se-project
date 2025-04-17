@@ -92,6 +92,7 @@ services:
       - SQL_SCHEMA=car_service
       - PULSAR_PRODUCER=true
       - PULSAR_URL=pulsar://pulsar-ms:6650
+      - BOOKING_SERVICE_URL=http://bookingService:8080
       # NoSQL
       - CAR_DB_BACKEND=nosql ## Change this to either 'nosql' or 'sql' to specify which db to use
       - CAR_MONGO_URI=mongodb://mongo-ms:27017
@@ -130,6 +131,7 @@ services:
       - PULSAR_URL=pulsar://pulsar-ms:6650
       - SEED_BOOKING_SQL=true
       - SEED_CAR_SQL=true
+      - CAR_DB_BACKEND=sql
     depends_on:
       - postgres-ms
       - converter-ms
@@ -142,7 +144,6 @@ services:
       - "6650:6650"
       - "8080:8080"
     volumes:
-      - pulsardata_ms:/pulsar/data
       - pulsarconf_ms:/pulsar/conf
     tty: true
     stdin_open: true

@@ -7,11 +7,28 @@ import (
 	dataInt "github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/model"
 	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/query"
+	"time"
 )
 
 type RentalRepo struct {
 	Q   *query.Query
 	Ctx context.Context
+}
+
+func (r RentalRepo) GetBookingsInTimeRange(startTime time.Time, endTime time.Time) ([]dataInt.Booking, error) {
+
+	vins, err := r.Q.WithContext(r.Ctx).Booking.
+		Where(
+			r.Q.Booking.StartTime.Lt(endTime),
+			r.Q.Booking.EndTime.Gt(startTime),
+		).
+		Find()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return MapBookingsToDTOs(vins), nil
 }
 
 func (r RentalRepo) UpdateBookingStateById(id uuid.UUID, state string) (dataInt.Booking, error) {
