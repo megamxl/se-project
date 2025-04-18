@@ -12,9 +12,16 @@ class FindCarDetailViewModel: ObservableObject {
     
     let car: OpenAPIClientAPI.CarListInner
     let currency: OpenAPIClientAPI.Currency
+    let from: Date
+    let to: Date
     
-    public init(car: OpenAPIClientAPI.CarListInner, currency: OpenAPIClientAPI.Currency) {
+    public init(car: OpenAPIClientAPI.CarListInner,
+                currency: OpenAPIClientAPI.Currency,
+                from: Date,
+                to: Date) {
         self.car = car
         self.currency = currency
+        self.from = from
+        self.to = to
     }
 }

@@ -60,6 +60,20 @@ struct FindCarDetailView: View {
                 .font(.title2)
                 .fontDesign(.rounded)
             
+            HStack {
+                Label("From:", systemImage: "calendar")
+                    .fontWeight(.semibold)
+                Text(viewModel.from.formatted(date: .abbreviated, time: .omitted))
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            
+            HStack {
+                Label("To:", systemImage: "calendar")
+                    .fontWeight(.semibold)
+                Text(viewModel.to.formatted(date: .abbreviated, time: .omitted))
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            
             Button {
                 // TODO: Action einfügen
             } label: {
@@ -143,5 +157,5 @@ struct FindCarDetailView: View {
 }
 
 #Preview {
-    FindCarDetailView(viewModel: .init(car: .init(), currency: .eur))
+    FindCarDetailView(viewModel: .init(car: .init(), currency: .eur, from: .now, to: .now))
 }
