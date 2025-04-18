@@ -34,7 +34,7 @@ struct FindCarView: View {
                 } else {
                     List(viewModel.cars, id: \.VIN) { car in
                         Button {
-                            route.path.append(.findCarDetailView(car: car))
+                            route.path.append(.findCarDetailView(car: car, currency: viewModel.selectedCurrency))
                         } label: {
                             CarRow(car: car, currency: viewModel.selectedCurrency)
                                 .listRowSeparator(.hidden)

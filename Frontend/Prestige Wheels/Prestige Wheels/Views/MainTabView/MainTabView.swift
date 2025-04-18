@@ -39,8 +39,8 @@ struct MainTabView: View {
     @ViewBuilder
     func view(for route: Route) -> some View {
         switch route {
-        case .findCarDetailView(let car):
-            let viewModel = FindCarDetailViewModel(car: car)
+        case .findCarDetailView(let car, let currency):
+            let viewModel = FindCarDetailViewModel(car: car, currency: currency)
             FindCarDetailView(viewModel: viewModel)
         }
     }

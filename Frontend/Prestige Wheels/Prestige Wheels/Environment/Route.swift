@@ -9,5 +9,5 @@ import Foundation
 import OpenAPIClient
 
 enum Route: Hashable {
-    case findCarDetailView(car: OpenAPIClientAPI.CarListInner)
+    case findCarDetailView(car: OpenAPIClientAPI.CarListInner, currency: OpenAPIClientAPI.Currency)
 }
