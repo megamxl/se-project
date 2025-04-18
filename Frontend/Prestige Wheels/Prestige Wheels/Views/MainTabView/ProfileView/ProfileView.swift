@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileView: View {
     
-    @EnvironmentObject var loginViewModel: LoginViewModel
+    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
     @EnvironmentObject var userViewModel: UserViewModel
     
     @State private var isEditSheetPresented = false
@@ -75,7 +75,7 @@ struct ProfileView: View {
                 
                 Section {
                     Button(role: .destructive) {
-                        loginViewModel.logout()
+                        authenticationViewModel.logout()
                     } label: {
                         Label {
                             Text("Logout")
@@ -105,6 +105,6 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
-        .environmentObject(LoginViewModel())
+        .environmentObject(AuthenticationViewModel())
         .environmentObject(UserViewModel())
 }

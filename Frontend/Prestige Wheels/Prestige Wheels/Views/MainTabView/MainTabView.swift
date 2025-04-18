@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @EnvironmentObject var loginViewModel: LoginViewModel
+    @EnvironmentObject var loginViewModel: AuthenticationViewModel
     
     var body: some View {
         TabView {
@@ -26,12 +26,12 @@ struct MainTabView: View {
             get: { !loginViewModel.isLoggedIn },
             set: { loginViewModel.isLoggedIn = !$0 }
         )) {
-            LoginView()
+            AuthenticationView()
         }
     }
 }
 
 #Preview {
     MainTabView()
-        .environmentObject(LoginViewModel())
+        .environmentObject(AuthenticationViewModel())
 }

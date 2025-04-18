@@ -1,5 +1,5 @@
 //
-//  LoginViewModel.swift
+//  AuthenticationViewModel.swift
 //  Prestige Wheels
 //
 //  Created by Michael Luegmayer on 25.03.2025.
@@ -11,11 +11,12 @@ import OSLog
 import OpenAPIClient
 
 @MainActor
-class LoginViewModel: ObservableObject {
+class AuthenticationViewModel: ObservableObject {
     // MARK: - Input Fields
 
-    @Published var username: String = "john.doe@example.com"
-    @Published var password: String = "password123"
+    @Published var username: String = ""
+    @Published var email: String = ""
+    @Published var password: String = ""
 
     // MARK: - Output Properties
 
@@ -42,7 +43,7 @@ class LoginViewModel: ObservableObject {
     func login() {
         errorMessage = nil
 
-        let login = OpenAPIClientAPI.LoginRequest(email: username, password: password)
+        let login = OpenAPIClientAPI.LoginRequest(email: email, password: password)
 
         OpenAPIClientAPI.UserAPI.login(loginRequest: login) { _, error in
             if let error = error {
@@ -62,7 +63,7 @@ class LoginViewModel: ObservableObject {
     func register() {
         errorMessage = nil
 
-        let register = OpenAPIClientAPI.UserMutation(username: username, email: username, password: password)
+        let register = OpenAPIClientAPI.UserMutation(username: username, email: email, password: password)
 
         OpenAPIClientAPI.UserAPI.registerUser(userMutation: register) { _, error in
             if let error = error {
@@ -84,7 +85,7 @@ class LoginViewModel: ObservableObject {
             HTTPCookieStorage.shared.deleteCookie($0)
         }
         self.isLoggedIn = false
-        self.username = ""
+        self.email = ""
         self.password = ""
     }
 

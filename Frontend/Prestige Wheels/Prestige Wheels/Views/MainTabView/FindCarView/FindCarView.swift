@@ -11,7 +11,7 @@ import OSLog
 
 struct FindCarView: View {
     @StateObject private var viewModel = CarViewModel()
-    @EnvironmentObject var loginViewModel: LoginViewModel
+    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
     
     var body: some View {
         NavigationStack {
@@ -62,16 +62,16 @@ struct FindCarView: View {
             }
             .navigationTitle("Prestige Wheels")
             .onAppear {
-                if loginViewModel.isLoggedIn {
+                if authenticationViewModel.isLoggedIn {
                     viewModel.listCars()
                 }
             }
-            .onChange(of: loginViewModel.isLoggedIn) {
+            .onChange(of: authenticationViewModel.isLoggedIn) {
                 Logger.backgroundProcessing.log("🔄 refresh after login")
                 viewModel.listCars()
             }
             .refreshable {
-                if loginViewModel.isLoggedIn {
+                if authenticationViewModel.isLoggedIn {
                     Logger.backgroundProcessing.log("🔄 loading cars")
                     viewModel.listCars()
                 } else {
@@ -91,5 +91,5 @@ struct FindCarView: View {
 
 #Preview {
     FindCarView()
-        .environmentObject(LoginViewModel())
+        .environmentObject(AuthenticationViewModel())
 }
