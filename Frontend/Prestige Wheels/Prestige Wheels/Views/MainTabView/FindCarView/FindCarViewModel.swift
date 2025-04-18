@@ -8,13 +8,13 @@
 import Foundation
 import OpenAPIClient
 
-class CarViewModel: ObservableObject {
+class FindCarViewModel: ObservableObject {
     @Published var cars: [OpenAPIClientAPI.CarListInner] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     
     @Published var fromDate: Date = Date()
-    @Published var toDate: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+    @Published var toDate: Date = Date()
     
     @Published var selectedCurrency: OpenAPIClientAPI.Currency = .eur
     

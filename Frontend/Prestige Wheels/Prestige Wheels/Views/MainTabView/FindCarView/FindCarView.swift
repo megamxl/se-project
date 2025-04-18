@@ -10,8 +10,9 @@ import OpenAPIClient
 import OSLog
 
 struct FindCarView: View {
-    @StateObject private var viewModel = CarViewModel()
+    @StateObject private var viewModel = FindCarViewModel()
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
+    @EnvironmentObject var route: RouteObject
     
     var body: some View {
         NavigationStack {
@@ -32,11 +33,15 @@ struct FindCarView: View {
                     ContentUnavailableView("API Error", systemImage: "exclamationmark.triangle.fill", description: Text(error))
                 } else {
                     List(viewModel.cars, id: \.VIN) { car in
-                        CarRow(car: car, currency: viewModel.selectedCurrency)
-                            .listRowSeparator(.hidden)
-                            .listRowInsets(.init())
-                            .padding(.vertical, .spacingXS)
-                            .padding(.horizontal)
+                        Button {
+                            route.path.append(.findCarDetailView(car: car))
+                        } label: {
+                            CarRow(car: car, currency: viewModel.selectedCurrency)
+                                .listRowSeparator(.hidden)
+                                .listRowInsets(.init())
+                                .padding(.vertical, .spacingXS)
+                                .padding(.horizontal)
+                        }
                     }
                     .listStyle(.plain)
                     .contentMargins(.top, 0, for: .scrollContent)

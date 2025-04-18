@@ -9,11 +9,16 @@ import SwiftUI
 
 struct MainTabView: View {
     @EnvironmentObject var loginViewModel: AuthenticationViewModel
+    @StateObject var route = RouteObject()
     
     var body: some View {
         TabView {
             Tab("Find a Car", systemImage: "car.fill") {
-                FindCarView()
+                NavigationStack(path: $route.path) {
+                    FindCarView()
+                        .navigationDestination(for: Route.self) { route in view(for: route) }
+                }
+                .environmentObject(route)
             }
             Tab("Bookings", systemImage: "book.pages.fill") {
                 MyBookingsView()
@@ -27,6 +32,16 @@ struct MainTabView: View {
             set: { loginViewModel.isLoggedIn = !$0 }
         )) {
             AuthenticationView()
+        }
+    }
+
+
+    @ViewBuilder
+    func view(for route: Route) -> some View {
+        switch route {
+        case .findCarDetailView(let car):
+            let viewModel = FindCarDetailViewModel(car: car)
+            FindCarDetailView(viewModel: viewModel)
         }
     }
 }

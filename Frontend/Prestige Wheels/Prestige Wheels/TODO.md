@@ -3,7 +3,7 @@
 ## 🔐 Login / Register
 
 - [X] `LoginView`
-- [ ] `RegisterView`
+- [X] `RegisterView`
 
 ## 🙍‍♂️ Profile
 
