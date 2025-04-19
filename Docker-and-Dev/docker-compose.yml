@@ -8,6 +8,7 @@ services:
       - "27017:27017"
     volumes:
       - rental_ms_mongo_data:/data/db
+      - ../Rental-Server/internal/data/no-sql/db/init:/docker-entrypoint-initdb.d:ro
 
   postgres-ms:
     image: postgres:17.2-bookworm

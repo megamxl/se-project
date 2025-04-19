@@ -93,6 +93,8 @@ func (s Server) Login(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// Bookings
+
 func (s Server) DeleteBooking(w http.ResponseWriter, r *http.Request, params DeleteBookingParams) {
 	if params.BookingId == "" {
 		http.Error(w, "missing 'bookingId' query parameter", http.StatusBadRequest)
@@ -229,6 +231,8 @@ func (s Server) GetAllBookingsByUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Cars
+
 func (s Server) DeleteCar(w http.ResponseWriter, r *http.Request, params DeleteCarParams) {
 	if params.VIN == "" {
 		http.Error(w, "ERROR: VIN parameter is required", http.StatusBadRequest)
@@ -311,6 +315,8 @@ func (s Server) UpdateCar(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
+// Users
 
 func (s Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
