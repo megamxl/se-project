@@ -94,7 +94,7 @@ func (s bookingService) UpdateBooking(ctx context.Context, bookingId string, sta
 	}
 	booking.Status = status
 
-	updatedBooking, err := s.repo.SaveBooking(booking)
+	updatedBooking, err := s.repo.UpdateBookingStateById(booking.Id, status)
 	if err != nil {
 		return data.Booking{}, fmt.Errorf("UpdateBooking: %w", err)
 	}
