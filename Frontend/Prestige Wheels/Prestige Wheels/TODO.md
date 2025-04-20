@@ -7,9 +7,9 @@
 
 ## 🙍‍♂️ Profile
 
-- [ ] `ProfileView`
+- [X] `ProfileView`
     - [X] UserDetails
-    - [ ] edit UserDetails?
+    - [1/2] edit UserDetails?
     - [X] Logout
 
 ## 🚘 Car
