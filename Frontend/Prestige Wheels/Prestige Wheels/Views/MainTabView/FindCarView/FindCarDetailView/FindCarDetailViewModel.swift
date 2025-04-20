@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import MapKit
 import OpenAPIClient
+import _MapKit_SwiftUI
 
 class FindCarDetailViewModel: ObservableObject {
     @Published var showAlert = false
@@ -26,6 +28,13 @@ class FindCarDetailViewModel: ObservableObject {
         self.from = from
         self.to = to
     }
+    
+    var position = MapCameraPosition.region(
+        MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 48.157975, longitude: 16.381778),
+            span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+        )
+    )
     
     func bookCar() {
         let request = OpenAPIClientAPI.BookCarRequest(VIN: car.VIN, currency: currency, startTime: from, endTime: to)

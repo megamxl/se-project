@@ -45,7 +45,7 @@ struct EditProfileSheetView: View {
                         } label: {
                             Text("Save")
                         }
-                        .disabled(viewModel.username.isEmpty && viewModel.email.isEmpty && viewModel.password.isEmpty)
+                        .disabled(viewModel.username.isEmpty || viewModel.email.isEmpty || viewModel.password.isEmpty)
                     }
                 }
             }

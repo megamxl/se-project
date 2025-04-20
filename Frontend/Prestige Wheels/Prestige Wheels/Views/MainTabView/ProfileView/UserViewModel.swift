@@ -26,14 +26,6 @@ class UserViewModel: ObservableObject {
         }
     }
     
-    func getAllUsers() {
-
-    }
-    
-    func updateUser() {
-
-    }
-    
     func deleteUser() {
         guard let userId = user?.id else { return }
         
