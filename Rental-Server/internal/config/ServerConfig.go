@@ -28,7 +28,7 @@ func BasicServerSetup() http.Handler {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{AddSource: true, Level: slog.LevelDebug}))
 	slog.SetDefault(logger)
 
-	server := api.NewServer(GenerateDSNStringFromEnvVariables())
+	server := api.NewServer()
 
 	r := http.NewServeMux()
 

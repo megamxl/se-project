@@ -3,30 +3,17 @@ package api
 import (
 	"context"
 	"errors"
-	"github.com/apache/pulsar-client-go/pulsar"
 	"github.com/google/uuid"
 	"github.com/megamxl/se-project/Rental-Server/api/Util"
-	"github.com/megamxl/se-project/Rental-Server/internal/communication/carEvents"
-	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter"
-	myGrpcImpl "github.com/megamxl/se-project/Rental-Server/internal/communication/converter/grpc"
-	myGrpcStub "github.com/megamxl/se-project/Rental-Server/internal/communication/converter/grpc/proto"
-	"google.golang.org/grpc/credentials/insecure"
+	"github.com/megamxl/se-project/Rental-Server/internal/di"
 
-	"github.com/megamxl/se-project/Rental-Server/internal/communication/converter/soap"
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
-	"github.com/megamxl/se-project/Rental-Server/internal/data/sql"
-	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/dao/query"
-	"github.com/megamxl/se-project/Rental-Server/internal/data/sql/repos"
 	"github.com/megamxl/se-project/Rental-Server/internal/middleware"
 	"github.com/megamxl/se-project/Rental-Server/internal/service"
-	"google.golang.org/grpc"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"log"
 	"log/slog"
 	"net/http"
 	"os"
-	"strconv"
 	"time"
 
 	nosqldb "github.com/megamxl/se-project/Rental-Server/internal/data/no-sql/db"
@@ -447,166 +434,68 @@ func (s Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func NewServer(dsn string) Server {
+func NewServer() Server {
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
-	}
-
-	seeder := sql.NewSqlSeeder(db)
-
-	basedOnEnvVaribels(err, seeder)
-
-	use := query.Use(db)
-
-	var carRepo data.CarRepository
-
-	carDbBackend := os.Getenv("CAR_DB_BACKEND")
-	switch carDbBackend {
-	case "nosql":
-		nosqldb.InitMongoWith(os.Getenv("CAR_MONGO_URI"), os.Getenv("CAR_MONGO_DB_NAME"))
-		carRepo = nosqlrepos.NewCarRepo(context.Background(), nosqldb.MongoDatabase)
-	case "sql":
-		carRepo = &repos.CarRepo{
-			Db:  db,
-			Ctx: context.Background(),
-			Q:   use,
-		}
-	default:
-		log.Printf("❌ Invalid or missing CAR_DB_BACKEND env variable: got '%s'", carDbBackend)
-	}
-
-	repo := repos.RentalRepo{
-		Q:   use,
-		Ctx: context.Background(),
-	}
+	dbBackend := os.Getenv("DB_BACKEND")
 
 	var userRepo data.UserRepository
+	var carRepo data.CarRepository
+	var bookingRepo data.BookingRepository
 
-	userDbBackend := os.Getenv("USER_DB_BACKEND")
-	switch userDbBackend {
-	case "nosql":
-		nosqldb.InitMongoWith(os.Getenv("USER_MONGO_URI"), os.Getenv("USER_MONGO_DB_NAME"))
+	switch dbBackend {
+	case "SQL":
+		slog.Info("DB_BACKEND=SQL")
+		connection := di.GetSQLDatabaseConnection()
+		di.SeedDatabase(connection)
+
+		userRepo = di.GetUserRepositorySQL(connection)
+		carRepo = di.GetCarRepositorySQL(connection)
+		bookingRepo = di.GetBookingRepositorySQL(connection)
+
+	case "NO-SQL":
+		nosqldb.InitMongoWith(os.Getenv("MONGO_URI"), os.Getenv("MONGO_DB_NAME"))
+		carRepo = nosqlrepos.NewCarRepo(context.Background(), nosqldb.MongoDatabase)
 		userRepo = nosqlrepos.NewUserRepo(context.Background(), nosqldb.MongoDatabase)
-	case "sql":
-		userRepo = &repos.UserRepo{
-			Q:   use,
-			Ctx: context.Background(),
-		}
+
+		slog.Info("DB_BACKEND=NO-SQL")
 	default:
-		log.Printf("❌ Invalid or missing USER_DB_BACKEND env variable: got '%s'", userDbBackend)
+		log.Fatal("DB_BACKEND= Not Set no function reconfigure the app")
 	}
 
-	var convService converter.Converter
-
-	if os.Getenv("CONVERTOR_SOAP_URL") != "" {
-		convService = soap.NewSoapService(os.Getenv("CONVERTOR_SOAP_URL"))
-
-		slog.Info("Connected to SOAP server and using it ")
-
-	} else if os.Getenv("CONVERTOR_GRPC_URL") != "" {
-
-		var opts []grpc.DialOption
-		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-
-		conn, err := grpc.NewClient(os.Getenv("CONVERTOR_GRPC_URL"), opts...)
-		if err != nil {
-			log.Fatal("Failed to connect to server:", err)
-		}
-
-		client := myGrpcStub.NewConvertorClient(conn)
-
-		convService = myGrpcImpl.NewConverter(client)
-		slog.Info("Connected to GRPC server and using it ")
-	} else {
-		slog.Info("Unsupported config no convertor set. Set CONVERTOR_SOAP_URL or CONVERTOR_GRPC_URL if you want an convertor")
+	if userRepo == nil {
+		slog.Info("🚨 UserRepo is nil")
 	}
 
-	if os.Getenv("PULSAR_LISTENER") == "true" {
+	if carRepo == nil {
+		slog.Info("🚨 CarRepo is nil")
+	}
 
-		client, err := pulsar.NewClient(pulsar.ClientOptions{
-			URL:               os.Getenv("PULSAR_URL"),
-			OperationTimeout:  30 * time.Second,
-			ConnectionTimeout: 30 * time.Second,
-		})
-		if err != nil {
-			slog.Error("Could not instantiate Pulsar client: %v", err)
+	if bookingRepo == nil {
+		slog.Info("🚨 BookingRepo is nil")
+	}
+
+	convertor := di.GetConvertor()
+
+	var err error
+
+	for i := 0; i < 5; i++ {
+		err = nil
+		err = di.PulsarListner(carRepo)
+		if err == nil {
+			break
 		}
+		slog.Info("Sleeping 5 seconds and then trying to connect to Pulsar Again")
+		time.Sleep(5 * time.Second)
+	}
 
-		reader, err := client.CreateReader(pulsar.ReaderOptions{
-			Topic:          "car-events",
-			StartMessageID: pulsar.EarliestMessageID(),
-		})
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		carEvents.NewPulsarConsumer(reader, carRepo)
+	if err != nil {
+		log.Fatal("🔌 Cant connect to pulsar", err)
 	}
 
 	return Server{
-		carService:     service.NewCarService(carRepo, convService),
+		carService:     service.NewCarService(carRepo, convertor),
 		userService:    service.NewUserService(userRepo),
-		bookingService: service.NewBookingService(repo, convService),
-	}
-}
-
-func basedOnEnvVaribels(err error, seeder sql.Seeder) {
-	monoSeeder, err := strconv.ParseBool(os.Getenv("SEED_MOMOLITH"))
-	if err != nil {
-		slog.Info("Not seeding database for Monolith since Argument can't be parsed as boolean")
-	}
-
-	if monoSeeder {
-		seeder.SeedUser()
-		seeder.SeedCars()
-		seeder.SeedBooking()
-		seeder.SeedBookingMonolithConstraints()
-		return
-	}
-
-	userSql, err := strconv.ParseBool(os.Getenv("SEED_USER_SQL"))
-	if err != nil {
-		slog.Info("Not seeding database for SEED_USER_SQL since Argument can't be parsed as boolean")
-	}
-
-	if userSql {
-		seeder.SeedUser()
-		return
-	}
-
-	carSQL, err := strconv.ParseBool(os.Getenv("SEED_CAR_SQL"))
-	if err != nil {
-		slog.Info("Not seeding database for SEED_CAR_SQL since Argument can't be parsed as boolean")
-	}
-
-	if carSQL {
-		seeder.SeedCars()
-	}
-
-	bookSQL, err := strconv.ParseBool(os.Getenv("SEED_BOOKING_SQL"))
-	if err != nil {
-		slog.Info("Not seeding database for SEED_BOOKING_SQL since Argument can't be parsed as boolean")
-	}
-
-	if bookSQL {
-		seeder.SeedBooking()
-		seeder.SeedBookingConstraints()
-	}
-
-}
-
-func MapDataCarToCar(dataCar data.Car) Car {
-	price := float32(dataCar.PricePerDay)
-
-	return Car{
-		VIN:         &dataCar.Vin,
-		Brand:       &dataCar.Brand,
-		ImageURL:    &dataCar.ImageUrl,
-		Model:       &dataCar.Model,
-		PricePerDay: &price,
+		bookingService: service.NewBookingService(bookingRepo, convertor),
 	}
 }
 
