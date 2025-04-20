@@ -21,8 +21,8 @@ from test_output import (
 # 🔧 Global Test Config
 # =====================
 
-BOOKING_BASE_URL = "http://localhost:8093"
-CAR_BASE_URL = "http://localhost:8092"
+BOOKING_BASE_URL = "http://localhost:8098"
+CAR_BASE_URL = "http://localhost:8098"
 VERBOSE = "--no-output" not in sys.argv
 
 def random_vin():
@@ -59,11 +59,7 @@ class BookingAPITest(unittest.TestCase):
         print("Waiting for Pulsar to sync car to booking service...")
         time.sleep(1)  # Wait for Pulsar to sync car to booking service
 
-    @classmethod
-    def tearDownClass(cls):
-        print_test_header("🪩 Class Teardown: Delete Car")
-        response = cls.session.delete(f"{CAR_BASE_URL}/cars", params={"VIN": cls.vin})
-        print_test_footer(response.status_code, f"Deleted VIN: {cls.vin}")
+    
 
     def setUp(self):
         self.session = self.__class__.session
@@ -169,6 +165,20 @@ class BookingAPITest(unittest.TestCase):
         print_test_footer(status, "Invalid booking ID lookup")
         print_verbose_text(response, VERBOSE)
         self.assertIn(status, [400, 404])
+
+    def test_08_book_car_duplicate(self):
+        print_test_header("🗕️ Book a Car")
+        response = self.session.post(f"{BOOKING_BASE_URL}/booking", json={
+            "VIN": self.vin,
+            "currency": self.currency,
+            "startTime": self.start_date,
+            "endTime": self.end_date
+        })
+        status = warn_if_500(response)
+        print_test_footer(status, f"Booking car {self.vin} from {self.start_date} to {self.end_date}")
+        print_verbose_json(response, VERBOSE)
+        self.assertEqual(status, 500)
+
 
 if __name__ == "__main__":
     unittest.main(argv=[arg for arg in sys.argv if arg != "--no-output"])

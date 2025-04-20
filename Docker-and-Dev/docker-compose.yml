@@ -164,6 +164,5 @@ services:
   
 volumes:
   rental_ms_postgres_data:
-  pulsardata_ms:
   pulsarconf_ms:
   rental_ms_mongo_data:

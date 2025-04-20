@@ -94,9 +94,13 @@ func (c CarRepo) UpdateCar(car dataInt.Car) (dataInt.Car, error) {
 		"price_per_day": car.PricePerDay,
 	}}
 
-	_, err := c.Collection.UpdateOne(c.Ctx, filter, update)
+	info, err := c.Collection.UpdateOne(c.Ctx, filter, update)
 	if err != nil {
 		return dataInt.Car{}, err
+	}
+
+	if info.ModifiedCount == 0 {
+		return dataInt.Car{}, errors.New("car not found")
 	}
 
 	log.Printf("🚗 [Mongo] UpdateCar: %+v", car)
@@ -107,7 +111,12 @@ func (c CarRepo) UpdateCar(car dataInt.Car) (dataInt.Car, error) {
 func (c CarRepo) DeleteCarByVin(vin string) error {
 	log.Printf("🚗 [Mongo] DeleteCarByVin: %s", vin)
 	filter := bson.M{"_id": vin}
-	_, err := c.Collection.DeleteOne(c.Ctx, filter)
+	info, err := c.Collection.DeleteOne(c.Ctx, filter)
+
+	if info.DeletedCount == 0 {
+		return errors.New("car not found")
+	}
+
 	return err
 }
 
