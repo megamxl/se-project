@@ -93,6 +93,8 @@ func (s Server) Login(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// Bookings
+
 func (s Server) DeleteBooking(w http.ResponseWriter, r *http.Request, params DeleteBookingParams) {
 	if params.BookingId == "" {
 		http.Error(w, "missing 'bookingId' query parameter", http.StatusBadRequest)
@@ -140,11 +142,13 @@ func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
 	userIdFromRequest, err := getUserIdFromRequest(r)
 	if err != nil {
 		http.Error(w, "User not found contact support", http.StatusBadRequest)
+		return
 	}
 
 	vin, err := s.carService.GetCarByVin(r.Context(), *req.VIN)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Car not found", http.StatusNotFound)
+		return
 	}
 
 	booking, err := s.bookingService.BookCar(r.Context(), data.Booking{
@@ -158,7 +162,7 @@ func (s Server) BookCar(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Failed to create booking: "+err.Error(), http.StatusUnprocessableEntity)
 		return
 	}
 
@@ -175,11 +179,13 @@ func (s Server) UpdateBooking(w http.ResponseWriter, r *http.Request) {
 		BookingId string `json:"bookingId"`
 		Status    string `json:"status"`
 	}
+
 	if err := Util.DecodeJSON(r, &req); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
-	if req.BookingId == "" || req.Status == "" {
+
+	if err := data.ValidateRequiredFields(req, []string{"BookingId", "Status"}); err != nil {
 		http.Error(w, "missing bookingId or status", http.StatusBadRequest)
 		return
 	}
@@ -199,9 +205,14 @@ func (s Server) GetBookingById(w http.ResponseWriter, r *http.Request, id string
 		return
 	}
 
+	if err := data.ValidateRequiredFields(struct{ ID string }{ID: id}, []string{"ID"}); err != nil {
+		http.Error(w, "Invalid booking ID", http.StatusBadRequest)
+		return
+	}
+
 	booking, err := s.bookingService.GetBookingById(r.Context(), id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Booking not found", http.StatusNotFound)
 		return
 	}
 
@@ -212,7 +223,12 @@ func (s Server) GetBookingById(w http.ResponseWriter, r *http.Request, id string
 }
 
 func (s Server) GetAllBookingsByUser(w http.ResponseWriter, r *http.Request) {
-	dataBookings, err := s.bookingService.GetAllBookings(r.Context())
+	userIdFromRequest, err := getUserIdFromRequest(r)
+	if err != nil {
+		http.Error(w, "User not found in context", http.StatusBadRequest)
+		return
+	}
+	dataBookings, err := s.bookingService.GetAllBookingsByUser(r.Context(), userIdFromRequest.String())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -228,6 +244,8 @@ func (s Server) GetAllBookingsByUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// Cars
 
 func (s Server) DeleteCar(w http.ResponseWriter, r *http.Request, params DeleteCarParams) {
 	if params.VIN == "" {
@@ -288,6 +306,11 @@ func (s Server) AddCar(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := data.ValidateRequiredFields(car, []string{"Vin", "Model", "Brand", "PricePerDay"}); err != nil {
+		http.Error(w, "ERROR: "+err.Error(), http.StatusUnprocessableEntity)
+		return
+	}
+
 	if _, err := s.carService.CreateCar(r.Context(), car); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -311,6 +334,8 @@ func (s Server) UpdateCar(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
+// Users
 
 func (s Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
