@@ -15,7 +15,7 @@
 ## 🚘 Car
 
 - [X] `CarListView`
-- [ ] `CarDetailView`
+- [X] `CarDetailView`
 
 ## 📅 Booking
 

@@ -75,7 +75,7 @@ struct FindCarDetailView: View {
             }
             
             Button {
-                // TODO: Action einfügen
+                viewModel.bookCar()
             } label: {
                 Text("Book this Car")
                     .font(.headline)
@@ -153,6 +153,13 @@ struct FindCarDetailView: View {
         }
         .padding()
         .ignoresSafeArea(edges: .top)
+        .alert("Prestige Wheels", isPresented: $viewModel.showAlert) {
+            Button("OK", role: .cancel) {
+                route.path.removeLast()
+            }
+        } message: {
+            Text(viewModel.alertMessage)
+        }
     }
 }
 
