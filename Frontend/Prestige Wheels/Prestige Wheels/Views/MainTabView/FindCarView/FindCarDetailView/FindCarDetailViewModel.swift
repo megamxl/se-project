@@ -35,7 +35,7 @@ class FindCarDetailViewModel: ObservableObject {
             
             if let error {
                 alertMessage = error.localizedDescription
-            } else if let booking {
+            } else if booking != nil {
                 alertMessage = "Booking was sucessfully!"
             }
             showAlert = true

@@ -155,7 +155,7 @@ struct FindCarDetailView: View {
         .ignoresSafeArea(edges: .top)
         .alert("Prestige Wheels", isPresented: $viewModel.showAlert) {
             Button("OK", role: .cancel) {
-                route.path.removeLast()
+                route.pathFindCar.removeLast()
             }
         } message: {
             Text(viewModel.alertMessage)

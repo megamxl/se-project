@@ -11,6 +11,7 @@ struct ProfileView: View {
     
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
     @EnvironmentObject var userViewModel: UserViewModel
+    @EnvironmentObject var route: RouteObject
     
     @State private var isEditSheetPresented = false
     
@@ -39,20 +40,6 @@ struct ProfileView: View {
                         }
                         .listRowSeparator(.hidden)
                     }
-                    .swipeActions(edge: .trailing) {
-                        Button {
-                            isEditSheetPresented = true
-                        } label: {
-                            Label("Edit", systemImage: "slider.horizontal.3")
-                        }
-                    }
-                    .contextMenu {
-                        Button {
-                            isEditSheetPresented = true
-                        } label: {
-                            Label("Edit", systemImage: "slider.horizontal.3")
-                        }
-                    }
                 }
                 
                 // MARK: - Licensing
@@ -65,6 +52,36 @@ struct ProfileView: View {
                         } icon: {
                             Text("")
                                 .faDuotoneThin(size: 20)
+                                .foregroundStyle(.gray)
+                        }
+                    }
+                    .tint(.primary)
+                }
+                
+                // MARK: - Profile
+                
+                Section("Profile") {
+                    Button {
+                        isEditSheetPresented = true
+                    } label: {
+                        Label {
+                            Text("Edit Profile")
+                        } icon: {
+                            Text("")
+                                .faDuotoneRegular(size: 20)
+                                .foregroundStyle(.gray)
+                        }
+                    }
+                    .tint(.primary)
+                    
+                    Button {
+                        userViewModel.deleteUser()
+                    } label: {
+                        Label {
+                            Text("Delete Account")
+                        } icon: {
+                            Text("")
+                                .faDuotoneRegular(size: 20)
                                 .foregroundStyle(.gray)
                         }
                     }
@@ -89,15 +106,21 @@ struct ProfileView: View {
                     }
                 }
             }
-            .sheet(isPresented: $isEditSheetPresented) {
-                // reload user Data?
-            } content: {
-                Text("Edit Profile")
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.visible)
+            .alert("Profile delete", isPresented: $userViewModel.showAlert) {
+                Button("OK", role: .cancel) {
+                    authenticationViewModel.logout()
+                }
+            } message: {
+                Text(userViewModel.alertMessage)
             }
             .onAppear {
                 userViewModel.getUserInfo()
+            }
+            .sheet(isPresented: $isEditSheetPresented) {
+                let viewModel = EditProfileSheetViewModel(user: userViewModel.user)
+                EditProfileSheetView(viewModel: viewModel)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
             }
         }
     }
