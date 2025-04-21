@@ -51,7 +51,7 @@ func (c CarRepo) GetCarByVin(vin string) (dataInt.Car, error) {
 
 func (c CarRepo) SaveCar(car dataInt.Car) (dataInt.Car, error) {
 	toSaveCar := intToModelCar(car)
-	err := c.Q.WithContext(c.Ctx).Car.Save(toSaveCar)
+	err := c.Q.WithContext(c.Ctx).Car.Create(toSaveCar)
 	if err != nil {
 		return dataInt.Car{}, err
 	}
@@ -72,10 +72,15 @@ func (c CarRepo) UpdateCar(car dataInt.Car) (dataInt.Car, error) {
 }
 
 func (c CarRepo) DeleteCarByVin(vin string) error {
-	_, err := c.Q.WithContext(c.Ctx).Car.Where(c.Q.Car.Vin.Eq(vin)).Delete()
+	info, err := c.Q.WithContext(c.Ctx).Car.Where(c.Q.Car.Vin.Eq(vin)).Delete()
 	if err != nil {
 		return err
 	}
+
+	if info.RowsAffected == 0 {
+		return errors.New("car not found")
+	}
+
 	return nil
 }
 

@@ -45,21 +45,14 @@ services:
     ports:
       - "8091:8080"
     environment:
+      - DB_BACKEND=NO-SQL
       - CONVERTOR_GRPC_URL=converter-ms:8082
-      - DB_HOST=postgres-ms
-      - DB_NAME=main
-      - DB_PASSWORD=admin
-      - DB_PORT=5432
-      - DB_SSL-MODE=disable
-      - DB_USERNAME=admin
-      - SEED_USER_SQL=true
       - WEB_HOST=0.0.0.0
       - WEB_PORT=8080
-      - SQL_SCHEMA=user_service
       # NoSQL
-      - USER_DB_BACKEND=nosql ## Change this to either 'nosql' or 'sql' to specify which db to use
-      - USER_MONGO_URI=mongodb://mongo-ms:27017
-      - USER_MONGO_DB_NAME=user_service
+      - MONGO_URI=mongodb://mongo-ms:27017
+      - MONGO_DB_NAME=user_service
+      - ADMIN=john@example.com;securePass123
     depends_on:
       - postgres-ms
       - converter-ms
@@ -80,24 +73,16 @@ services:
     ports:
       - "8092:8080"
     environment:
+      - DB_BACKEND=NO-SQL
       - CONVERTOR_GRPC_URL=converter-ms:8082
-      - DB_HOST=postgres-ms
-      - DB_NAME=main
-      - DB_PASSWORD=admin
-      - DB_PORT=5432
-      - DB_SSL-MODE=disable
-      - DB_USERNAME=admin
       - SEED_CAR_SQL=true
       - WEB_HOST=0.0.0.0
       - WEB_PORT=8080
-      - SQL_SCHEMA=car_service
       - PULSAR_PRODUCER=true
       - PULSAR_URL=pulsar://pulsar-ms:6650
       - BOOKING_SERVICE_URL=http://bookingService:8080
-      # NoSQL
-      - CAR_DB_BACKEND=nosql ## Change this to either 'nosql' or 'sql' to specify which db to use
-      - CAR_MONGO_URI=mongodb://mongo-ms:27017
-      - CAR_MONGO_DB_NAME=car_service
+      - MONGO_URI=mongodb://mongo-ms:27017
+      - MONGO_DB_NAME=car_service
     depends_on:
       - postgres-ms
       - converter-ms
@@ -118,21 +103,15 @@ services:
     ports:
       - "8093:8080"
     environment:
+      - DB_BACKEND=SQL
       - CONVERTOR_GRPC_URL=converter-ms:8082
-      - DB_HOST=postgres-ms
-      - DB_PORT=5432
-      - DB_NAME=main
-      - DB_USERNAME=admin
-      - DB_PASSWORD=admin
-      - DB_SSL-MODE=disable
+      - POSTGRES_DNS=host=postgres-ms user=admin password=admin dbname=main port=5432 sslmode=disable search_path=booking_schema
       - WEB_HOST=0.0.0.0
       - WEB_PORT=8080
-      - SQL_SCHEMA=booking_schema
       - PULSAR_LISTENER=true
       - PULSAR_URL=pulsar://pulsar-ms:6650
       - SEED_BOOKING_SQL=true
       - SEED_CAR_SQL=true
-      - CAR_DB_BACKEND=sql
     depends_on:
       - postgres-ms
       - converter-ms
@@ -144,8 +123,6 @@ services:
     ports:
       - "6650:6650"
       - "8080:8080"
-    volumes:
-      - pulsarconf_ms:/pulsar/conf
     tty: true
     stdin_open: true
 
@@ -164,6 +141,5 @@ services:
   
 volumes:
   rental_ms_postgres_data:
-  pulsardata_ms:
   pulsarconf_ms:
   rental_ms_mongo_data:

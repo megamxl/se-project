@@ -1,6 +1,6 @@
 import requests
 
-BASE_URL = "http://localhost:8090"
+BASE_URL = "http://localhost:80"
 
 # Step 1: Register a new user
 register_data = {
