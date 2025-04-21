@@ -409,21 +409,36 @@ func (s Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if body.Username == nil || *body.Username == "" ||
-		body.Email == nil || *body.Email == "" {
-		http.Error(w, "Invalid input: missing fields", http.StatusBadRequest)
-		return
+	request, err2 := getUserIdFromRequest(r)
+	if err2 != nil {
+		http.Error(w, err2.Error(), http.StatusBadRequest)
 	}
 
-	userToUpdate, err := s.userService.GetUserByEmail(r.Context(), string(*body.Email))
+	userToUpdate, err := s.userService.GetUserById(r.Context(), request.String())
 	if err != nil {
 		http.Error(w, "User not found", http.StatusBadRequest)
 		return
 	}
 
-	userToUpdate.Name = *body.Username
+	allEmpty := true
+
+	if body.Username != nil && *body.Username != "" {
+		userToUpdate.Name = *body.Username
+		allEmpty = false
+	}
+
 	if body.Password != nil && *body.Password != "" {
 		userToUpdate.Password = *body.Password
+		allEmpty = false
+	}
+
+	if body.Email != nil && *body.Email != "" {
+		userToUpdate.Email = string(*body.Email)
+		allEmpty = false
+	}
+
+	if allEmpty {
+		http.Error(w, "Invalid input: no fields would change", http.StatusBadRequest)
 	}
 
 	_, err = s.userService.UpdateUser(r.Context(), userToUpdate)

@@ -57,6 +57,7 @@ func (s userService) GetUserByEmail(ctx context.Context, email string) (data.Ren
 }
 
 func (s userService) UpdateUser(ctx context.Context, user data.RentalUser) (data.RentalUser, error) {
+
 	if user.Id == uuid.Nil {
 		return data.RentalUser{}, errors.New("ERROR: User id is empty")
 	}
