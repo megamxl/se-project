@@ -77,7 +77,7 @@ func MonoMiddleware(next http.Handler) http.Handler {
 
 		r = SetRequestContext(r, userID, roles)
 
-		if path == "/users/all" || path == "/cars" && r.Method != "GET" || path == "/bookings/all" {
+		if path == "/users/all" && r.Method == "GET" || path == "/cars" && r.Method != "GET" || path == "/bookings/all" {
 			if roles == "admin" {
 				next.ServeHTTP(w, r)
 				return
