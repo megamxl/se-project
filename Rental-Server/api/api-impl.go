@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/megamxl/se-project/Rental-Server/api/Util"
 	"github.com/megamxl/se-project/Rental-Server/internal/di"
+	"strings"
 
 	"github.com/megamxl/se-project/Rental-Server/internal/data"
 	"github.com/megamxl/se-project/Rental-Server/internal/middleware"
@@ -490,6 +491,20 @@ func NewServer() Server {
 
 	if err != nil {
 		log.Fatal("🔌 Cant connect to pulsar", err)
+	}
+
+	if os.Getenv("ADMIN") != "" {
+		split := strings.Split(os.Getenv("ADMIN"), ";")
+
+		userRepo.SaveUser(
+			data.RentalUser{
+				Id:       uuid.UUID{},
+				Name:     "admin",
+				Email:    split[0],
+				Password: split[1],
+				Admin:    true,
+			})
+
 	}
 
 	return Server{

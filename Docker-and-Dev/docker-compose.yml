@@ -52,6 +52,7 @@ services:
       # NoSQL
       - MONGO_URI=mongodb://mongo-ms:27017
       - MONGO_DB_NAME=user_service
+      - ADMIN=john@example.com;securePass123
     depends_on:
       - postgres-ms
       - converter-ms

@@ -32,6 +32,7 @@ services:
       - WEB_PORT=8080
       - CONVERTOR_SOAP_URL=http://converter:8080/ws
       - SEED_MONOLITH=true
+      - ADMIN=john@example.com;securePass123
     depends_on:
       - postgres
       - converter

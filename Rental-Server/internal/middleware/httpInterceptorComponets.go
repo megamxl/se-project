@@ -44,7 +44,8 @@ func MonoMiddleware(next http.Handler) http.Handler {
 
 		var err error
 
-		r.URL.Path = strings.TrimRight(r.URL.Path, "/")
+		path := r.URL.Path
+		path = strings.TrimRight(path, "/")
 
 		routesWithoutAuth :=
 			CheckIfRouteAndMethodMatch(r, "/login", "POST") ||
@@ -55,7 +56,7 @@ func MonoMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		if r.Method == "GET" && strings.Contains(r.URL.Path, "/bookings/rpc/in_range") {
+		if r.Method == "GET" && strings.Contains(path, "/bookings/rpc/in_range") {
 			next.ServeHTTP(w, r)
 			return
 		}
@@ -76,6 +77,14 @@ func MonoMiddleware(next http.Handler) http.Handler {
 
 		r = SetRequestContext(r, userID, roles)
 
+		if path == "/users/all" || path == "/cars" && r.Method != "GET" || path == "/bookings/all" {
+			if roles == "admin" {
+				next.ServeHTTP(w, r)
+				return
+			}
+			http.Error(w, "Unauthorized: not allowed", http.StatusUnauthorized)
+			return
+		}
 		next.ServeHTTP(w, r)
 	})
 }
