@@ -135,6 +135,11 @@ type ListBookingsInRangeParams struct {
 	EndTime *openapi_types.Date `form:"endTime,omitempty" json:"endTime,omitempty"`
 }
 
+// GetCarByVinParams defines parameters for GetCarByVin.
+type GetCarByVinParams struct {
+	VIN string `form:"VIN" json:"VIN"`
+}
+
 // DeleteCarParams defines parameters for DeleteCar.
 type DeleteCarParams struct {
 	VIN string `form:"VIN" json:"VIN"`
@@ -210,6 +215,9 @@ type ServerInterface interface {
 	// List Bookings in time frame cars
 	// (GET /bookings/rpc/in_range)
 	ListBookingsInRange(w http.ResponseWriter, r *http.Request, params ListBookingsInRangeParams)
+	// Get a car by VIN
+	// (GET /carByVin)
+	GetCarByVin(w http.ResponseWriter, r *http.Request, params GetCarByVinParams)
 	// Delete a car
 	// (DELETE /cars)
 	DeleteCar(w http.ResponseWriter, r *http.Request, params DeleteCarParams)
@@ -392,6 +400,40 @@ func (siw *ServerInterfaceWrapper) ListBookingsInRange(w http.ResponseWriter, r 
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.ListBookingsInRange(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetCarByVin operation middleware
+func (siw *ServerInterfaceWrapper) GetCarByVin(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetCarByVinParams
+
+	// ------------- Required query parameter "VIN" -------------
+
+	if paramValue := r.URL.Query().Get("VIN"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "VIN"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "VIN", r.URL.Query(), &params.VIN)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "VIN", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCarByVin(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -744,6 +786,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc("GET "+options.BaseURL+"/booking/{id}", wrapper.GetBookingById)
 	m.HandleFunc("GET "+options.BaseURL+"/bookings/all/", wrapper.GetAllBookingsByUser)
 	m.HandleFunc("GET "+options.BaseURL+"/bookings/rpc/in_range", wrapper.ListBookingsInRange)
+	m.HandleFunc("GET "+options.BaseURL+"/carByVin", wrapper.GetCarByVin)
 	m.HandleFunc("DELETE "+options.BaseURL+"/cars", wrapper.DeleteCar)
 	m.HandleFunc("GET "+options.BaseURL+"/cars", wrapper.ListCars)
 	m.HandleFunc("POST "+options.BaseURL+"/cars", wrapper.AddCar)

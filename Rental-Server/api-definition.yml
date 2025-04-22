@@ -194,6 +194,25 @@ paths:
       responses:
         '204':
           description: Car deleted successfully
+  /carByVin:
+    get:
+      tags:
+        - cars
+      summary: Get a car by VIN
+      operationId: getCarByVin
+      parameters:
+        - name: VIN
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get car by VIN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Car"
 
   /booking:
     post:

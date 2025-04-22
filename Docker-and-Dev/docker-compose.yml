@@ -68,6 +68,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.carService.rule=PathPrefix(`/cars`)"
+      - "traefik.http.routers.carServiceByVin.rule=PathPrefix(`/carByVin`)"
       - "traefik.http.routers.carService.entrypoints=web"
       - "traefik.http.services.carService.loadbalancer.server.port=8080"
     ports:
