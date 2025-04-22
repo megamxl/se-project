@@ -44,6 +44,7 @@ struct FindCarView: View {
                                 .listRowInsets(.init())
                                 .padding(.vertical, .spacingXS)
                         }
+                        .listRowSeparator(.hidden)
                     }
                     .listStyle(.plain)
                     .contentMargins(.top, 0, for: .scrollContent)

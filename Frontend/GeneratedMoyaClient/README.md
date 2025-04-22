@@ -37,6 +37,7 @@ Class | Method | HTTP request | Description
 *CarsAPI* | [**deleteCar**](docs/CarsAPI.md#deletecar) | **DELETE** /cars | Delete a car
 *CarsAPI* | [**listCars**](docs/CarsAPI.md#listcars) | **GET** /cars | List available cars
 *CarsAPI* | [**updateCar**](docs/CarsAPI.md#updatecar) | **PUT** /cars | Update car details
+*RpcAPI* | [**listBookingsInRange**](docs/RpcAPI.md#listbookingsinrange) | **GET** /bookings/rpc/in_range | List Bookings in time frame cars
 *UserAPI* | [**deleteUser**](docs/UserAPI.md#deleteuser) | **DELETE** /users/all | Delete a user
 *UserAPI* | [**getUsers**](docs/UserAPI.md#getusers) | **GET** /users | Get user info
 *UserAPI* | [**login**](docs/UserAPI.md#login) | **POST** /login | User login using email and password

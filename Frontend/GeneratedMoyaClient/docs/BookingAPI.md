@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 # **bookCar**
 ```swift
-    open class func bookCar(bookCarRequest: BookCarRequest, completion: @escaping (_ data: Void?, _ error: Error?) -> Void)
+    open class func bookCar(bookCarRequest: BookCarRequest, completion: @escaping (_ data: Booking?, _ error: Error?) -> Void)
 ```
 
 Book a car
@@ -46,7 +46,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-Void (empty response body)
+[**Booking**](Booking.md)
 
 ### Authorization
 
@@ -55,7 +55,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

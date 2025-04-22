@@ -8,6 +8,7 @@ OpenAPIClient/Classes/OpenAPIs/APIs.swift
 OpenAPIClient/Classes/OpenAPIs/APIs/AdminAPI.swift
 OpenAPIClient/Classes/OpenAPIs/APIs/BookingAPI.swift
 OpenAPIClient/Classes/OpenAPIs/APIs/CarsAPI.swift
+OpenAPIClient/Classes/OpenAPIs/APIs/RpcAPI.swift
 OpenAPIClient/Classes/OpenAPIs/APIs/UserAPI.swift
 OpenAPIClient/Classes/OpenAPIs/CodableHelper.swift
 OpenAPIClient/Classes/OpenAPIs/Configuration.swift
@@ -42,6 +43,7 @@ docs/CarListInner.md
 docs/CarsAPI.md
 docs/Currency.md
 docs/LoginRequest.md
+docs/RpcAPI.md
 docs/TokenResponse.md
 docs/UpdateBookingRequest.md
 docs/User.md

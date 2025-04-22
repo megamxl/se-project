@@ -39,28 +39,31 @@ struct FindCarDetailView: View {
                             .frame(maxWidth: .infinity)
                     }
                 }
+                .padding(.spacingL)
                 
-                HStack {
-                    Text(viewModel.car.model ?? "")
-                        .foregroundStyle(.primary)
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .fontDesign(.rounded)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    if let priceOverAll = viewModel.car.priceOverAll {
-                        Text("\(priceOverAll.formatted(.currency(code: viewModel.currency.rawValue)))")
+                VStack(alignment: .leading, spacing: 0){
+                    HStack {
+                        Text(viewModel.car.model ?? "")
                             .foregroundStyle(.primary)
-                            .font(.title2)
+                            .font(.title)
                             .fontWeight(.bold)
                             .fontDesign(.rounded)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        if let priceOverAll = viewModel.car.priceOverAll {
+                            Text("\(priceOverAll.formatted(.currency(code: viewModel.currency.rawValue)))")
+                                .foregroundStyle(.primary)
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .fontDesign(.rounded)
+                        }
                     }
+                    
+                    Text(viewModel.car.brand ?? "")
+                        .foregroundStyle(.secondary)
+                        .font(.headline)
+                        .fontDesign(.rounded)
                 }
-                
-                Text(viewModel.car.brand ?? "")
-                    .foregroundStyle(.primary)
-                    .font(.title2)
-                    .fontDesign(.rounded)
                 
                 HStack {
                     Label("From:", systemImage: "calendar")
@@ -159,9 +162,8 @@ struct FindCarDetailView: View {
                 Map(position: $viewModel.position) {
                     Marker("FH Campus Wien", coordinate: CLLocationCoordinate2D(latitude: 48.157975, longitude: 16.381778))
                 }
-                .frame(height: 300)
+                .frame(height: 200)
                 .cornerRadius(12)
-                .padding()
                 
                 Spacer()
             }

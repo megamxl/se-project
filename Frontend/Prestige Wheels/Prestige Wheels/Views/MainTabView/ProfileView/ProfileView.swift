@@ -42,21 +42,6 @@ struct ProfileView: View {
                     }
                 }
                 
-                // MARK: - Licensing
-                
-                Section("Licensing") {
-                    Button{
-                    } label: {
-                        Label {
-                            Text("Licensing")
-                        } icon: {
-                            Text("")
-                                .faDuotoneThin(size: 20)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    .tint(.primary)
-                }
                 
                 // MARK: - Profile
                 
@@ -67,9 +52,10 @@ struct ProfileView: View {
                         Label {
                             Text("Edit Profile")
                         } icon: {
-                            Text("")
-                                .faDuotoneRegular(size: 20)
-                                .foregroundStyle(.gray)
+                            Text("")
+                                .faDuotoneThin(size: 20)
+                                .foregroundStyle(.blue)
+                                .offset(x: .spacing2XS)
                         }
                     }
                     .tint(.primary)
@@ -80,8 +66,68 @@ struct ProfileView: View {
                         Label {
                             Text("Delete Account")
                         } icon: {
-                            Text("")
-                                .faDuotoneRegular(size: 20)
+                            Text("")
+                                .faDuotoneThin(size: 20)
+                                .foregroundStyle(.red)
+                        }
+                    }
+                    .tint(.primary)
+                }
+                
+                // MARK: - Admin
+                
+                if true {
+                    Section("Admin") {
+                        Button {
+                            
+                        } label: {
+                            Label {
+                                Text("Car Management")
+                            } icon: {
+                                Text("")
+                                    .faDuotoneThin(size: 20)
+                                    .foregroundStyle(Color(uiColor: .darkGray))
+                            }
+                        }
+                        .tint(.primary)
+                        Button {
+                            
+                        } label: {
+                            Label {
+                                Text("Booking Management")
+                            } icon: {
+                                Text("")
+                                    .faDuotoneThin(size: 20)
+                                    .foregroundStyle(Color(uiColor: .darkGray))
+                            }
+                        }
+                        .tint(.primary)
+                        Button {
+                            
+                        } label: {
+                            Label {
+                                Text("User Management")
+                            } icon: {
+                                Text("")
+                                    .faDuotoneThin(size: 20)
+                                    .foregroundStyle(Color(uiColor: .darkGray))
+                            }
+                        }
+                        .tint(.primary)
+                    }
+                }
+                
+                
+                // MARK: - Licensing
+                
+                Section("Licensing") {
+                    Button{
+                    } label: {
+                        Label {
+                            Text("Licensing")
+                        } icon: {
+                            Text("")
+                                .faDuotoneThin(size: 20)
                                 .foregroundStyle(.gray)
                         }
                     }

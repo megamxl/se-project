@@ -21,12 +21,16 @@ public struct Booking: Codable, JSONEncodable, Hashable {
     public var userId: String?
     public var VIN: String?
     public var status: String?
+    public var paidAmount: Double?
+    public var currency: Currency?
 
-    public init(bookingId: String? = nil, userId: String? = nil, VIN: String? = nil, status: String? = nil) {
+    public init(bookingId: String? = nil, userId: String? = nil, VIN: String? = nil, status: String? = nil, paidAmount: Double? = nil, currency: Currency? = nil) {
         self.bookingId = bookingId
         self.userId = userId
         self.VIN = VIN
         self.status = status
+        self.paidAmount = paidAmount
+        self.currency = currency
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
@@ -34,6 +38,8 @@ public struct Booking: Codable, JSONEncodable, Hashable {
         case userId
         case VIN
         case status
+        case paidAmount
+        case currency
     }
 
     // Encodable protocol methods
@@ -44,6 +50,8 @@ public struct Booking: Codable, JSONEncodable, Hashable {
         try container.encodeIfPresent(userId, forKey: .userId)
         try container.encodeIfPresent(VIN, forKey: .VIN)
         try container.encodeIfPresent(status, forKey: .status)
+        try container.encodeIfPresent(paidAmount, forKey: .paidAmount)
+        try container.encodeIfPresent(currency, forKey: .currency)
     }
 }
 

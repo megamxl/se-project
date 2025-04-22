@@ -4,7 +4,7 @@
 brew install openapi-generator
 ```
 
-2. Change the BaseURL to `http://localhost:8098` 
+2. `cd` into `se-project/Rental-Server`
 
 3. Generate the swift-package.
 ```bash
@@ -15,4 +15,6 @@ openapi-generator generate \
   --additional-properties=swiftUseApiNamespace=true
 ```
 
-4. Add the Swift-Package to the project.
+4. move the folder `GeneratedMoyaClient` to `se-project/Frontend`
+
+5. Add the Swift-Package to the project.

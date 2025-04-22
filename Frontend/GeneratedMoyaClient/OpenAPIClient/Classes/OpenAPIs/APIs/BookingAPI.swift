@@ -23,11 +23,11 @@ open class BookingAPI {
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func bookCar(bookCarRequest: BookCarRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: Void?, _ error: Error?) -> Void)) -> RequestTask {
+    open class func bookCar(bookCarRequest: BookCarRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: Booking?, _ error: Error?) -> Void)) -> RequestTask {
         return bookCarWithRequestBuilder(bookCarRequest: bookCarRequest).execute(apiResponseQueue) { result in
             switch result {
-            case .success:
-                completion((), nil)
+            case let .success(response):
+                completion(response.body, nil)
             case let .failure(error):
                 completion(nil, error)
             }
@@ -38,9 +38,9 @@ open class BookingAPI {
      Book a car
      - POST /booking
      - parameter bookCarRequest: (body)  
-     - returns: RequestBuilder<Void> 
+     - returns: RequestBuilder<Booking> 
      */
-    open class func bookCarWithRequestBuilder(bookCarRequest: BookCarRequest) -> RequestBuilder<Void> {
+    open class func bookCarWithRequestBuilder(bookCarRequest: BookCarRequest) -> RequestBuilder<Booking> {
         let localVariablePath = "/booking"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: bookCarRequest)
@@ -53,7 +53,7 @@ open class BookingAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Void>.Type = OpenAPIClientAPI.requestBuilderFactory.getNonDecodableBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Booking>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
         return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
