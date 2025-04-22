@@ -30,6 +30,30 @@ type Server struct {
 	bookingService service.BookingService
 }
 
+func (s Server) GetCarByVin(w http.ResponseWriter, r *http.Request, params GetCarByVinParams) {
+
+	vin, err := s.carService.GetCarByVin(context.Background(), params.VIN)
+
+	if err != nil {
+		http.Error(w, "No Car With that vin", http.StatusUnauthorized)
+		return
+	}
+
+	car := Car{
+		VIN:         &vin.Vin,
+		Brand:       &vin.Brand,
+		ImageURL:    &vin.ImageUrl,
+		Model:       &vin.Model,
+		PricePerDay: nil,
+	}
+
+	if err := Util.WriteJSON(w, http.StatusOK, car); err != nil {
+		http.Error(w, "failed to write JSON response", http.StatusBadRequest)
+		return
+	}
+
+}
+
 func (s Server) ListBookingsInRange(w http.ResponseWriter, r *http.Request, params ListBookingsInRangeParams) {
 	timeRange, err := s.bookingService.GetAllBookingsInTimeRange(params.StartTime.Time, params.EndTime.Time)
 	if err != nil {
@@ -278,6 +302,10 @@ func (s Server) ListCars(w http.ResponseWriter, r *http.Request, params ListCars
 	}
 
 	duration := endTimeVal.Sub(startTimeVal).Hours() / 24
+
+	if duration == 0 {
+		duration = 1
+	}
 
 	cars := CarIntToListResponse(dataCars, int(duration), params.Currency)
 
