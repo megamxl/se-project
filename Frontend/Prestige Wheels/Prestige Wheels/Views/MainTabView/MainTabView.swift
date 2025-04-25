@@ -18,19 +18,20 @@ struct MainTabView: View {
                     FindCarView()
                         .navigationDestination(for: RouteFindCar.self) { route in view(for: route) }
                 }
-                .environmentObject(route)
             }
             Tab("Bookings", systemImage: "book.pages.fill") {
                 NavigationStack(path: $route.pathMyBookings) {
                     MyBookingsView()
                         .navigationDestination(for: RouteMyBookings.self) { route in view(for: route) }
                 }
-                .environmentObject(route)
             }
             Tab("Profile", systemImage: "person.crop.circle.fill") {
-                ProfileView()
+                NavigationStack(path: $route.pathAdmin) {
+                    ProfileView()
+                }
             }
         }
+        .environmentObject(route)
         .fullScreenCover(isPresented: Binding(
             get: { !loginViewModel.isLoggedIn },
             set: { loginViewModel.isLoggedIn = !$0 }

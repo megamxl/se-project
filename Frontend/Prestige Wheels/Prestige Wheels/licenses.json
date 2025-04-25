@@ -1,0 +1,14 @@
+[
+  {
+    "name": "JWTDecode.swift",
+    "version": "2.6.0",
+    "licenseName": "MIT",
+    "licenseURL": "https://raw.githubusercontent.com/auth0/JWTDecode.swift/refs/heads/master/LICENSE"
+  },
+  {
+    "name": "OpenAPI Generator CLI",
+    "version": "6.6.0",
+    "licenseName": "Apache-2.0",
+    "licenseURL": "https://raw.githubusercontent.com/OpenAPITools/openapi-generator/refs/heads/master/LICENSE"
+  }
+]

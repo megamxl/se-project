@@ -10,4 +10,5 @@ import Foundation
 class RouteObject: ObservableObject {
     @Published var pathFindCar: [RouteFindCar] = []
     @Published var pathMyBookings: [RouteMyBookings] = []
+    @Published var pathAdmin: [RouteAdmin] = []
 }

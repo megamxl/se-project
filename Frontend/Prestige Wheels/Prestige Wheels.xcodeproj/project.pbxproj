@@ -15,6 +15,7 @@
 		5AD8B2E62DA2D3CC001CDCE8 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AD8B2E52DA2D3CC001CDCE8 /* OpenAPIClient */; };
 		5AD8B3162DA2D887001CDCE8 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AD8B3152DA2D887001CDCE8 /* OpenAPIClient */; };
 		5AE5A97F2DB7902700FF7BBE /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AE5A97E2DB7902700FF7BBE /* OpenAPIClient */; };
+		5AE5AA322DB82F3100FF7BBE /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 5AE5AA312DB82F3100FF7BBE /* JWTDecode */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 			files = (
 				5AE5A97F2DB7902700FF7BBE /* OpenAPIClient in Frameworks */,
 				5AD8B2E62DA2D3CC001CDCE8 /* OpenAPIClient in Frameworks */,
+				5AE5AA322DB82F3100FF7BBE /* JWTDecode in Frameworks */,
 				5AD8B2772DA2C1E9001CDCE8 /* OpenAPIClient in Frameworks */,
 				5AD8B3162DA2D887001CDCE8 /* OpenAPIClient in Frameworks */,
 				5A2EC1952D92207C0010EEEF /* OpenAPIClient in Frameworks */,
@@ -92,6 +94,7 @@
 				5AD8B2E52DA2D3CC001CDCE8 /* OpenAPIClient */,
 				5AD8B3152DA2D887001CDCE8 /* OpenAPIClient */,
 				5AE5A97E2DB7902700FF7BBE /* OpenAPIClient */,
+				5AE5AA312DB82F3100FF7BBE /* JWTDecode */,
 			);
 			productName = "Prestige Wheels";
 			productReference = 5A5FFC6E2D91E6D60027FF67 /* Prestige Wheels.app */;
@@ -123,6 +126,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5AE5A97D2DB7902700FF7BBE /* XCLocalSwiftPackageReference "../GeneratedMoyaClient" */,
+				5AE5AA302DB82F3100FF7BBE /* XCRemoteSwiftPackageReference "JWTDecode" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5A5FFC6F2D91E6D60027FF67 /* Products */;
@@ -366,6 +370,17 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		5AE5AA302DB82F3100FF7BBE /* XCRemoteSwiftPackageReference "JWTDecode" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/auth0/JWTDecode.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		5A2EC1742D921C0E0010EEEF /* OpenAPIClient */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -398,6 +413,11 @@
 		5AE5A97E2DB7902700FF7BBE /* OpenAPIClient */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAPIClient;
+		};
+		5AE5AA312DB82F3100FF7BBE /* JWTDecode */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5AE5AA302DB82F3100FF7BBE /* XCRemoteSwiftPackageReference "JWTDecode" */;
+			productName = JWTDecode;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

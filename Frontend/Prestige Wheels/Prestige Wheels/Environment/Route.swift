@@ -18,3 +18,7 @@ enum RouteFindCar: Hashable {
 enum RouteMyBookings: Hashable {
     case bookingDetailView(booking: OpenAPIClientAPI.Booking)
 }
+
+enum RouteAdmin: Hashable {
+    case manageCars, manageBookings, manageUsers
+}

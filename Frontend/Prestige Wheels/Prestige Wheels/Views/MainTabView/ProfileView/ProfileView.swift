@@ -8,28 +8,42 @@
 import SwiftUI
 
 struct ProfileView: View {
-    
+
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var route: RouteObject
-    
+
     @State private var isEditSheetPresented = false
-    
+    @State private var showDeleteDialog = false
+
     var body: some View {
         NavigationStack {
             Form {
-                
+
                 // MARK: - User Info
-                
+
                 if let user = userViewModel.user {
                     Section {
                         HStack {
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .clipShape(Circle())
-                                .scaledToFill()
-                                .frame(width: 60, height: 60)
-                                .foregroundStyle(.gray.gradient)
+                            if authenticationViewModel.isAdmin {
+                                VStack(alignment: .center, spacing: 0){
+                                    Text("")
+                                        .faDuotoneSolid(size: 40)
+                                    Text("ADMIN")
+                                        .font(.caption)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(.secondary)
+                                }
+                                    .frame(width: 60, height: 60)
+                                    .foregroundStyle(.gray.gradient)
+                            } else {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .scaledToFill()
+                                    .frame(width: 60, height: 60)
+                                    .foregroundStyle(.gray.gradient)
+                            }
                             VStack(alignment: .leading) {
                                 Text(user.username ?? "")
                                 Text(verbatim: user.email ?? "")
@@ -41,10 +55,9 @@ struct ProfileView: View {
                         .listRowSeparator(.hidden)
                     }
                 }
-                
-                
+
                 // MARK: - Profile
-                
+
                 Section("Profile") {
                     Button {
                         isEditSheetPresented = true
@@ -59,9 +72,9 @@ struct ProfileView: View {
                         }
                     }
                     .tint(.primary)
-                    
+
                     Button {
-                        userViewModel.deleteUser()
+                        showDeleteDialog = true
                     } label: {
                         Label {
                             Text("Delete Account")
@@ -72,17 +85,27 @@ struct ProfileView: View {
                         }
                     }
                     .tint(.primary)
+                    .confirmationDialog("Are you sure?", isPresented: $showDeleteDialog) {
+                        Button("Delete your account?", role: .destructive) {
+                            userViewModel.deleteUser()
+                        }
+                    }
                 }
                 
-                // MARK: - Admin
-                
-                if true {
+                // MARK: - Admin Management
+                if authenticationViewModel.isAdmin {
                     Section("Admin") {
-                        Button {
-                            
-                        } label: {
+                        // Buttons push onto route.pathAdmin
+                        Button { route.pathAdmin.append(.manageCars) } label: {
                             Label {
-                                Text("Car Management")
+                                HStack {
+                                    Text("Car Management")
+                                    Spacer()
+                                    Image(systemName: "chevron.forward")
+                                        .font(.caption)
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.gray.opacity(0.6))
+                                }
                             } icon: {
                                 Text("")
                                     .faDuotoneThin(size: 20)
@@ -90,11 +113,17 @@ struct ProfileView: View {
                             }
                         }
                         .tint(.primary)
-                        Button {
-                            
-                        } label: {
+
+                        Button { route.pathAdmin.append(.manageBookings) } label: {
                             Label {
-                                Text("Booking Management")
+                                HStack {
+                                    Text("Booking Management")
+                                    Spacer()
+                                    Image(systemName: "chevron.forward")
+                                        .font(.caption)
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.gray.opacity(0.6))
+                                }
                             } icon: {
                                 Text("")
                                     .faDuotoneThin(size: 20)
@@ -102,11 +131,17 @@ struct ProfileView: View {
                             }
                         }
                         .tint(.primary)
-                        Button {
-                            
-                        } label: {
+
+                        Button { route.pathAdmin.append(.manageUsers) } label: {
                             Label {
-                                Text("User Management")
+                                HStack {
+                                    Text("User Management")
+                                    Spacer()
+                                    Image(systemName: "chevron.forward")
+                                        .font(.caption)
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.gray.opacity(0.6))
+                                }
                             } icon: {
                                 Text("")
                                     .faDuotoneThin(size: 20)
@@ -116,13 +151,11 @@ struct ProfileView: View {
                         .tint(.primary)
                     }
                 }
-                
-                
+
                 // MARK: - Licensing
-                
+
                 Section("Licensing") {
-                    Button{
-                    } label: {
+                    NavigationLink(destination: LicenseListView()) {
                         Label {
                             Text("Licensing")
                         } icon: {
@@ -133,9 +166,9 @@ struct ProfileView: View {
                     }
                     .tint(.primary)
                 }
-                
+
                 // MARK: - Logout
-                
+
                 Section {
                     Button(role: .destructive) {
                         authenticationViewModel.logout()
@@ -148,8 +181,47 @@ struct ProfileView: View {
                                 .faDuotoneRegular(size: 20)
                                 .foregroundStyle(.red)
                         }
-
                     }
+                }
+            }
+            .navigationDestination(for: RouteAdmin.self) { routeCase in
+                switch routeCase {
+                case .manageCars:
+                    AdminManagementView(
+                        viewModel: CarManagementViewModel(),
+                        title: "Cars",
+                        rowContent: { car in
+                            VStack(alignment: .leading) {
+                                Text(car.brand ?? "")
+                                Text(car.model ?? "")
+                            }
+                        },
+                        createContent: { vm in CarCreateView(viewModel: vm) }
+                    )
+                case .manageBookings:
+                    AdminManagementView(
+                        viewModel: BookingManagementViewModel(),
+                        title: "Bookings",
+                        rowContent: { booking in
+                            VStack(alignment: .leading) {
+                                Text(booking.bookingId ?? "")
+                                Text(booking.status ?? "")
+                            }
+                        },
+                        createContent: { vm in BookingCreateView(viewModel: vm) }
+                    )
+                case .manageUsers:
+                    AdminManagementView(
+                        viewModel: UserManagementViewModel(),
+                        title: "Users",
+                        rowContent: { user in
+                            VStack(alignment: .leading) {
+                                Text(user.username ?? "")
+                                Text(user.email ?? "")
+                            }
+                        },
+                        createContent: { vm in UserCreateView(viewModel: vm) }
+                    )
                 }
             }
             .alert("Profile delete", isPresented: $userViewModel.showAlert) {
@@ -168,6 +240,7 @@ struct ProfileView: View {
                     .presentationDetents([.medium, .large])
                     .presentationDragIndicator(.visible)
             }
+            
         }
     }
 }
