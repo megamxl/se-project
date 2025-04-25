@@ -300,12 +300,11 @@ func (s Server) ListCars(w http.ResponseWriter, r *http.Request, params ListCars
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	
+	startDate := time.Date(startTimeVal.Year(), startTimeVal.Month(), startTimeVal.Day(), 0, 0, 0, 0, startTimeVal.Location())
+	endDate := time.Date(endTimeVal.Year(), endTimeVal.Month(), endTimeVal.Day(), 0, 0, 0, 0, endTimeVal.Location())
 
-	duration := endTimeVal.Sub(startTimeVal).Hours() / 24
-
-	if duration == 0 {
-		duration = 1
-	}
+	duration := int(endDate.Sub(startDate).Hours()/24) + 1
 
 	cars := CarIntToListResponse(dataCars, int(duration), params.Currency)
 
