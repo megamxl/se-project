@@ -151,6 +151,19 @@ struct ProfileView: View {
                         .tint(.primary)
                     }
                 }
+                
+                //MARK: - Map
+                
+                Section("Map") {
+                    VStack {
+                        List {
+                            Picker("Map Provider", selection: $userViewModel.selectedMapProviderRaw) {
+                                Text("Apple Maps").tag(MapProvider.apple.rawValue)
+                                Text("Google Maps").tag(MapProvider.google.rawValue)
+                            }
+                        }
+                    }
+                }
 
                 // MARK: - Licensing
 

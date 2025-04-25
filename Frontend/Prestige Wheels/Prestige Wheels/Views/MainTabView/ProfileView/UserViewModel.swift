@@ -8,8 +8,11 @@
 import Foundation
 import OpenAPIClient
 import OSLog
+import SwiftUI
 
 class UserViewModel: ObservableObject {
+    @AppStorage("selectedMapProvider") var selectedMapProviderRaw = MapProvider.apple.rawValue
+
     @Published var user: OpenAPIClientAPI.User?
     @Published var showAlert = false
     @Published var alertMessage = ""

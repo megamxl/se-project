@@ -9,8 +9,11 @@ import Foundation
 import MapKit
 import OpenAPIClient
 import _MapKit_SwiftUI
+import SwiftUI
 
 class FindCarDetailViewModel: ObservableObject {
+    @AppStorage("selectedMapProvider") private var selectedMapProviderRaw = MapProvider.apple.rawValue
+
     @Published var showAlert = false
 
     var alertMessage: String = ""
@@ -36,6 +39,10 @@ class FindCarDetailViewModel: ObservableObject {
         )
     )
     
+    var selectedMapProvider: MapProvider {
+        MapProvider(rawValue: selectedMapProviderRaw) ?? .apple
+    }
+
     func bookCar() {
         let request = OpenAPIClientAPI.BookCarRequest(VIN: car.VIN, currency: currency, startTime: from, endTime: to)
         

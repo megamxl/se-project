@@ -22,6 +22,7 @@ struct CarRow: View {
                     image
                         .resizable()
                         .scaledToFill()
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                 } else {
                     // While fetching, show placeholder.
                     Image(systemName: "car.fill")
@@ -30,6 +31,7 @@ struct CarRow: View {
                 }
             }
             .frame(width: 80, height: 80)
+
             VStack(alignment: .leading, spacing: 0) {
                 Text(car.model ?? "")
                     .font(.headline)
