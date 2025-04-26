@@ -32,23 +32,12 @@ class FindCarViewModel: ObservableObject {
             
             self.isLoading = false
             
-            if let error = error {
+            if let error {
                 self.errorMessage = error.localizedDescription
-            } else if let cars = cars {
+            } else if let cars {
                 self.cars = cars
             }
         }
-    }
-    
-    func addCar() {
-        
-    }
-    
-    func deleteCar() {
-        
-    }
-    
-    func updateCar() {
-        
+        isLoading = false
     }
 }

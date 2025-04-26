@@ -13,6 +13,8 @@ struct FindCarDetailView: View {
     @EnvironmentObject var route: RouteObject
     @ObservedObject var viewModel: FindCarDetailViewModel
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -89,10 +91,10 @@ struct FindCarDetailView: View {
                         Text("Book this Car")
                             .font(.headline)
                             .fontDesign(.rounded)
-                            .foregroundColor(.white)
+                            .foregroundColor(colorScheme == .dark ? .black : .white)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.black)
+                            .background(colorScheme == .dark ? Color.white : Color.black)
                             .cornerRadius(12)
                             .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
                     }

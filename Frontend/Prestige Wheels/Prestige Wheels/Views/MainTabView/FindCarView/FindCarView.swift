@@ -29,8 +29,8 @@ struct FindCarView: View {
                 if viewModel.isLoading {
                     ProgressView("Loading Cars...")
                         .vAlign(.center)
-                } else if let error = viewModel.errorMessage {
-                    ContentUnavailableView("API Error", systemImage: "exclamationmark.triangle.fill", description: Text(error))
+                } else if let _ = viewModel.errorMessage {
+                    ContentUnavailableView("No Result", systemImage: "car.2.fill", description: Text("No cars are available!"))
                 } else {
                     List(viewModel.cars, id: \.VIN) { car in
                         Button {
@@ -73,10 +73,6 @@ struct FindCarView: View {
                 if authenticationViewModel.isLoggedIn {
                     viewModel.listCars()
                 }
-            }
-            .onChange(of: authenticationViewModel.isLoggedIn) {
-                Logger.backgroundProcessing.log("🔄 refresh")
-                viewModel.listCars()
             }
             .onChange(of: viewModel.selectedCurrency) {
                 Logger.backgroundProcessing.log("🔄 refresh")
