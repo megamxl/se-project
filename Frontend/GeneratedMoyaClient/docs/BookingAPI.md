@@ -1,6 +1,6 @@
 # BookingAPI
 
-All URIs are relative to *http://localhost:8098*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

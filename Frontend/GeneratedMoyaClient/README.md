@@ -22,7 +22,7 @@ Run `pod install`
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:8098*
+All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -35,6 +35,7 @@ Class | Method | HTTP request | Description
 *BookingAPI* | [**updateBooking**](docs/BookingAPI.md#updatebooking) | **PUT** /booking | Update a booking
 *CarsAPI* | [**addCar**](docs/CarsAPI.md#addcar) | **POST** /cars | Add a new car
 *CarsAPI* | [**deleteCar**](docs/CarsAPI.md#deletecar) | **DELETE** /cars | Delete a car
+*CarsAPI* | [**getCarByVin**](docs/CarsAPI.md#getcarbyvin) | **GET** /carByVin | Get a car by VIN
 *CarsAPI* | [**listCars**](docs/CarsAPI.md#listcars) | **GET** /cars | List available cars
 *CarsAPI* | [**updateCar**](docs/CarsAPI.md#updatecar) | **PUT** /cars | Update car details
 *RpcAPI* | [**listBookingsInRange**](docs/RpcAPI.md#listbookingsinrange) | **GET** /bookings/rpc/in_range | List Bookings in time frame cars

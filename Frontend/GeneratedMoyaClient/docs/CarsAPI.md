@@ -1,11 +1,12 @@
 # CarsAPI
 
-All URIs are relative to *http://localhost:8098*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**addCar**](CarsAPI.md#addcar) | **POST** /cars | Add a new car
 [**deleteCar**](CarsAPI.md#deletecar) | **DELETE** /cars | Delete a car
+[**getCarByVin**](CarsAPI.md#getcarbyvin) | **GET** /carByVin | Get a car by VIN
 [**listCars**](CarsAPI.md#listcars) | **GET** /cars | List available cars
 [**updateCar**](CarsAPI.md#updatecar) | **PUT** /cars | Update car details
 
@@ -103,6 +104,54 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getCarByVin**
+```swift
+    open class func getCarByVin(VIN: String, completion: @escaping (_ data: Car?, _ error: Error?) -> Void)
+```
+
+Get a car by VIN
+
+### Example
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import OpenAPIClient
+
+let VIN = "VIN_example" // String | 
+
+// Get a car by VIN
+CarsAPI.getCarByVin(VIN: VIN) { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **VIN** | **String** |  | 
+
+### Return type
+
+[**Car**](Car.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -16,6 +16,7 @@
 		5AD8B3162DA2D887001CDCE8 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AD8B3152DA2D887001CDCE8 /* OpenAPIClient */; };
 		5AE5A97F2DB7902700FF7BBE /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AE5A97E2DB7902700FF7BBE /* OpenAPIClient */; };
 		5AE5AA322DB82F3100FF7BBE /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 5AE5AA312DB82F3100FF7BBE /* JWTDecode */; };
+		CE7DAC6C2DBCEFA200D16D9C /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = CE7DAC6B2DBCEFA200D16D9C /* OpenAPIClient */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 			files = (
 				5AE5A97F2DB7902700FF7BBE /* OpenAPIClient in Frameworks */,
 				5AD8B2E62DA2D3CC001CDCE8 /* OpenAPIClient in Frameworks */,
+				CE7DAC6C2DBCEFA200D16D9C /* OpenAPIClient in Frameworks */,
 				5AE5AA322DB82F3100FF7BBE /* JWTDecode in Frameworks */,
 				5AD8B2772DA2C1E9001CDCE8 /* OpenAPIClient in Frameworks */,
 				5AD8B3162DA2D887001CDCE8 /* OpenAPIClient in Frameworks */,
@@ -95,6 +97,7 @@
 				5AD8B3152DA2D887001CDCE8 /* OpenAPIClient */,
 				5AE5A97E2DB7902700FF7BBE /* OpenAPIClient */,
 				5AE5AA312DB82F3100FF7BBE /* JWTDecode */,
+				CE7DAC6B2DBCEFA200D16D9C /* OpenAPIClient */,
 			);
 			productName = "Prestige Wheels";
 			productReference = 5A5FFC6E2D91E6D60027FF67 /* Prestige Wheels.app */;
@@ -125,8 +128,8 @@
 			mainGroup = 5A5FFC652D91E6D60027FF67;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				5AE5A97D2DB7902700FF7BBE /* XCLocalSwiftPackageReference "../GeneratedMoyaClient" */,
 				5AE5AA302DB82F3100FF7BBE /* XCRemoteSwiftPackageReference "JWTDecode" */,
+				CE7DAC6A2DBCEFA200D16D9C /* XCLocalSwiftPackageReference "../GeneratedMoyaClient" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5A5FFC6F2D91E6D60027FF67 /* Products */;
@@ -364,7 +367,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		5AE5A97D2DB7902700FF7BBE /* XCLocalSwiftPackageReference "../GeneratedMoyaClient" */ = {
+		CE7DAC6A2DBCEFA200D16D9C /* XCLocalSwiftPackageReference "../GeneratedMoyaClient" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../GeneratedMoyaClient;
 		};
@@ -418,6 +421,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5AE5AA302DB82F3100FF7BBE /* XCRemoteSwiftPackageReference "JWTDecode" */;
 			productName = JWTDecode;
+		};
+		CE7DAC6B2DBCEFA200D16D9C /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
