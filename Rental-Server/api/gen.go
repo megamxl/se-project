@@ -53,7 +53,9 @@ type Booking struct {
 	VIN        *string   `json:"VIN,omitempty"`
 	BookingId  *string   `json:"bookingId,omitempty"`
 	Currency   *Currency `json:"currency,omitempty"`
+	EndDate    *string   `json:"endDate,omitempty"`
 	PaidAmount *float32  `json:"paidAmount,omitempty"`
+	StartDate  *string   `json:"startDate,omitempty"`
 	Status     *string   `json:"status,omitempty"`
 	UserId     *string   `json:"userId,omitempty"`
 }

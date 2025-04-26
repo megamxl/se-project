@@ -300,7 +300,7 @@ func (s Server) ListCars(w http.ResponseWriter, r *http.Request, params ListCars
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	
+
 	startDate := time.Date(startTimeVal.Year(), startTimeVal.Month(), startTimeVal.Day(), 0, 0, 0, 0, startTimeVal.Location())
 	endDate := time.Date(endTimeVal.Year(), endTimeVal.Month(), endTimeVal.Day(), 0, 0, 0, 0, endTimeVal.Location())
 
@@ -574,6 +574,9 @@ func MapDataBookingToBooking(booking data.Booking) Booking {
 
 	f := float32(booking.AmountPaid)
 
+	s := booking.StartTime.Format("2006-01-02")
+	e := booking.EndTime.Format("2006-01-02")
+
 	currency := Currency(booking.Currency)
 	return Booking{
 		VIN:        &booking.CarVin,
@@ -582,6 +585,8 @@ func MapDataBookingToBooking(booking data.Booking) Booking {
 		UserId:     &userId,
 		PaidAmount: &f,
 		Currency:   &currency,
+		StartDate:  &s,
+		EndDate:    &e,
 	}
 }
 

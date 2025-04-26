@@ -436,6 +436,10 @@ components:
           type: number
         currency:
           $ref: "#/components/schemas/Currency"
+        startDate:
+          type: string
+        endDate:
+          type: string
     TokenResponse:
       type: object
       properties:
