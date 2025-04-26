@@ -22,15 +22,20 @@ struct CarRow: View {
                     image
                         .resizable()
                         .scaledToFill()
+                        .frame(width: 120, height: 80)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .clipped()
                 } else {
-                    // While fetching, show placeholder.
                     Image(systemName: "car.fill")
                         .resizable()
-                        .scaledToFit()
+                        .scaledToFill()
+                        .frame(width: 150, height: 100)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .foregroundColor(.gray)
+                        .background(Color(.systemGray5))
+                        .clipped()
                 }
             }
-            .frame(width: 80, height: 80)
 
             VStack(alignment: .leading, spacing: 0) {
                 Text(car.model ?? "")
@@ -55,7 +60,7 @@ struct CarRow: View {
             }
         }
         .hAlign(.leading)
-        .padding(.horizontal, .spacingL)
+        .padding(.horizontal, .spacingXS)
         .padding(.vertical, .spacingXS)
         .background(
             RoundedRectangle(cornerRadius: 12)

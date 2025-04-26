@@ -10,9 +10,12 @@ import Foundation
 import OSLog
 import OpenAPIClient
 import JWTDecode
+import SwiftUI
 
 @MainActor
 class AuthenticationViewModel: ObservableObject {
+    @AppStorage("selectedBackend") var selectedBackend = Backend.part1.rawValue
+    
     // MARK: - Input Fields
 
     @Published var username: String = ""
@@ -151,5 +154,17 @@ class AuthenticationViewModel: ObservableObject {
                 self.isAdmin = false
             }
         }
+    }
+    
+    func setBackend(newValue: String) {
+        if newValue == "part1" {
+            OpenAPIClientAPI.basePath = "http://20.82.111.96"
+        } else {
+            OpenAPIClientAPI.basePath = "http://74.234.202.141"
+        }
+    }
+    
+    var selectedBackendProvider: Backend {
+        Backend(rawValue: selectedBackend) ?? .part1
     }
 }

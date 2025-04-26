@@ -24,11 +24,8 @@ struct FindCarDetailView: View {
                     case .success(let image):
                         image
                             .resizable()
-                            .scaledToFill()
-                            .frame(height: 250)
-                            .frame(maxWidth: .infinity)
+                            .aspectRatio(contentMode: .fit)
                             .cornerRadius(20)
-                            .clipped()
                     case .failure(_):
                         Image(systemName: "car.fill")
                             .resizable()
@@ -196,8 +193,14 @@ struct FindCarDetailView: View {
                 Button(action: {
                     route.pathFindCar.removeLast()
                 }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.black)
+                    ZStack {
+                        Color.gray
+                            .frame(width: 30, height: 30, alignment: .center)
+                            .cornerRadius(5)
+                        
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.black)
+                    }
                 }
             }
         }

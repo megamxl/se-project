@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OpenAPIClient
 
 struct AuthenticationView: View {
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
@@ -88,6 +89,7 @@ struct AuthenticationView: View {
                 .hAlign(.center)
                 .padding(.top, .spacingS)
             }
+            selectBackend
         }
     }
     
@@ -157,6 +159,23 @@ struct AuthenticationView: View {
                 }
                 .hAlign(.center)
                 .padding(.top, .spacingS)
+            }
+
+            selectBackend
+        }
+    }
+    
+    //MARK: - Select Backend
+    
+    var selectBackend: some View {
+        Section {
+            Picker("Backend", selection: $authenticationViewModel.selectedBackend) {
+                Text("Part 1").tag(Backend.part1.rawValue)
+                Text("Part 2 (Microservice)").tag(Backend.part2.rawValue)
+            }
+            .onChange(of: authenticationViewModel.selectedBackend) { newValue in
+                print("Backend changed to: \(newValue)")
+                authenticationViewModel.setBackend(newValue: newValue)
             }
         }
     }
