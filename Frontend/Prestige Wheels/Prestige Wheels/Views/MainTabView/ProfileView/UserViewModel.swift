@@ -21,9 +21,9 @@ class UserViewModel: ObservableObject {
         OpenAPIClientAPI.UserAPI.getUsers(apiResponseQueue: DispatchQueue.main) { [weak self] (user, error) in
             guard let self = self else { return }
             
-            if let error = error {
+            if let error {
                 Logger.backgroundProcessing.error("\(error.localizedDescription)")
-            } else if let user = user {
+            } else if let user {
                 self.user = user
             }
         }

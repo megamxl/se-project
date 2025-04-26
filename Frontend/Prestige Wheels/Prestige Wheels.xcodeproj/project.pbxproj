@@ -17,6 +17,7 @@
 		5AE5A97F2DB7902700FF7BBE /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AE5A97E2DB7902700FF7BBE /* OpenAPIClient */; };
 		5AE5AA322DB82F3100FF7BBE /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 5AE5AA312DB82F3100FF7BBE /* JWTDecode */; };
 		CE7DAC6C2DBCEFA200D16D9C /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = CE7DAC6B2DBCEFA200D16D9C /* OpenAPIClient */; };
+		CE9000E92DBD34CA001FC4D5 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = CE9000E82DBD34CA001FC4D5 /* GoogleMaps */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 				CE7DAC6C2DBCEFA200D16D9C /* OpenAPIClient in Frameworks */,
 				5AE5AA322DB82F3100FF7BBE /* JWTDecode in Frameworks */,
 				5AD8B2772DA2C1E9001CDCE8 /* OpenAPIClient in Frameworks */,
+				CE9000E92DBD34CA001FC4D5 /* GoogleMaps in Frameworks */,
 				5AD8B3162DA2D887001CDCE8 /* OpenAPIClient in Frameworks */,
 				5A2EC1952D92207C0010EEEF /* OpenAPIClient in Frameworks */,
 				5AD8B2832DA2C705001CDCE8 /* OpenAPIClient in Frameworks */,
@@ -98,6 +100,7 @@
 				5AE5A97E2DB7902700FF7BBE /* OpenAPIClient */,
 				5AE5AA312DB82F3100FF7BBE /* JWTDecode */,
 				CE7DAC6B2DBCEFA200D16D9C /* OpenAPIClient */,
+				CE9000E82DBD34CA001FC4D5 /* GoogleMaps */,
 			);
 			productName = "Prestige Wheels";
 			productReference = 5A5FFC6E2D91E6D60027FF67 /* Prestige Wheels.app */;
@@ -130,6 +133,7 @@
 			packageReferences = (
 				5AE5AA302DB82F3100FF7BBE /* XCRemoteSwiftPackageReference "JWTDecode" */,
 				CE7DAC6A2DBCEFA200D16D9C /* XCLocalSwiftPackageReference "../GeneratedMoyaClient" */,
+				CE9000E72DBD34CA001FC4D5 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5A5FFC6F2D91E6D60027FF67 /* Products */;
@@ -304,7 +308,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dev.luegm.Prestige-Wheels";
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.heinzschw.Prestige-Wheels";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -335,7 +339,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dev.luegm.Prestige-Wheels";
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.heinzschw.Prestige-Wheels";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -382,6 +386,14 @@
 				minimumVersion = 3.3.0;
 			};
 		};
+		CE9000E72DBD34CA001FC4D5 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -425,6 +437,11 @@
 		CE7DAC6B2DBCEFA200D16D9C /* OpenAPIClient */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAPIClient;
+		};
+		CE9000E82DBD34CA001FC4D5 /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE9000E72DBD34CA001FC4D5 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

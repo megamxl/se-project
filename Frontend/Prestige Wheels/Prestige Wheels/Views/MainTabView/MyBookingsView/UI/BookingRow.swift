@@ -29,7 +29,7 @@ struct BookingRow: View {
                     Image(systemName: "car.fill")
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 150, height: 100)
+                        .frame(width: 120, height: 80)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .foregroundColor(.gray)
                         .background(Color(.systemGray5))

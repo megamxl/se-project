@@ -7,6 +7,7 @@
 
 import SwiftUI
 import OpenAPIClient
+import GoogleMaps
 
 private func loadRocketSimConnect() {
     #if DEBUG
@@ -31,6 +32,8 @@ struct Prestige_WheelsApp: App {
         customDateFormatter.dateFormat = "yyyy-MM-dd"
 
         CodableHelper.dateFormatter = customDateFormatter
+        
+        GMSServices.provideAPIKey("") // AIzaSyBH24e8U1qCacnubIiwqQ5zJMjYPmSV5WI
     }
 
     var body: some Scene {

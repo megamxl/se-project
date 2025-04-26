@@ -176,7 +176,9 @@ struct MyBookingDetailView: View {
                         .frame(height: 200)
                         .cornerRadius(12)
                     } else {
-                        Text("Google Maps")
+                        GoogleMapsView()
+                            .frame(height: 200)
+                            .cornerRadius(12)
                     }
                     
                     Spacer()

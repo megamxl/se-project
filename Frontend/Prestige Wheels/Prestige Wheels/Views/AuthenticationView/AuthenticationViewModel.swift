@@ -14,7 +14,7 @@ import SwiftUI
 
 @MainActor
 class AuthenticationViewModel: ObservableObject {
-    @AppStorage("selectedBackend") var selectedBackend = Backend.part1.rawValue
+    @Published var selectedBackend = Backend.part1.rawValue
     
     // MARK: - Input Fields
 
@@ -159,8 +159,10 @@ class AuthenticationViewModel: ObservableObject {
     func setBackend(newValue: String) {
         if newValue == "part1" {
             OpenAPIClientAPI.basePath = "http://20.82.111.96"
+            selectedBackend = Backend.part1.rawValue
         } else {
             OpenAPIClientAPI.basePath = "http://74.234.202.141"
+            selectedBackend = Backend.part2.rawValue
         }
     }
     
