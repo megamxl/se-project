@@ -75,7 +75,19 @@ struct FindCarView: View {
                 }
             }
             .onChange(of: authenticationViewModel.isLoggedIn) {
-                Logger.backgroundProcessing.log("🔄 refresh after login")
+                Logger.backgroundProcessing.log("🔄 refresh")
+                viewModel.listCars()
+            }
+            .onChange(of: viewModel.selectedCurrency) {
+                Logger.backgroundProcessing.log("🔄 refresh")
+                viewModel.listCars()
+            }
+            .onChange(of: viewModel.toDate) {
+                Logger.backgroundProcessing.log("🔄 refresh")
+                viewModel.listCars()
+            }
+            .onChange(of: viewModel.fromDate) {
+                Logger.backgroundProcessing.log("🔄 refresh")
                 viewModel.listCars()
             }
             .refreshable {

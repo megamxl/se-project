@@ -53,8 +53,8 @@ struct MainTabView: View {
     @ViewBuilder
     func view(for route: RouteMyBookings) -> some View {
         switch route {
-        case .bookingDetailView(booking: let booking):
-            let viewModel = MyBookingDetailViewModel(booking: booking)
+        case .bookingDetailView(booking: let booking, car: let car):
+            let viewModel = MyBookingDetailViewModel(booking: booking, car: car)
             MyBookingDetailView(viewModel: viewModel)
         }
     }

@@ -9,7 +9,7 @@
 
 - [X] `ProfileView`
     - [X] UserDetails
-    - [1/2] edit UserDetails?
+    - [X] edit UserDetails?
     - [X] Logout
 
 ## 🚘 Car

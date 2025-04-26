@@ -10,17 +10,19 @@ import OpenAPIClient
 
 struct BookingRow: View {
     let booking: OpenAPIClientAPI.Booking
+    let car: OpenAPIClientAPI.Car
     
     var body: some View {
         HStack(spacing: .spacingL) {
             AsyncImage(
-                url: URL(string: ""),
+                url: URL(string: car.imageURL ?? ""),
                 transaction: Transaction(animation: .default)
             ) { phase in
                 if let image = phase.image {
                     image
                         .resizable()
                         .scaledToFill()
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                 } else {
                     // While fetching, show placeholder.
                     Image(systemName: "car.fill")
@@ -29,40 +31,32 @@ struct BookingRow: View {
                 }
             }
             .frame(width: 80, height: 80)
-            VStack(alignment: .leading, spacing: 0) {
-                Text("Placeholder")
-                    .font(.headline)
-                Text("Placeholder")
-                    .font(.subheadline)
-                
-                // Start- und Enddatum
-                /*if let startDate = booking.startDate, let endDate = booking.endDate {
-                    Text("\(startDate) - \(endDate)")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }*/
 
-                Text("Status: \(booking.status ?? "Unbekannt")")
-                    .font(.caption)
-                    .foregroundColor(.gray)
+            VStack(alignment: .leading, spacing: 0) {
+                Text(car.model ?? "")
+                    .font(.headline)
+                Text(car.brand ?? "")
+                    .font(.subheadline)
+                    .padding(.bottom, 4)
+                
+                
+                Text("Status: \(booking.status ?? "-")")
+                    .font(.system(size: 11))
+                    .foregroundColor(Color(uiColor: .secondaryLabel))
+                
+                Text("\(booking.startDate ?? "") - \(booking.endDate ?? "")")
+                    .font(.system(size: 10))
+                    .foregroundColor(Color(uiColor: .secondaryLabel))
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             
-            Spacer()
             VStack(alignment: .trailing, spacing: 4){
-                //if let priceOverAll = car.priceOverAll {
-                    //Text("\(priceOverAll.formatted(.currency(code: currency.rawValue)))")
-                    Text("placeholder")
+                if let paidAmount = booking.paidAmount {
+                    Text("\(paidAmount.formatted(.currency(code: booking.currency?.rawValue ?? "-")))")
                         .foregroundStyle(.primary)
                         .font(.callout)
                         .fontDesign(.rounded)
-                //}
-                //if let pricePerDay = car.pricePerDay {
-                    //Text("\(pricePerDay.formatted(.currency(code: currency.rawValue))) /day")
-                    Text("placeholder")
-                        .foregroundStyle(.gray)
-                        .font(.caption2)
-                        .fontDesign(.rounded)
-                //}
+                }
             }
         }
         .hAlign(.leading)
@@ -76,5 +70,5 @@ struct BookingRow: View {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-    BookingRow(booking: .init(bookingId: "", userId: "", VIN: "", status: ""))
+    BookingRow(booking: .init(bookingId: "", userId: "", VIN: "", status: ""), car: .init())
 }

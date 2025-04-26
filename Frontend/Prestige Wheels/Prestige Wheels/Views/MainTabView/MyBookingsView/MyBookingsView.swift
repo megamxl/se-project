@@ -36,15 +36,17 @@ struct MyBookingsView: View {
     
     var bookingList: some View {
         List(bookingViewModel.bookings, id: \.bookingId) { booking in
-            Button {
-                route.pathMyBookings.append(.bookingDetailView(booking: booking))
-            } label: {
-                BookingRow(booking: booking)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(.init())
-                    .padding(.vertical, .spacingXS)
+            if let car = bookingViewModel.carsByBookingId[booking.bookingId ?? ""] {
+                Button {
+                    route.pathMyBookings.append(.bookingDetailView(booking: booking, car: car))
+                } label: {
+                    BookingRow(booking: booking, car: car)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(.init())
+                        .padding(.vertical, .spacingXS)
+                }
+                .listRowSeparator(.hidden)
             }
-            .listRowSeparator(.hidden)
         }
         .listStyle(.plain)
         .contentMargins(.top, 0, for: .scrollContent)

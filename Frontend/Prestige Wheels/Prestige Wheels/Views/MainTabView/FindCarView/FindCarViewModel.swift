@@ -22,7 +22,7 @@ class FindCarViewModel: ObservableObject {
         isLoading = true
         
         OpenAPIClientAPI.CarsAPI.listCars(
-            currency: OpenAPIClientAPI.Currency.eur,
+            currency: selectedCurrency,
             startTime: fromDate,
             endTime: toDate,
             apiResponseQueue: DispatchQueue.main
