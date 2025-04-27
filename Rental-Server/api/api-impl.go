@@ -290,21 +290,43 @@ func (s Server) ListCars(w http.ResponseWriter, r *http.Request, params ListCars
 		endTimeVal = params.EndTime.Time
 	}
 
-	if !startTimeVal.IsZero() && !endTimeVal.IsZero() && endTimeVal.Before(startTimeVal) {
-		http.Error(w, "ERROR: endTime cannot be before startTime", http.StatusBadRequest)
+	roleFromRequest, ok := r.Context().Value(middleware.ContextKeyRoles).(string)
+	if !ok {
+		http.Error(w, "ERROR: User Role not found in context", http.StatusBadRequest)
 		return
 	}
 
-	dataCars, err := s.carService.GetCarsAvailableInTimeRange(r.Context(), startTimeVal, endTimeVal, string(params.Currency))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	isAdmin := roleFromRequest == "admin"
+
+	var dataCars []data.Car
+	var duration = 1
+	var err error
+
+	if isAdmin && startTimeVal.IsZero() && endTimeVal.IsZero() {
+		// Admin should get all cars, regardless of time range
+		dataCars, err = s.carService.GetAllCars(r.Context())
+		if err != nil {
+			http.Error(w, "ERROR: failed to get all cars", http.StatusInternalServerError)
+			return
+		}
+	} else {
+
+		if !startTimeVal.IsZero() && !endTimeVal.IsZero() && endTimeVal.Before(startTimeVal) {
+			http.Error(w, "ERROR: endTime cannot be before startTime", http.StatusBadRequest)
+			return
+		}
+
+		dataCars, err = s.carService.GetCarsAvailableInTimeRange(r.Context(), startTimeVal, endTimeVal, string(params.Currency))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		startDate := time.Date(startTimeVal.Year(), startTimeVal.Month(), startTimeVal.Day(), 0, 0, 0, 0, startTimeVal.Location())
+		endDate := time.Date(endTimeVal.Year(), endTimeVal.Month(), endTimeVal.Day(), 0, 0, 0, 0, endTimeVal.Location())
+
+		duration = int(endDate.Sub(startDate).Hours()/24) + 1
 	}
-
-	startDate := time.Date(startTimeVal.Year(), startTimeVal.Month(), startTimeVal.Day(), 0, 0, 0, 0, startTimeVal.Location())
-	endDate := time.Date(endTimeVal.Year(), endTimeVal.Month(), endTimeVal.Day(), 0, 0, 0, 0, endTimeVal.Location())
-
-	duration := int(endDate.Sub(startDate).Hours()/24) + 1
 
 	cars := CarIntToListResponse(dataCars, int(duration), params.Currency)
 

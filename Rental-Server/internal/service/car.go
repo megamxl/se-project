@@ -20,6 +20,7 @@ type CarService interface {
 	UpdateCar(ctx context.Context, car data.Car) (data.Car, error)
 	DeleteCarByVin(ctx context.Context, vin string) error
 	GetCarsAvailableInTimeRange(ctx context.Context, startTime, endTime time.Time, currency string) ([]data.Car, error)
+	GetAllCars(ctx context.Context) ([]data.Car, error)
 }
 
 type carService struct {
@@ -136,6 +137,10 @@ func (s *carService) GetCarsAvailableInTimeRange(ctx context.Context, startTime,
 	}
 
 	return dataCars, nil
+}
+
+func (s *carService) GetAllCars(ctx context.Context) ([]data.Car, error) {
+	return s.repo.GetAllCars()
 }
 
 func NewCarService(repo data.CarRepository, conv converter.Converter) CarService {
