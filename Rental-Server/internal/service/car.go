@@ -100,6 +100,21 @@ func (s *carService) GetCarsAvailableInTimeRange(ctx context.Context, startTime,
 		return nil, errors.New("EndTime is earlier than StartTime")
 	}
 
+	now := time.Now()
+	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+
+	if startTime.Before(today) {
+		return nil, errors.New("can't Book into the past")
+	}
+
+	sameDay := startTime.Year() == endTime.Year() &&
+		startTime.Month() == endTime.Month() &&
+		startTime.Day() == endTime.Day()
+
+	if sameDay {
+		return nil, errors.New("can't Book a car for less than a Day")
+	}
+
 	dataCars, err := s.repo.GetCarsAvailableInTimeRange(startTime, endTime)
 
 	for i, dataCar := range dataCars {

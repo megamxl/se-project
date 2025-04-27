@@ -2,11 +2,9 @@ package service
 
 import "time"
 
-func GetDurationBetween(start time.Time, end time.Time) time.Duration {
-	after := end.After(start)
-	if !after {
-		return time.Duration(0)
-	}
+func GetDurationBetween(startTimeVal time.Time, endTimeVal time.Time) int {
+	startDate := time.Date(startTimeVal.Year(), startTimeVal.Month(), startTimeVal.Day(), 0, 0, 0, 0, startTimeVal.Location())
+	endDate := time.Date(endTimeVal.Year(), endTimeVal.Month(), endTimeVal.Day(), 0, 0, 0, 0, endTimeVal.Location())
 
-	return end.Sub(start)
+	return int(endDate.Sub(startDate).Hours()/24) + 1
 }

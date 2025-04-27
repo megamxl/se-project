@@ -41,11 +41,30 @@ func (s bookingService) BookCar(ctx context.Context, req data.Booking, currency 
 		return data.Booking{}, errors.New("BookCar: VIN is empty")
 	}
 
+	if req.EndTime.Before(req.StartTime) {
+		return data.Booking{}, errors.New("EndTime is earlier than StartTime")
+	}
+
+	now := time.Now()
+	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+
+	if req.StartTime.Before(today) {
+		return data.Booking{}, errors.New("can't Book into the past")
+	}
+
 	if req.Status == "" {
 		req.Status = "pending"
 	}
 
-	between := GetDurationBetween(req.StartTime, req.EndTime).Hours() / 24
+	sameDay := req.StartTime.Year() == req.EndTime.Year() &&
+		req.StartTime.Month() == req.EndTime.Month() &&
+		req.StartTime.Day() == req.EndTime.Day()
+
+	if sameDay {
+		return data.Booking{}, errors.New("can't Book a car for less than a Day")
+	}
+
+	between := GetDurationBetween(req.StartTime, req.EndTime)
 
 	convert, err := s.conv.Convert(converter.Request{
 		GivenCurrency:  "USD",
@@ -54,12 +73,12 @@ func (s bookingService) BookCar(ctx context.Context, req data.Booking, currency 
 	})
 
 	req.Currency = currency
-	req.AmountPaid = convert.Amount * between
+	req.AmountPaid = convert.Amount * float64(between)
 
 	if err != nil {
 		slog.Error(" conversion error creating Booking in USD", err)
 		req.Currency = "USD"
-		req.AmountPaid = pricePerDayInUSD * between
+		req.AmountPaid = pricePerDayInUSD * float64(between)
 	}
 
 	saved, err := s.repo.SaveBooking(req)
