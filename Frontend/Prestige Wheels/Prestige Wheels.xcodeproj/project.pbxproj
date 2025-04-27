@@ -1,0 +1,449 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5A2EC1752D921C0E0010EEEF /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5A2EC1742D921C0E0010EEEF /* OpenAPIClient */; };
+		5A2EC1952D92207C0010EEEF /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5A2EC1942D92207C0010EEEF /* OpenAPIClient */; };
+		5A5FDB862D92199300D8B762 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5A5FDB852D92199300D8B762 /* OpenAPIClient */; };
+		5AD8B2772DA2C1E9001CDCE8 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AD8B2762DA2C1E9001CDCE8 /* OpenAPIClient */; };
+		5AD8B2832DA2C705001CDCE8 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AD8B2822DA2C705001CDCE8 /* OpenAPIClient */; };
+		5AD8B2E62DA2D3CC001CDCE8 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AD8B2E52DA2D3CC001CDCE8 /* OpenAPIClient */; };
+		5AD8B3162DA2D887001CDCE8 /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AD8B3152DA2D887001CDCE8 /* OpenAPIClient */; };
+		5AE5A97F2DB7902700FF7BBE /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5AE5A97E2DB7902700FF7BBE /* OpenAPIClient */; };
+		5AE5AA322DB82F3100FF7BBE /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 5AE5AA312DB82F3100FF7BBE /* JWTDecode */; };
+		CE7DAC6C2DBCEFA200D16D9C /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = CE7DAC6B2DBCEFA200D16D9C /* OpenAPIClient */; };
+		CE9000E92DBD34CA001FC4D5 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = CE9000E82DBD34CA001FC4D5 /* GoogleMaps */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5A5FFC6E2D91E6D60027FF67 /* Prestige Wheels.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prestige Wheels.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		5A5FFC702D91E6D60027FF67 /* Prestige Wheels */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Prestige Wheels";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5A5FFC6B2D91E6D60027FF67 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AE5A97F2DB7902700FF7BBE /* OpenAPIClient in Frameworks */,
+				5AD8B2E62DA2D3CC001CDCE8 /* OpenAPIClient in Frameworks */,
+				CE7DAC6C2DBCEFA200D16D9C /* OpenAPIClient in Frameworks */,
+				5AE5AA322DB82F3100FF7BBE /* JWTDecode in Frameworks */,
+				5AD8B2772DA2C1E9001CDCE8 /* OpenAPIClient in Frameworks */,
+				CE9000E92DBD34CA001FC4D5 /* GoogleMaps in Frameworks */,
+				5AD8B3162DA2D887001CDCE8 /* OpenAPIClient in Frameworks */,
+				5A2EC1952D92207C0010EEEF /* OpenAPIClient in Frameworks */,
+				5AD8B2832DA2C705001CDCE8 /* OpenAPIClient in Frameworks */,
+				5A2EC1752D921C0E0010EEEF /* OpenAPIClient in Frameworks */,
+				5A5FDB862D92199300D8B762 /* OpenAPIClient in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5A5FFC652D91E6D60027FF67 = {
+			isa = PBXGroup;
+			children = (
+				5A5FFC702D91E6D60027FF67 /* Prestige Wheels */,
+				5A5FFC6F2D91E6D60027FF67 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5A5FFC6F2D91E6D60027FF67 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A5FFC6E2D91E6D60027FF67 /* Prestige Wheels.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5A5FFC6D2D91E6D60027FF67 /* Prestige Wheels */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A5FFC7C2D91E6D80027FF67 /* Build configuration list for PBXNativeTarget "Prestige Wheels" */;
+			buildPhases = (
+				5A5FFC6A2D91E6D60027FF67 /* Sources */,
+				5A5FFC6B2D91E6D60027FF67 /* Frameworks */,
+				5A5FFC6C2D91E6D60027FF67 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				5A5FFC702D91E6D60027FF67 /* Prestige Wheels */,
+			);
+			name = "Prestige Wheels";
+			packageProductDependencies = (
+				5A5FDB852D92199300D8B762 /* OpenAPIClient */,
+				5A2EC1742D921C0E0010EEEF /* OpenAPIClient */,
+				5A2EC1942D92207C0010EEEF /* OpenAPIClient */,
+				5AD8B2762DA2C1E9001CDCE8 /* OpenAPIClient */,
+				5AD8B2822DA2C705001CDCE8 /* OpenAPIClient */,
+				5AD8B2E52DA2D3CC001CDCE8 /* OpenAPIClient */,
+				5AD8B3152DA2D887001CDCE8 /* OpenAPIClient */,
+				5AE5A97E2DB7902700FF7BBE /* OpenAPIClient */,
+				5AE5AA312DB82F3100FF7BBE /* JWTDecode */,
+				CE7DAC6B2DBCEFA200D16D9C /* OpenAPIClient */,
+				CE9000E82DBD34CA001FC4D5 /* GoogleMaps */,
+			);
+			productName = "Prestige Wheels";
+			productReference = 5A5FFC6E2D91E6D60027FF67 /* Prestige Wheels.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5A5FFC662D91E6D60027FF67 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					5A5FFC6D2D91E6D60027FF67 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+				};
+			};
+			buildConfigurationList = 5A5FFC692D91E6D60027FF67 /* Build configuration list for PBXProject "Prestige Wheels" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5A5FFC652D91E6D60027FF67;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				5AE5AA302DB82F3100FF7BBE /* XCRemoteSwiftPackageReference "JWTDecode" */,
+				CE7DAC6A2DBCEFA200D16D9C /* XCLocalSwiftPackageReference "../GeneratedMoyaClient" */,
+				CE9000E72DBD34CA001FC4D5 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 5A5FFC6F2D91E6D60027FF67 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5A5FFC6D2D91E6D60027FF67 /* Prestige Wheels */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5A5FFC6C2D91E6D60027FF67 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5A5FFC6A2D91E6D60027FF67 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5A5FFC7A2D91E6D80027FF67 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		5A5FFC7B2D91E6D80027FF67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5A5FFC7D2D91E6D80027FF67 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Prestige Wheels/Preview Content\"";
+				DEVELOPMENT_TEAM = 9LWZKUFVQ2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Prestige-Wheels-Info.plist";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.heinzschw.Prestige-Wheels";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5A5FFC7E2D91E6D80027FF67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Prestige Wheels/Preview Content\"";
+				DEVELOPMENT_TEAM = 9LWZKUFVQ2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Prestige-Wheels-Info.plist";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.heinzschw.Prestige-Wheels";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5A5FFC692D91E6D60027FF67 /* Build configuration list for PBXProject "Prestige Wheels" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A5FFC7A2D91E6D80027FF67 /* Debug */,
+				5A5FFC7B2D91E6D80027FF67 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A5FFC7C2D91E6D80027FF67 /* Build configuration list for PBXNativeTarget "Prestige Wheels" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A5FFC7D2D91E6D80027FF67 /* Debug */,
+				5A5FFC7E2D91E6D80027FF67 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		CE7DAC6A2DBCEFA200D16D9C /* XCLocalSwiftPackageReference "../GeneratedMoyaClient" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../GeneratedMoyaClient;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5AE5AA302DB82F3100FF7BBE /* XCRemoteSwiftPackageReference "JWTDecode" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/auth0/JWTDecode.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.3.0;
+			};
+		};
+		CE9000E72DBD34CA001FC4D5 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5A2EC1742D921C0E0010EEEF /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5A2EC1942D92207C0010EEEF /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5A5FDB852D92199300D8B762 /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5AD8B2762DA2C1E9001CDCE8 /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5AD8B2822DA2C705001CDCE8 /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5AD8B2E52DA2D3CC001CDCE8 /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5AD8B3152DA2D887001CDCE8 /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5AE5A97E2DB7902700FF7BBE /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		5AE5AA312DB82F3100FF7BBE /* JWTDecode */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5AE5AA302DB82F3100FF7BBE /* XCRemoteSwiftPackageReference "JWTDecode" */;
+			productName = JWTDecode;
+		};
+		CE7DAC6B2DBCEFA200D16D9C /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
+		};
+		CE9000E82DBD34CA001FC4D5 /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE9000E72DBD34CA001FC4D5 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 5A5FFC662D91E6D60027FF67 /* Project object */;
+}
