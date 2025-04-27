@@ -204,7 +204,7 @@ struct ProfileView: View {
                         viewModel: CarManagementViewModel(),
                         title: "Cars",
                         rowContent: { car in
-                            CarRow(car: car, currency: .eur)
+                            CarRow(car: car, currency: .usd)
                         },
                         createContent: { vm in CarCreateView(viewModel: vm) }
                     )

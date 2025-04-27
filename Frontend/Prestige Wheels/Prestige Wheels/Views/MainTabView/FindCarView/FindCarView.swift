@@ -73,6 +73,12 @@ struct FindCarView: View {
             .onAppear {
                 viewModel.listCars()
             }
+            .onChange(of: authenticationViewModel.isLoggedIn) { isLoggedIn in
+                if isLoggedIn {
+                    Logger.backgroundProcessing.log("✅ Login success, loading cars")
+                    viewModel.listCars()
+                }
+            }
             .onChange(of: viewModel.selectedCurrency) {
                 Logger.backgroundProcessing.log("🔄 refresh")
                 viewModel.listCars()
