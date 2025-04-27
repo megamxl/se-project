@@ -8,9 +8,11 @@
 import Foundation
 import Combine
 import OpenAPIClient
+import OSLog
 
 class BookingManagementViewModel: ObservableObject, ManagementViewModelProtocol {
     @Published var items: [OpenAPIClientAPI.Booking] = []
+    @Published var carsByBookingId: [String: OpenAPIClientAPI.Car] = [:]
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
 
@@ -23,8 +25,27 @@ class BookingManagementViewModel: ObservableObject, ManagementViewModelProtocol 
             self.isLoading = false
             if let error = error {
                 self.errorMessage = error.localizedDescription
-            } else {
-                self.items = bookings?.compactMap { $0 } ?? []
+            } else if let bookings = bookings {
+                self.items = bookings.compactMap { $0 }
+                for booking in self.items {
+                    if let vin = booking.VIN, let bookingId = booking.bookingId {
+                        self.fetchCarByVin(vin: vin, bookingId: bookingId)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func fetchCarByVin(vin: String, bookingId: String) {
+        OpenAPIClientAPI.CarsAPI.getCarByVin(
+            VIN: vin,
+            apiResponseQueue: DispatchQueue.main
+        ) { [weak self] car, error in
+            guard let self = self else { return }
+            if let error = error {
+                Logger.backgroundProcessing.error("Failed to fetch car for VIN \(vin): \(error.localizedDescription)")
+            } else if let car = car {
+                self.carsByBookingId[bookingId] = car
             }
         }
     }

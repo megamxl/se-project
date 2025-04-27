@@ -204,21 +204,18 @@ struct ProfileView: View {
                         viewModel: CarManagementViewModel(),
                         title: "Cars",
                         rowContent: { car in
-                            VStack(alignment: .leading) {
-                                Text(car.brand ?? "")
-                                Text(car.model ?? "")
-                            }
+                            CarRow(car: car, currency: .eur)
                         },
                         createContent: { vm in CarCreateView(viewModel: vm) }
                     )
                 case .manageBookings:
+                    let bookingVM = BookingManagementViewModel()
                     AdminManagementView(
-                        viewModel: BookingManagementViewModel(),
+                        viewModel: bookingVM,
                         title: "Bookings",
                         rowContent: { booking in
-                            VStack(alignment: .leading) {
-                                Text(booking.bookingId ?? "")
-                                Text(booking.status ?? "")
+                            if let car = bookingVM.carsByBookingId[booking.bookingId ?? ""] {
+                                BookingRow(booking: booking, car: car)
                             }
                         },
                         createContent: { vm in BookingCreateView(viewModel: vm) }
@@ -228,10 +225,7 @@ struct ProfileView: View {
                         viewModel: UserManagementViewModel(),
                         title: "Users",
                         rowContent: { user in
-                            VStack(alignment: .leading) {
-                                Text(user.username ?? "")
-                                Text(user.email ?? "")
-                            }
+                            UserRow(user: user)
                         },
                         createContent: { vm in UserCreateView(viewModel: vm) }
                     )

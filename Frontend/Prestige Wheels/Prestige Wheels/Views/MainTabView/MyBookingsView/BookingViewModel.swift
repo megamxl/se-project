@@ -41,16 +41,4 @@ class BookingViewModel: ObservableObject {
             }
         }
     }
-    
-    func deleteBooking() {
-
-    }
-    
-    func getBookingById() {
-        
-    }
-    
-    func updateBooking() {
-        
-    }
 }
