@@ -96,7 +96,7 @@ class AuthenticationViewModel: ObservableObject {
                 self.errorMessage = "Registrierung fehlgeschlagen: \(error.localizedDescription)"
             } else {
                 Logger.authentication.info("✅ Registration success")
-                self.isLoggedIn = true
+                self.login()
             }
         }
     }
