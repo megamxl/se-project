@@ -29,7 +29,8 @@ struct FindCarView: View {
                 if viewModel.isLoading {
                     ProgressView("Loading Cars...")
                         .vAlign(.center)
-                } else if let _ = viewModel.errorMessage {
+                }
+                else if viewModel.errorMessage != nil || viewModel.cars.isEmpty {
                     ContentUnavailableView("No Result", systemImage: "car.2.fill", description: Text("No cars are available!"))
                 } else {
                     List(viewModel.cars, id: \.VIN) { car in
@@ -70,9 +71,7 @@ struct FindCarView: View {
             }
             .navigationTitle("Prestige Wheels")
             .onAppear {
-                if authenticationViewModel.isLoggedIn {
-                    viewModel.listCars()
-                }
+                viewModel.listCars()
             }
             .onChange(of: viewModel.selectedCurrency) {
                 Logger.backgroundProcessing.log("🔄 refresh")
@@ -87,12 +86,13 @@ struct FindCarView: View {
                 viewModel.listCars()
             }
             .refreshable {
-                if authenticationViewModel.isLoggedIn {
-                    Logger.backgroundProcessing.log("🔄 loading cars")
-                    viewModel.listCars()
-                } else {
-                    Logger.backgroundProcessing.warning("⚠️ not logged in")
-                }
+                Logger.backgroundProcessing.log("🔄 loading cars")
+                viewModel.listCars()
+            }
+            .alert("Invalid Booking Dates", isPresented: $viewModel.showDateValidationError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please ensure the start date is today or later, before the end date, and at least 1 day difference.")
             }
         }
     }
