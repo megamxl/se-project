@@ -33,8 +33,7 @@ struct Prestige_WheelsApp: App {
 
         CodableHelper.dateFormatter = customDateFormatter
         
-        // AIzaSyBH24e8U1qCacnubIiwqQ5zJMjYPmSV5WI
-        GMSServices.provideAPIKey("")
+        GMSServices.provideAPIKey("AIzaSyBH24e8U1qCacnubIiwqQ5zJMjYPmSV5WI")
     }
 
     var body: some Scene {
