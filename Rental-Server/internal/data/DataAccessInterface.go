@@ -51,6 +51,7 @@ type CarRepository interface {
 
 	GetCarsAvailableInTimeRange(startTime time.Time, endTime time.Time) ([]Car, error)
 	GetCarsNotInList(vins []string) ([]Car, error)
+	GetAllCars() ([]Car, error)
 }
 
 type BookingRepository interface {

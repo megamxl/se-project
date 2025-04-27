@@ -142,6 +142,27 @@ func (c CarRepo) GetCarsAvailableInTimeRange(startTime time.Time, endTime time.T
 	return list, nil
 }
 
+func (c CarRepo) GetAllCars() ([]dataInt.Car, error) {
+	log.Printf("🚗 [Mongo] GetAllCars")
+	cursor, err := c.Collection.Find(c.Ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(c.Ctx)
+
+	var cars []model.Car
+	if err := cursor.All(c.Ctx, &cars); err != nil {
+		return nil, err
+	}
+
+	var result []dataInt.Car
+	for _, car := range cars {
+		result = append(result, convertModelToDataCar(car))
+	}
+
+	return result, nil
+}
+
 // Helper
 
 func NewCarRepo(ctx context.Context, db *mongo.Database) *CarRepo {
